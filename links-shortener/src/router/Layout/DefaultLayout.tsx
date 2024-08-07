@@ -5,7 +5,7 @@ const DefaultLayout = () => {
   return (
     <>
       <div className="min-h-screen container">
-        {/* <Colors /> */}
+        {/* <ColorsTest /> */}
         <header>
           <Header />
         </header>

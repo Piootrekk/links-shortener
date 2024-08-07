@@ -16,15 +16,17 @@ const LandingView = () => {
       </h1>
       <form
         onClick={handleForm}
-        className="sm:h-14  flex flex-col flex-wrap items-center gap-2 justify-center w-1/2"
+        className="md:h-16 flex flex-col flex-wrap items-center gap-2 justify-center w-4/5"
       >
         <Input
           type="url"
+          name="url"
           placeholder="Enter your link"
-          className="h-full flex-1 p-4"
+          className="h-full p-4"
+          required
         />
         <Button type="submit" variant="outline" className="h-full">
-          Short
+          Short it!
         </Button>
       </form>
       <Futures />

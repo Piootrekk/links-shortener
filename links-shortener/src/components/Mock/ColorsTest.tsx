@@ -1,4 +1,4 @@
-const Colors = () => {
+const ColorsTest = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="h-12 bg-background">bg-background</div>
@@ -16,4 +16,4 @@ const Colors = () => {
   );
 };
 
-export default Colors;
+export default ColorsTest;
