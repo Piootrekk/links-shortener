@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import UserMenu from "./UserMenu";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const { isAuthorized } = useAuth();
 
   const loginHandler = () => {
     navigate("/auth");
-    setIsAuthorized(true);
   };
 
   return (
