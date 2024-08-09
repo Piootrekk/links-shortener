@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, user, logout } = useAuth();
 
   const loginHandler = () => {
     navigate("/auth");
@@ -22,7 +22,7 @@ const Header = () => {
           Authorize
         </Button>
       ) : (
-        <UserMenu />
+        <UserMenu user={user!} logout={logout} />
       )}
     </nav>
   );

@@ -1,3 +1,5 @@
+import { Button } from "../ui/button";
+
 const ColorsTest = () => {
   return (
     <div className="flex flex-col w-full">
@@ -12,6 +14,14 @@ const ColorsTest = () => {
       <div className="h-12 bg-card">bg-card</div>
       <div className="h-12 bg-accent">bg-accent</div>
       <div className="h-12 bg-popover">bg-popover</div>
+      <div className="flex flex-row ">
+        <Button variant={"default"}>default</Button>
+        <Button variant={"outline"}>outline</Button>
+        <Button variant={"destructive"}>destructive</Button>
+        <Button variant={"ghost"}>ghost</Button>
+        <Button variant={"secondary"}>secondary</Button>
+        <Button variant={"link"}>link</Button>
+      </div>
     </div>
   );
 };

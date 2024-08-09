@@ -4,6 +4,10 @@ import LandingView from "./Pages/LandingView";
 import DashboardView from "./Pages/DashboardView";
 import AuthView from "./Pages/AuthView";
 import RedirectView from "./Pages/RedirectView";
+import RequireNotAuth from "./Guard/RequireNotAuth";
+import RequireAuth from "./Guard/RequireAuth";
+import LinkView from "./Pages/LinkView";
+import ColorsTest from "@/components/Mock/ColorsTest";
 
 const router = createBrowserRouter([
   {
@@ -13,21 +17,34 @@ const router = createBrowserRouter([
         path: "/",
         element: <LandingView />,
       },
-      {
-        path: "/dashboard",
-        element: <DashboardView />,
-      },
+
       {
         path: "link/:id",
-        element: <LandingView />,
+        element: <LinkView />,
       },
       {
-        path: "auth",
-        element: <AuthView />,
+        path: "/auth",
+        element: (
+          <RequireNotAuth>
+            <AuthView />
+          </RequireNotAuth>
+        ),
+      },
+      {
+        path: "/dashboard",
+        element: (
+          <RequireAuth>
+            <DashboardView />
+          </RequireAuth>
+        ),
       },
       {
         path: "/:id",
         element: <RedirectView />,
+      },
+      {
+        path: "/test",
+        element: <ColorsTest />,
       },
       {
         path: "*",

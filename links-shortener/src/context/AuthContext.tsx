@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useEffect } from "react";
-import { getCurrentUser } from "@/supabase/auth";
+import { getCurrentUser, signOut } from "@/supabase/auth";
 import { User } from "@supabase/supabase-js";
 import useFetchCallback from "@/hooks/useFetchCallback";
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null | undefined;
   isLoading: boolean;
   isAuthorized: boolean;
   execute: (...args: any[]) => Promise<void>;
-}
+  logout: () => void;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -29,17 +30,22 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchUser = async () => {
       await execute();
     };
-
+    console.log("fetching user ", data);
     fetchUser();
   }, []);
 
+  const logout = async () => {
+    await signOut();
+    await execute();
+  };
   return (
     <AuthContext.Provider
       value={{
         user: data,
         isLoading,
-        isAuthorized: !!data,
+        isAuthorized: data?.id ? true : false,
         execute,
+        logout,
       }}
     >
       {!isLoading && children}
