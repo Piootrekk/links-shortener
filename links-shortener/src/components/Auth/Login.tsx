@@ -8,9 +8,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { signIn } from "@/supabase/auth";
+import UserAuthChecker from "./UserAuthChecker";
 
 const Login = () => {
-  const { error, isLoading, execute } = useFetchCallback(signIn);
+  const { data, error, isLoading, execute } = useFetchCallback(signIn);
 
   const {
     register,
@@ -26,6 +27,7 @@ const Login = () => {
 
   return (
     <>
+      {data && <UserAuthChecker />}
       <Card>
         <CardHeader className="text-2xl">
           Login

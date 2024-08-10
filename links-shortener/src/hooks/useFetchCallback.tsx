@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 interface FetchState<T> {
-  data: T | null;
+  data: T | null | undefined;
   error: Error | null;
   isLoading: boolean;
   execute: (...args: any[]) => Promise<void>;
@@ -10,7 +10,7 @@ interface FetchState<T> {
 const useFetchCallback = <T = unknown,>(
   asyncFunction: (...args: any[]) => Promise<T>
 ): FetchState<T> => {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

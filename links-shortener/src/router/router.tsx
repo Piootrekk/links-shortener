@@ -8,6 +8,7 @@ import RequireNotAuth from "./Guard/RequireNotAuth";
 import RequireAuth from "./Guard/RequireAuth";
 import LinkView from "./Pages/LinkView";
 import ColorsTest from "@/components/Mock/ColorsTest";
+import RouteEndpoints from "@/components/Mock/RouteEndpoints";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/test",
         element: <ColorsTest />,
+      },
+      {
+        path: "/routes-test",
+        element: <RouteEndpoints />,
       },
       {
         path: "*",

@@ -6,8 +6,8 @@ import useFetchCallback from "@/hooks/useFetchCallback";
 type AuthContextType = {
   user: User | null | undefined;
   isLoading: boolean;
-  isAuthorized: boolean;
-  execute: (...args: any[]) => Promise<void>;
+  isAuthorized: boolean | undefined;
+  getUser: (...args: any[]) => Promise<void>;
   logout: () => void;
 };
 
@@ -30,27 +30,37 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchUser = async () => {
       await execute();
     };
-    console.log("fetching user ", data);
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
 
   const logout = async () => {
     await signOut();
     await execute();
   };
-  return (
-    <AuthContext.Provider
-      value={{
-        user: data,
-        isLoading,
-        isAuthorized: data?.id ? true : false,
-        execute,
-        logout,
-      }}
-    >
-      {!isLoading && children}
-    </AuthContext.Provider>
-  );
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Skeleton or spinner will be
+  }
+
+  if (data !== undefined) {
+    return (
+      <AuthContext.Provider
+        value={{
+          user: data,
+          isLoading,
+          isAuthorized: Boolean(data),
+          getUser: execute,
+          logout,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 };
 
 export default AuthProvider;

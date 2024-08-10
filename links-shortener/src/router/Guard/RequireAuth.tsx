@@ -13,7 +13,7 @@ const RequireAuth: React.FC<AuthProtectedProps> = ({ children }) => {
       navigate("/auth", { replace: true });
     }
     console.log("isAuthorized", isAuthorized);
-  }, [isAuthorized, navigate, isLoading]);
+  }, []);
   if (isLoading) return <p>Loading...</p>;
   if (isAuthorized && !isLoading) return children;
 };

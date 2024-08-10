@@ -1,6 +1,7 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+
 type AuthProtectedProps = PropsWithChildren;
 
 const RequireNotAuth: React.FC<AuthProtectedProps> = ({ children }) => {
@@ -12,7 +13,7 @@ const RequireNotAuth: React.FC<AuthProtectedProps> = ({ children }) => {
       navigate("/", { replace: true });
     }
     console.log("isAuthorized", isAuthorized);
-  }, [isAuthorized, navigate, isLoading]);
+  }, []);
   if (isLoading) return <p>Loading...</p>;
   if (!isAuthorized && !isLoading) return children;
 };

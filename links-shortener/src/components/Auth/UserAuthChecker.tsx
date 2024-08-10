@@ -1,13 +1,14 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 
-const InitUser = () => {
-  const { execute: fetchUser } = useAuth();
+const UserAuthChecker = () => {
+  const { getUser } = useAuth();
+
   useEffect(() => {
-    fetchUser();
+    getUser();
   }, []);
 
   return null;
 };
 
-export default InitUser;
+export default UserAuthChecker;
