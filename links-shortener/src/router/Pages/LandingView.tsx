@@ -6,7 +6,6 @@ import Futures from "@/components/LandingPage/Futures";
 const LandingView = () => {
   const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { ZodSchema, ZodError } from "zod";
 
 type FetchOptions = RequestInit;
 
@@ -11,7 +12,8 @@ type FetchState<T> = {
 
 const useFetch = <T = unknown,>(
   url: string,
-  options?: FetchOptions
+  options?: FetchOptions,
+  schema?: ZodSchema<T>
 ): FetchState<T> => {
   const [response, setResponse] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -30,14 +32,27 @@ const useFetch = <T = unknown,>(
         }
 
         const json = (await res.json()) as T;
-        setResponse(json);
+
+        if (schema) {
+          try {
+            const validatedData = schema.parse(json);
+            setResponse(validatedData);
+          } catch (err) {
+            if (err instanceof ZodError) {
+              throw new Error(err.message);
+            }
+            throw err;
+          }
+        } else {
+          setResponse(json);
+        }
       } catch (error) {
         setError(error as Error);
       }
     };
 
     fetchDataInternal();
-  }, [url, options]);
+  }, [url, options, schema]);
 
   return { response, error, fetchData, abort };
 };

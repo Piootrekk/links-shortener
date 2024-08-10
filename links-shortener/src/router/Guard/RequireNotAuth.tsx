@@ -12,8 +12,8 @@ const RequireNotAuth: React.FC<AuthProtectedProps> = ({ children }) => {
     if (isAuthorized && isLoading === false) {
       navigate("/", { replace: true });
     }
-    console.log("isAuthorized", isAuthorized);
   }, []);
+
   if (isLoading) return <p>Loading...</p>;
   if (!isAuthorized && !isLoading) return children;
 };

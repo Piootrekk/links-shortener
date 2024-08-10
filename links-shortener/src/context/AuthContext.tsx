@@ -33,10 +33,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
-
   const logout = async () => {
     await signOut();
     await execute();

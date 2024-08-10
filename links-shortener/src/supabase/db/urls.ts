@@ -1,6 +1,6 @@
 import supabase from "../supabase";
 
-export const getAllUrls = async (user_id: string) => {
+const getAllAuthUrls = async (user_id: string) => {
   const { data, error } = await supabase
     .from("urls")
     .select("*")
@@ -8,3 +8,20 @@ export const getAllUrls = async (user_id: string) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+const getAllUsers = async () => {
+  const { data, error } = await supabase.from("urls").select("*");
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+const getAllNotAuthUrls = async () => {
+  const { data, error } = await supabase
+    .from("urls")
+    .select("*")
+    .eq("user_id", null);
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export { getAllAuthUrls, getAllUsers, getAllNotAuthUrls };

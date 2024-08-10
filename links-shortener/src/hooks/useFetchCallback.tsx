@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { ZodSchema, ZodError } from "zod";
 
 interface FetchState<T> {
   data: T | null | undefined;
@@ -8,7 +9,8 @@ interface FetchState<T> {
 }
 
 const useFetchCallback = <T = unknown,>(
-  asyncFunction: (...args: any[]) => Promise<T>
+  asyncFunction: (...args: any[]) => Promise<T>,
+  validationSchema?: ZodSchema<T>
 ): FetchState<T> => {
   const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<Error | null>(null);
@@ -20,14 +22,23 @@ const useFetchCallback = <T = unknown,>(
       setError(null);
       try {
         const result = await asyncFunction(...args);
-        setData(result);
+        if (validationSchema) {
+          const validatedResult = validationSchema.parse(result);
+          setData(validatedResult as Awaited<T>);
+        } else {
+          setData(result);
+        }
       } catch (err) {
-        setError(err as Error);
+        if (err instanceof ZodError) {
+          setError(new Error("Validation failed: " + err.message));
+        } else {
+          setError(err as Error);
+        }
       } finally {
         setIsLoading(false);
       }
     },
-    [asyncFunction]
+    [asyncFunction, validationSchema]
   );
 
   return { data, error, isLoading, execute };
