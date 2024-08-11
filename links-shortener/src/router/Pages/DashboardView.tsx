@@ -1,52 +1,17 @@
 import ErrorMessage from "@/components/Error/ErrorMessage";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Statistic from "@/components/Dashboard/Statistic";
 import { Input } from "@/components/ui/input";
-import useDbAuth from "@/hooks/useDbAuth";
 import { Filter } from "lucide-react";
+import { useDbAll, useDbAuth } from "@/hooks/useDB";
 
 const DashboardView = () => {
   const { data } = useDbAuth();
+  const { data: all } = useDbAll();
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-row flex-wrap gap-4 mt-12 w-full">
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle>Your Links Created</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>0</p>
-            </CardContent>
-          </Card>
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle>Total Links Created</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>0</p>
-            </CardContent>
-          </Card>
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle>Total Links Created</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>0</p>
-            </CardContent>
-          </Card>
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle>Your Links Clicked</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>0</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
+      <Statistic data={data} all={all} />
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
         <Button variant="default">Create New</Button>
