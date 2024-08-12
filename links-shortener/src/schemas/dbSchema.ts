@@ -24,6 +24,6 @@ const urlSchema = z.object({
 
 const urlsArraySchema = z.array(urlSchema);
 type TUrls = z.infer<typeof urlsArraySchema>;
-
+type TUrl = z.infer<typeof urlSchema>;
 export { urlsArraySchema };
-export type { TUrls };
+export type { TUrls, TUrl };

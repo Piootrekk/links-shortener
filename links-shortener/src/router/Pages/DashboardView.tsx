@@ -1,26 +1,40 @@
-import ErrorMessage from "@/components/Error/ErrorMessage";
-import { Button } from "@/components/ui/button";
 import Statistic from "@/components/Dashboard/Statistic";
 import { Input } from "@/components/ui/input";
 import { Filter } from "lucide-react";
-import { useDbAll, useDbAuth } from "@/hooks/useDB";
+import { useDbAuth } from "@/hooks/useDB";
+import LinkCard from "@/components/Dashboard/LinkCard";
+import { useState } from "react";
+import AddLink from "@/components/Dashboard/AddLink";
 
 const DashboardView = () => {
   const { data } = useDbAuth();
-  const { data: all } = useDbAll();
+  const [search, setSearch] = useState<string>("");
+
+  const filteredData = data?.filter((link) =>
+    link.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col gap-8">
-      <Statistic data={data} all={all} />
+      <Statistic data={data} />
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
-        <Button variant="default">Create New</Button>
+        <AddLink />
       </div>
       <div className="relative">
-        <Input type="text" placeholder="Search for a link" />
+        <Input
+          type="text"
+          placeholder="Search for a link"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <Filter className="absolute top-2 right-2 p-1" />
       </div>
-      <ErrorMessage className="text-xl text-center" message="No links found." />
+      {filteredData === undefined || filteredData?.length === 0 ? (
+        <p className="text-white text-center text-sm">No Links Found</p>
+      ) : (
+        filteredData.map((link) => <LinkCard key={link.id} link={link} />)
+      )}
     </div>
   );
 };

@@ -8,28 +8,18 @@ type TContentInfo = {
 
 type StatisticProps = {
   data: TUrls | undefined | null;
-  all: TUrls | undefined | null;
 };
 
-const Statistic: React.FC<StatisticProps> = ({ data, all }) => {
+const Statistic: React.FC<StatisticProps> = ({ data }) => {
   const contentInfo: TContentInfo[] = [
     {
       title: "Your Links Created",
       content: data?.length || 0,
     },
     {
-      title: "Total Links Created",
-      content: all?.length || 0,
-    },
-    {
       title: "Your Links Clicked",
       content:
         data?.reduce((acc, curr) => acc + curr.hidden_details.length, 0) || 0,
-    },
-    {
-      title: "Total Links Clicked",
-      content:
-        all?.reduce((acc, curr) => acc + curr.hidden_details.length, 0) || 0,
     },
   ];
 
