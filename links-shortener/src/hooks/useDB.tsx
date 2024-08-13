@@ -1,6 +1,10 @@
 import { useAuth } from "@/context/AuthContext";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { getAll, getAllAuthroized } from "@/supabase/db/selects";
+import {
+  getAll,
+  getAllAuthroized,
+  getAllUnauthroized,
+} from "@/supabase/db/selects";
 import { urlsArraySchema, TUrls } from "@/schemas/dbSchema";
 
 import { useEffect } from "react";
@@ -27,7 +31,7 @@ const useDbUnauth = () => {
     error,
     isLoading,
     execute: fetchUrl,
-  } = useFetchCallback<TUrls>(getAllAuthroized, urlsArraySchema);
+  } = useFetchCallback<TUrls>(getAllUnauthroized, urlsArraySchema);
 
   useEffect(() => {
     fetchUrl();

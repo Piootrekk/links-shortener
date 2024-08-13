@@ -6,9 +6,7 @@ type ErrorMessageProps = {
 };
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, className }) => {
-  return (
-    <span className={cn("text-red-500 text-sm", className)}>{message}</span>
-  );
+  return <p className={cn("text-red-500 text-sm", className)}>{message}</p>;
 };
 
 export default ErrorMessage;

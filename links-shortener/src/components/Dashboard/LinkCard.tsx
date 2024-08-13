@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { TUrl } from "@/schemas/dbSchema";
 import { Button } from "../ui/button";
-import { Copy, CopyCheck, Download, Edit, Trash } from "lucide-react";
+import { Copy, CopyCheck, Download, Edit } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import DialogRemove from "./DialogRemove";
 
 type LinksCardProps = {
   link: TUrl;
@@ -35,11 +36,11 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-primary rounded-lg">
       <img
-        src={link.qr_code}
+        src={`${import.meta.env.VITE_DB_ENDPOINT || ""}/${link.qr_code}`}
         alt="QR Code"
         className="h-32 object-contain rounded-md ring ring-blue-500 self-start"
       />
-      <Link to="/dashboard/1" className="flex flex-col flex-1">
+      <Link to={`/dashboard/${link.id}`} className="flex flex-col flex-1">
         <span className=" text-xl font-extrabold text-white">{link.title}</span>
         <span className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer text-clip">
           {URL}/{link.short_url}
@@ -65,9 +66,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         <Button variant={"ghost"} onClick={handleDownload}>
           <Download className="w-6 h-6" />
         </Button>
-        <Button variant={"ghost"}>
-          <Trash className="w-6 h-6" />
-        </Button>
+        <DialogRemove title={link.title} />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Filter } from "lucide-react";
 import { useDbAuth } from "@/hooks/useDB";
 import LinkCard from "@/components/Dashboard/LinkCard";
 import { useState } from "react";
-import AddLink from "@/components/Dashboard/AddLink";
+import DialogUrlForm from "@/components/Dashboard/DialogUrlForm";
 
 const DashboardView = () => {
   const { data } = useDbAuth();
@@ -15,11 +15,11 @@ const DashboardView = () => {
   );
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-12">
       <Statistic data={data} />
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
-        <AddLink />
+        <DialogUrlForm />
       </div>
       <div className="relative">
         <Input

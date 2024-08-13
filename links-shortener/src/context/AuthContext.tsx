@@ -39,7 +39,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // Skeleton or spinner will be
+    return <div>Loading...</div>;
   }
 
   if (data !== undefined) {
