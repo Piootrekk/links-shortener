@@ -1,15 +1,15 @@
 import Statistic from "@/components/Dashboard/Statistic";
 import { Input } from "@/components/ui/input";
 import { Filter } from "lucide-react";
-import { useDbAuth } from "@/hooks/useDB";
 import LinkCard from "@/components/Dashboard/LinkCard";
 import { useState } from "react";
 import DialogUrlForm from "@/components/Dashboard/DialogUrlForm";
+import useDb from "@/context/DbContext";
 
 const DashboardView = () => {
-  const { data } = useDbAuth();
+  const { get } = useDb();
   const [search, setSearch] = useState<string>("");
-
+  const data = get.data;
   const filteredData = data?.filter((link) =>
     link.title.toLowerCase().includes(search.toLowerCase())
   );

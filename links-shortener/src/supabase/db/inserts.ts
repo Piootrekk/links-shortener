@@ -8,7 +8,7 @@ const insertUrl = async (
   title: string,
   user_id: string
 ) => {
-  const qrBlob = await generateQR(orginal_url, short_url);
+  const qrBlob = await generateQR(short_url, short_url);
   const qrPath = await uploadFile(qrBlob);
 
   const { data, error } = await supabase.from("urls").insert([
@@ -21,7 +21,10 @@ const insertUrl = async (
     },
   ]);
   if (error) throw new Error(error.message);
-  return data;
+  return {
+    data,
+    success: true,
+  };
 };
 
 export default insertUrl;

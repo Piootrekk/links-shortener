@@ -4,7 +4,7 @@ const promiseQR = async (text: string): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     QRCode.toDataURL(
       text,
-      { errorCorrectionLevel: "H", scale: 4, margin: 1 },
+      { errorCorrectionLevel: "H", scale: 32, margin: 1 },
       (err, url) => {
         if (err) reject(err);
         fetch(url)

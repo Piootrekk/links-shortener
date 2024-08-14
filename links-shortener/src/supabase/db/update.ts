@@ -7,7 +7,7 @@ const upldateUrls = async (
   userId: string,
   { url, title, shortUrl }: TInsertLinkSchema
 ) => {
-  const qrBlob = await generateQR(url, shortUrl);
+  const qrBlob = await generateQR(shortUrl, shortUrl);
   const qrPath = await uploadFile(qrBlob);
 
   const { data, error } = await supabase
@@ -20,7 +20,10 @@ const upldateUrls = async (
     })
     .eq("user_id", userId);
   if (error) throw new Error(error.message);
-  return data;
+  return {
+    data,
+    success: true,
+  };
 };
 
 export default upldateUrls;
