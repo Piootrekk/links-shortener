@@ -1,24 +1,20 @@
 import { TInsertLinkSchema } from "@/schemas/InsertLinkSchema";
 import supabase from "../supabase";
-import generateQR from "@/lib/qrGenerate";
-import { uploadFile } from "./files";
 
-const upldateUrls = async (
+const updateUrls = async (
   userId: string,
-  { url, title, shortUrl }: TInsertLinkSchema
+  id: string,
+  formItems: TInsertLinkSchema
 ) => {
-  const qrBlob = await generateQR(shortUrl, shortUrl);
-  const qrPath = await uploadFile(qrBlob);
-
   const { data, error } = await supabase
     .from("urls")
     .update({
-      orginal_url: url,
-      title: title,
-      short_url: shortUrl,
-      qr_code: qrPath,
+      original_url: formItems.url,
+      title: formItems.title,
+      short_url: formItems.shortUrl,
     })
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .eq("id", id);
   if (error) throw new Error(error.message);
   return {
     data,
@@ -26,4 +22,4 @@ const upldateUrls = async (
   };
 };
 
-export default upldateUrls;
+export default updateUrls;

@@ -8,7 +8,10 @@ const insertUrl = async (
   title: string,
   user_id: string
 ) => {
-  const qrBlob = await generateQR(short_url, short_url);
+  const qrBlob = await generateQR(
+    `${import.meta.env.VITE_DB_ENDPOINT}/${short_url}`,
+    short_url
+  );
   const qrPath = await uploadFile(qrBlob);
 
   const { data, error } = await supabase.from("urls").insert([

@@ -14,27 +14,50 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ErrorMessage from "../Error/ErrorMessage";
+import { useEffect, useState } from "react";
+import useDb from "@/context/DbContext";
 
 type DialogRemoveProps = {
   title: string;
+  id: string;
+  qrPath: string;
 };
 
-const DialogRemove: React.FC<DialogRemoveProps> = ({ title }) => {
+const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const removeSchema = removeLinkSchema(title);
+  const { del } = useDb();
   type TRemoveLinkSchema = z.infer<typeof removeSchema>;
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TRemoveLinkSchema>({
     resolver: zodResolver(removeSchema),
   });
 
-  const onSubmit = (formData: TRemoveLinkSchema) => {
+  const onSubmit = async (formData: TRemoveLinkSchema) => {
     console.log(formData);
+    await del.execute(id, qrPath);
+    if (!del.error) return;
   };
+
+  useEffect(() => {
+    if (del.data?.success) {
+      setValue("title", "");
+      setIsOpen(false);
+    }
+  }, [del.data]);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!del.isLoading) {
+      setIsOpen(open);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant={"ghost"}>
           <Trash className="w-6 h-6" />
@@ -48,6 +71,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title }) => {
             link to confirm.
           </DialogDescription>
         </DialogHeader>
+        {del.error && <ErrorMessage message={del.error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -57,7 +81,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title }) => {
           />
           {errors.title && <ErrorMessage message={errors.title.message!} />}
           <Button type="submit" className="mt-4">
-            Remove
+            {del.isLoading ? "Loading..." : "Delete"}
           </Button>
         </form>
       </DialogContent>

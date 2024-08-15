@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { TUrl } from "@/schemas/dbSchema";
 import { Button } from "../ui/button";
-import { Copy, CopyCheck, Download, Edit } from "lucide-react";
+import { Copy, CopyCheck, Download } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
+
+import DialogUrlUpdate from "./DialogUrlUpdate";
 
 type LinksCardProps = {
   link: TUrl;
@@ -57,13 +59,18 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
             <Copy className="w-6 h-6" />
           )}
         </Button>
-        <Button variant={"ghost"}>
-          <Edit className="w-6 h-6" />
-        </Button>
+        <DialogUrlUpdate
+          data={{
+            title: link.title,
+            url: link.original_url,
+            shortUrl: link.short_url,
+          }}
+          id={link.id}
+        />
         <Button variant={"ghost"} onClick={handleDownload}>
           <Download className="w-6 h-6" />
         </Button>
-        <DialogRemove title={link.title} />
+        <DialogRemove title={link.title} id={link.id} qrPath={link.qr_code} />
       </div>
     </div>
   );

@@ -4,15 +4,17 @@ import useFetchCallback from "@/hooks/useFetchCallback";
 import { TUrls, urlsArraySchema } from "@/schemas/dbSchema";
 import { getAllAuthroized } from "@/supabase/db/selects";
 import { TCrud } from "@/supabase/supabase";
-import upldateUrls from "@/supabase/db/update";
+import updateUrls from "@/supabase/db/update";
 import insertUrl from "@/supabase/db/inserts";
 import { deleteSelectedUrl } from "@/supabase/db/delete";
+import { User } from "@supabase/supabase-js";
 
 type DbContextType = {
   get: ReturnType<typeof useFetchCallback<TUrls>>;
-  insert: ReturnType<typeof useFetchCallback>;
-  update: ReturnType<typeof useFetchCallback>;
-  del: ReturnType<typeof useFetchCallback>;
+  insert: ReturnType<typeof useFetchCallback<TCrud>>;
+  update: ReturnType<typeof useFetchCallback<TCrud>>;
+  del: ReturnType<typeof useFetchCallback<TCrud>>;
+  user: User | null | undefined;
 };
 
 const DbContext = createContext<DbContextType | undefined>(undefined);
@@ -29,12 +31,17 @@ const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const get = useFetchCallback<TUrls>(getAllAuthroized, urlsArraySchema);
   const insert = useFetchCallback<TCrud>(insertUrl);
-  const update = useFetchCallback<TCrud>(upldateUrls);
+  const update = useFetchCallback<TCrud>(updateUrls);
   const del = useFetchCallback<TCrud>(deleteSelectedUrl);
 
   useEffect(() => {
     get.execute(user?.id);
   }, []);
+
+  // refresh data when user changes
+  useEffect(() => {
+    get.execute(user?.id);
+  }, [insert.data, update.data, del.data]);
 
   return (
     <DbContext.Provider
@@ -43,6 +50,7 @@ const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         insert,
         update,
         del,
+        user,
       }}
     >
       {children}

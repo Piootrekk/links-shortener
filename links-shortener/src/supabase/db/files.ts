@@ -1,3 +1,4 @@
+import generateQR from "@/lib/qrGenerate";
 import supabase from "../supabase";
 
 const uploadFile = async (file: File) => {
@@ -13,4 +14,13 @@ const deleteFile = async (path: string) => {
   if (error) throw new Error(error.message);
 };
 
-export { uploadFile, deleteFile };
+const invokeQR = async (name: string) => {
+  const qrBlob = await generateQR(
+    `${import.meta.env.VITE_DB_ENDPOINT}/${name}`,
+    name
+  );
+  const qrPath = await uploadFile(qrBlob);
+  return qrPath;
+};
+
+export { uploadFile, deleteFile, invokeQR };
