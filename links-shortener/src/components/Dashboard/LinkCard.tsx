@@ -5,8 +5,7 @@ import { Copy, CopyCheck, Download } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
-
-import DialogUrlUpdate from "./DialogUrlUpdate";
+import DialogUpdate from "./DialogUpdate";
 
 type LinksCardProps = {
   link: TUrl;
@@ -39,19 +38,30 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-primary rounded-lg">
       <DialogQR qrCode={link.qr_code} />
-      <Link to={`/dashboard/${link.id}`} className="flex flex-col flex-1">
-        <span className=" text-xl font-extrabold text-white">{link.title}</span>
-        <span className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer text-clip">
+      <div className="flex flex-col">
+        <Link
+          to={`/link/${link.id}`}
+          className=" text-xl font-extrabold text-white"
+        >
+          {link.title}
+        </Link>
+        <Link
+          to={`/${link.short_url}`}
+          className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer text-clip"
+        >
           {URL}/{link.short_url}
-        </span>
-        <span className="flex items-center gap-1 hover:underline cursor-pointer text-white">
+        </Link>
+        <a
+          href={link.original_url}
+          className="flex items-center gap-1 hover:underline cursor-pointer text-white"
+        >
           {link.original_url}
-        </span>
+        </a>
         <span className="flex text-white items-end text-sm flex-1">
           {new Date(link.created_at).toLocaleString()}
         </span>
-      </Link>
-      <div className="flex gap-2">
+      </div>
+      <div className="flex gap-2 justify-end flex-1">
         <Button variant={"ghost"} onClick={handleCopy}>
           {copied ? (
             <CopyCheck className="w-6 h-6" />
@@ -59,7 +69,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
             <Copy className="w-6 h-6" />
           )}
         </Button>
-        <DialogUrlUpdate
+        <DialogUpdate
           data={{
             title: link.title,
             url: link.original_url,

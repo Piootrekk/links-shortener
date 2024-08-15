@@ -18,7 +18,6 @@ const router = createBrowserRouter([
         path: "/",
         element: <LandingView />,
       },
-
       {
         path: "link/:id",
         element: <LinkView />,
@@ -40,7 +39,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/:id",
+        path: "/:custom_link",
         element: <RedirectView />,
       },
       {

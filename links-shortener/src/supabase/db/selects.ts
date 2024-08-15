@@ -41,4 +41,14 @@ const getAll = async () => {
   return data;
 };
 
-export { getAllAuthroized, getAllUnauthroized, getAll };
+const getCustomLink = async (short_url: string) => {
+  const { data, error } = await supabase
+    .from("urls")
+    .select("original_url")
+    .eq("short_url", short_url)
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export { getAllAuthroized, getAllUnauthroized, getAll, getCustomLink };

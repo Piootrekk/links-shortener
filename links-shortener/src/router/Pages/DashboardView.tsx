@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Filter } from "lucide-react";
 import LinkCard from "@/components/Dashboard/LinkCard";
 import { useState } from "react";
-import CreateDialogUrl from "@/components/Dashboard/DialogUrlForm";
+import DialogAdd from "@/components/Dashboard/DialogAdd";
 import useDb from "@/context/DbContext";
 
 const DashboardView = () => {
@@ -19,7 +19,7 @@ const DashboardView = () => {
       <Statistic data={data} />
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
-        <CreateDialogUrl />
+        <DialogAdd />
       </div>
       <div className="relative">
         <Input

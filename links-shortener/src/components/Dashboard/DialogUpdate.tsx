@@ -11,7 +11,7 @@ import {
 import { Input } from "../ui/input";
 import ErrorMessage from "../Error/ErrorMessage";
 import { Card } from "../ui/card";
-import { RefreshCcw } from "lucide-react";
+import { Edit, RefreshCcw } from "lucide-react";
 import shortUrlGenerate from "@/lib/shortUrlGenerate";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,17 +19,18 @@ import insertLinkSchema, {
   TInsertLinkSchema,
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
-
-import { useAuth } from "@/context/AuthContext";
 import useDb from "@/context/DbContext";
 
-type DialogAddFormProps = {};
+type DialogUpdateFormProps = {
+  data?: TInsertLinkSchema;
+  id: string;
+};
 
-const DialogUrlForm: React.FC<DialogAddFormProps> = () => {
+const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   const short = shortUrlGenerate(2, 6);
-  const { insert } = useDb();
+
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, update } = useDb();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -43,7 +44,9 @@ const DialogUrlForm: React.FC<DialogAddFormProps> = () => {
   } = useForm<TInsertLinkSchema>({
     resolver: zodResolver(insertLinkSchema),
     defaultValues: {
-      shortUrl: short,
+      shortUrl: data?.shortUrl || short,
+      title: data?.title,
+      url: data?.url,
     },
   });
 
@@ -54,39 +57,37 @@ const DialogUrlForm: React.FC<DialogAddFormProps> = () => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
+    console.log(formData);
     if (!user) throw new Error("User not found");
-    await insert.execute(
-      formData.url,
-      formData.shortUrl,
-      formData.title,
-      user?.id
-    );
-    if (!insert.error) return;
+    await update.execute(user.id, id, formData);
+    if (!update.error) return;
   };
 
   useEffect(() => {
-    if (insert.data?.success) {
+    if (update.data?.success) {
       formsReset();
       setIsOpen(false);
     }
-  }, [insert.data]);
+  }, [update.data]);
 
   const handleOpenChange = (open: boolean) => {
-    if (!insert.isLoading) {
+    if (!update.isLoading) {
       setIsOpen(open);
     }
   };
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="default">Create New</Button>
+        <Button variant={"ghost"}>
+          <Edit className="w-6 h-6" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add link</DialogTitle>
-          <DialogDescription>Create a new link</DialogDescription>
+          <DialogTitle>Edit link</DialogTitle>
+          <DialogDescription>Edit your link</DialogDescription>
         </DialogHeader>
-        {insert.error && <ErrorMessage message={insert.error.message} />}
+        {update.error && <ErrorMessage message={update.error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -123,8 +124,8 @@ const DialogUrlForm: React.FC<DialogAddFormProps> = () => {
             <ErrorMessage message={errors.shortUrl.message} />
           )}
           <DialogFooter>
-            <Button type="submit" disabled={insert.isLoading}>
-              {insert.isLoading ? "Loading" : "Save changes"}
+            <Button type="submit" disabled={update.isLoading}>
+              {update.isLoading ? "Loading" : "Save changes"}
             </Button>
           </DialogFooter>
         </form>
@@ -133,4 +134,4 @@ const DialogUrlForm: React.FC<DialogAddFormProps> = () => {
   );
 };
 
-export default DialogUrlForm;
+export default DialogUpdate;

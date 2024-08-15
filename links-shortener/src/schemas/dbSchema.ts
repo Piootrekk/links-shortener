@@ -25,5 +25,12 @@ const urlSchema = z.object({
 const urlsArraySchema = z.array(urlSchema);
 type TUrls = z.infer<typeof urlsArraySchema>;
 type TUrl = z.infer<typeof urlSchema>;
-export { urlsArraySchema };
-export type { TUrls, TUrl };
+
+const singleCustomUrlSchema = z.object({
+  original_url: z.string().url(),
+});
+
+type TCustomeUrl = z.infer<typeof singleCustomUrlSchema>;
+
+export { urlsArraySchema, singleCustomUrlSchema };
+export type { TUrls, TUrl, TCustomeUrl };

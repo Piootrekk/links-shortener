@@ -25,7 +25,7 @@ type DialogRemoveProps = {
 
 const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const removeSchema = removeLinkSchema(title);
+  const removeSchema = removeLinkSchema(title.trim());
   const { del } = useDb();
   type TRemoveLinkSchema = z.infer<typeof removeSchema>;
   const {
