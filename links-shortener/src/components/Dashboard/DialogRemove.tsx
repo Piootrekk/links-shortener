@@ -16,6 +16,7 @@ import { z } from "zod";
 import ErrorMessage from "../Error/ErrorMessage";
 import { useEffect, useState } from "react";
 import useDb from "@/context/DbContext";
+import LoadingSpin from "../ui/loading-spin";
 
 type DialogRemoveProps = {
   title: string;
@@ -80,8 +81,8 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
             {...register("title")}
           />
           {errors.title && <ErrorMessage message={errors.title.message!} />}
-          <Button type="submit" className="mt-4">
-            {del.isLoading ? "Loading..." : "Delete"}
+          <Button type="submit" variant={"destructive"} className="mt-4">
+            {del.isLoading ? <LoadingSpin /> : "Delete"}
           </Button>
         </form>
       </DialogContent>

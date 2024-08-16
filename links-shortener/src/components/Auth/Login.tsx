@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { signIn } from "@/supabase/auth";
 import UserAuthChecker from "./UserAuthChecker";
+import LoadingSpin from "../ui/loading-spin";
 
 const Login = () => {
   const { data, error, isLoading, execute } = useFetchCallback(signIn);
@@ -57,7 +58,7 @@ const Login = () => {
               )}
             </div>
             <Button type="submit" className="w-full p-2">
-              {isLoading ? "Loading..." : "Login"}
+              {isLoading ? <LoadingSpin /> : "Login"}
             </Button>
           </form>
         </CardContent>

@@ -20,8 +20,8 @@ type UserMenuProps = {
 const UserMenu: React.FC<UserMenuProps> = ({ user, logout }) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-10 rounded-full overflow-hidden">
-        <Avatar className="flex justify-center items-center cursor-pointer border">
+      <DropdownMenuTrigger className="w-10 rounded-full overflow-hiddenfocus:outline-none">
+        <Avatar className="flex justify-center items-center cursor-pointer border focus:outline-none">
           <UserIcon />
         </Avatar>
       </DropdownMenuTrigger>

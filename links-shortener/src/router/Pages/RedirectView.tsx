@@ -4,6 +4,7 @@ import useFetchCallback from "@/hooks/useFetchCallback";
 import { getCustomLink } from "@/supabase/db/selects";
 import { singleCustomUrlSchema, TCustomeUrl } from "@/schemas/dbSchema";
 import loadUa from "@/lib/uaParser";
+import LoadingSpin from "@/components/ui/loading-spin";
 
 const RedirectView = () => {
   const { custom_link } = useParams();
@@ -15,7 +16,12 @@ const RedirectView = () => {
     execute(custom_link);
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadingSpin />
+      </div>
+    );
   if (error) return <div>Error: {<p>{error.message}</p>}</div>;
   if (data) {
     const ua = loadUa();

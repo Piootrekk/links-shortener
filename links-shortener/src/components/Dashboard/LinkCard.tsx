@@ -36,13 +36,10 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-5 border p-4 bg-primary rounded-lg">
+    <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg">
       <DialogQR qrCode={link.qr_code} />
       <div className="flex flex-col">
-        <Link
-          to={`/link/${link.id}`}
-          className=" text-xl font-extrabold text-white"
-        >
+        <Link to={`/link/${link.id}`} className=" text-xl font-extrabold">
           {link.title}
         </Link>
         <Link
@@ -53,11 +50,11 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         </Link>
         <a
           href={link.original_url}
-          className="flex items-center gap-1 hover:underline cursor-pointer text-white"
+          className="flex items-center gap-1 hover:underline cursor-pointer "
         >
           {link.original_url}
         </a>
-        <span className="flex text-white items-end text-sm flex-1">
+        <span className="flex items-end text-sm flex-1">
           {new Date(link.created_at).toLocaleString()}
         </span>
       </div>

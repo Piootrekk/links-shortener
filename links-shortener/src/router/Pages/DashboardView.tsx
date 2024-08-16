@@ -5,6 +5,7 @@ import LinkCard from "@/components/Dashboard/LinkCard";
 import { useState } from "react";
 import DialogAdd from "@/components/Dashboard/DialogAdd";
 import useDb from "@/context/DbContext";
+import LoadingSpin from "@/components/ui/loading-spin";
 
 const DashboardView = () => {
   const { get } = useDb();
@@ -30,8 +31,12 @@ const DashboardView = () => {
         />
         <Filter className="absolute top-2 right-2 p-1" />
       </div>
-      {filteredData === undefined || filteredData?.length === 0 ? (
-        <p className="text-white text-center text-sm">No Links Found</p>
+      {get.isLoading ? (
+        <LoadingSpin />
+      ) : filteredData === undefined ? (
+        <p></p>
+      ) : filteredData?.length === 0 ? (
+        <p className=" text-center text-sm">No Links Found</p>
       ) : (
         filteredData.map((link) => <LinkCard key={link.id} link={link} />)
       )}

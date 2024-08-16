@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect } from "react";
 import { getCurrentUser, signOut } from "@/supabase/auth";
 import { User } from "@supabase/supabase-js";
 import useFetchCallback from "@/hooks/useFetchCallback";
+import { RouterProvider } from "react-router-dom";
+import routerSkeleton from "@/router/skeletonRouter";
 
 type AuthContextType = {
   user: User | null | undefined;
@@ -39,7 +41,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <RouterProvider router={routerSkeleton} />;
   }
 
   if (data !== undefined) {

@@ -35,27 +35,29 @@ const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const del = useFetchCallback<TCrud>(deleteSelectedUrl);
 
   useEffect(() => {
-    get.execute(user?.id);
+    if (user !== null && user !== undefined) get.execute(user?.id);
   }, []);
 
-  // refresh data when user changes
   useEffect(() => {
-    get.execute(user?.id);
+    if (user !== null && user !== undefined) get.execute(user?.id);
   }, [insert.data, update.data, del.data]);
 
-  return (
-    <DbContext.Provider
-      value={{
-        get,
-        insert,
-        update,
-        del,
-        user,
-      }}
-    >
-      {children}
-    </DbContext.Provider>
-  );
+  if (user === null) return <>{children}</>;
+  else {
+    return (
+      <DbContext.Provider
+        value={{
+          get,
+          insert,
+          update,
+          del,
+          user,
+        }}
+      >
+        {children}
+      </DbContext.Provider>
+    );
+  }
 };
 export { DbProvider };
 export default useDb;

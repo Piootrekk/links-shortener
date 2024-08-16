@@ -20,6 +20,7 @@ import insertLinkSchema, {
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
 import useDb from "@/context/DbContext";
+import LoadingSpin from "../ui/loading-spin";
 
 type DialogUpdateFormProps = {
   data?: TInsertLinkSchema;
@@ -125,7 +126,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
           )}
           <DialogFooter>
             <Button type="submit" disabled={update.isLoading}>
-              {update.isLoading ? "Loading" : "Save changes"}
+              {update.isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>
         </form>

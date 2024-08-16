@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 
 import { useAuth } from "@/context/AuthContext";
 import useDb from "@/context/DbContext";
+import LoadingSpin from "../ui/loading-spin";
 
 type DialogAddFormProps = {};
 
@@ -124,7 +125,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           )}
           <DialogFooter>
             <Button type="submit" disabled={insert.isLoading}>
-              {insert.isLoading ? "Loading" : "Save changes"}
+              {insert.isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>
         </form>
