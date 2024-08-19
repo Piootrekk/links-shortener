@@ -32,6 +32,7 @@ const getCurrentUser = async () => {
 const tockenVerify = async (token: string) => {
   const { data, error } = await supabase.auth.getUser(token);
   if (error) throw new Error(error.message);
+  console.log("Verify:", data);
   return data;
 };
 

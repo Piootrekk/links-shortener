@@ -1,10 +1,13 @@
-import { TInsertLinkSchema } from "@/schemas/InsertLinkSchema";
 import supabase from "../supabase";
 
 const updateUrls = async (
   userId: string,
   id: string,
-  formItems: TInsertLinkSchema
+  formItems: {
+    url: string;
+    title: string;
+    shortUrl: string;
+  }
 ) => {
   const { data, error } = await supabase
     .from("urls")

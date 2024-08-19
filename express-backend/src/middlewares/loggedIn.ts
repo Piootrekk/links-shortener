@@ -1,33 +1,24 @@
-import { Request, Response, NextFunction } from "express";
-import { tockenVerify } from "../supabase/auth";
 import { User } from "@supabase/supabase-js";
+import passport from "passport";
+import { Strategy as BearerStrategy } from "passport-http-bearer";
+import supabase from "../supabase/supabase";
 
-type ExtendedRequest = Request & { user: User | null | undefined };
+passport.use(
+  new BearerStrategy(async (token, done) => {
+    try {
+      const { data, error } = await supabase.auth.getUser(token);
 
-const isLoggedAuth = async (
-  req: ExtendedRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const authHeader = req.headers.authorization;
+      if (error || !data.user) {
+        return done(null, false, "User not found");
+      }
+      const user: User = data.user;
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
 
-  if (!authHeader) {
-    return res.status(401).json({ message: "Auth header missing" });
-  }
+const authenticateUser = passport.authenticate("bearer", { session: false });
 
-  const authToken = authHeader.split(" ")[1];
-  if (!authToken) {
-    return res.status(401).json({ message: "Auth tocken missing" });
-  }
-
-  const data = await tockenVerify(authToken);
-  if (!data) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  req.user = data.user;
-  return next();
-};
-
-export default isLoggedAuth;
-
-export type { ExtendedRequest };
+export default authenticateUser;

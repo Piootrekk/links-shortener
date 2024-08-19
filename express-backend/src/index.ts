@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 import router from "./routes";
 
 config();
@@ -10,6 +11,7 @@ const PORT = process.env.PORT;
 if (!PORT) throw new Error("Port is not defined");
 
 app.use(express.json());
+app.use(cors());
 app.use(router);
 
 app.get("/", (_: Request, res: Response) => {

@@ -6,7 +6,7 @@ const router = Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).send("Email and password are required");
+    return res.status(400).json({ message: "Email and password are required" });
   }
   try {
     const user = await signIn(email, password);
@@ -50,7 +50,7 @@ router.get("/user", async (req, res) => {
     res.send(user);
   } catch (error) {
     if (error instanceof AuthError) {
-      res.status(400).send(error.message);
+      res.status(400).json({ message: error.message });
     }
   }
 });
