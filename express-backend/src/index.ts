@@ -19,7 +19,7 @@ app.get("/", (_: Request, res: Response) => {
 });
 
 app.get("/health", (_: Request, res: Response) => {
-  res.send("OK");
+  res.json({ status: "OK" });
 });
 
 app.listen(PORT, () => {

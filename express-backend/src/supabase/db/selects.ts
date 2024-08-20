@@ -1,54 +1,43 @@
-import supabase from "../supabase";
+import { PrismaClient } from "@prisma/client";
 
-const queryTemplate = `created_at,
-      id,
-      original_url,
-      qr_code,
+const prisma = new PrismaClient();
+
+const getLinks = async (user_id: string) => {
+  const links = await prisma.urls.findMany({
+    where: {
+      user_id,
+    },
+    include: {
+      hidden_details: true,
+    },
+    take: 10,
+  });
+  return links;
+};
+
+const getLink = async (short_url: string) => {
+  const link = await prisma.urls.findUnique({
+    where: {
       short_url,
-      title,
-      hidden_details (
-        created_at,
-        id,
-        city,
-        country,
-        device,
-        latitude,
-        longitude
-      )
-`;
+    },
+    include: {
+      hidden_details: true,
+    },
+  });
+  return link;
+};
+// kiedyś dorobić idiki na limity
+const getAllLinks = async () => {
+  const links = await prisma.urls.findMany({
+    include: {
+      hidden_details: {
+        take: 5,
+      },
+    },
+    take: 10,
+  });
 
-const getAllAuthroized = async (user_id: string) => {
-  const { data, error } = await supabase
-    .from("urls")
-    .select(queryTemplate)
-    .eq("user_id", user_id);
-  if (error) throw new Error(error.message);
-  return data;
+  return links;
 };
 
-const getAllUnauthroized = async () => {
-  const { data, error } = await supabase
-    .from("urls")
-    .select(queryTemplate)
-    .is("user_id", null);
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const getAll = async () => {
-  const { data, error } = await supabase.from("urls").select(queryTemplate);
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-const getCustomLink = async (short_url: string) => {
-  const { data, error } = await supabase
-    .from("urls")
-    .select("original_url")
-    .eq("short_url", short_url)
-    .single();
-  if (error) throw new Error(error.message);
-  return data;
-};
-
-export { getAllAuthroized, getAllUnauthroized, getAll, getCustomLink };
+export { getAllLinks, getLink, getLinks };

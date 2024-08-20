@@ -4,8 +4,11 @@ import supabase from "../supabase";
 
 config();
 
-const DB_ENDPOINT = process.env.DB_ENDPOINT;
-if (!DB_ENDPOINT) throw new Error("DB_ENDPOINT is not defined");
+const BUCKET_ENDPOINT = process.env.BUCKET_ENDPOINT;
+
+if (!BUCKET_ENDPOINT) {
+  throw new Error("BUCKET_ENDPOINT is not defined");
+}
 
 const uploadFile = async (file: File) => {
   const { data, error } = await supabase.storage
@@ -21,7 +24,7 @@ const deleteFile = async (path: string) => {
 };
 
 const invokeQR = async (name: string) => {
-  const qrBlob = await generateQR(`${DB_ENDPOINT}/${name}`, name);
+  const qrBlob = await generateQR(`${BUCKET_ENDPOINT}/${name}`, name);
   const qrPath = await uploadFile(qrBlob);
   return qrPath;
 };

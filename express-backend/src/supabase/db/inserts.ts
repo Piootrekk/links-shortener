@@ -1,6 +1,9 @@
 import supabase from "../supabase";
-import generateQR from "@/lib/qrGenerate";
-import { uploadFile } from "./files";
+import generateQR from "../../utils/qrGenerate";
+import { uploadFile, invokeQR } from "./files";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const insertUrl = async (
   orginal_url: string,
@@ -8,24 +11,21 @@ const insertUrl = async (
   title: string,
   user_id: string
 ) => {
-  const qrBlob = await generateQR(
-    `${import.meta.env.VITE_DB_ENDPOINT}/${short_url}`,
-    short_url
-  );
-  const qrPath = await uploadFile(qrBlob);
-
-  const { data, error } = await supabase.from("urls").insert([
-    {
+  const qrPath = await invokeQR(short_url);
+  const inserts = await prisma.urls.create({
+    data: {
       original_url: orginal_url,
-      short_url: short_url,
-      user_id: user_id,
-      title: title,
+      short_url,
+      title,
+      user_id,
       qr_code: qrPath,
     },
-  ]);
-  if (error) throw new Error(error.message);
+  });
+  if (!inserts) {
+    throw new Error("Insert failed");
+  }
   return {
-    data,
+    inserts,
     success: true,
   };
 };

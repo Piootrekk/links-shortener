@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "@supabase/supabase-js": "^2.45.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
@@ -26,6 +27,7 @@
     "nodemon": "^3.1.4",
     "passport": "^0.7.0",
     "passport-http-bearer": "^1.0.1",
+    "prisma": "^5.18.0",
     "qrcode": "^1.5.4",
     "zod": "^3.23.8"
   },
