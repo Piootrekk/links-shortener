@@ -33,38 +33,7 @@ const getCurrentUser = async () => {
 const tockenVerify = async (token: string) => {
   const { data, error } = await supabase.auth.getUser(token);
   if (error) throw new Error(error.message);
-  console.log("Verify:", data);
   return data;
 };
 
-const signUpAndAssignRole = async (
-  email: string,
-  password: string,
-  role: string
-) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-
-  if (error) throw new Error(error.message);
-  const user = data.user;
-  if (user) {
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { role: role },
-    });
-
-    if (updateError) throw new Error(updateError.message);
-  }
-
-  return data;
-};
-
-export {
-  signUp,
-  signIn,
-  signOut,
-  getCurrentUser,
-  signUpAndAssignRole,
-  tockenVerify,
-};
+export { signUp, signIn, signOut, getCurrentUser, tockenVerify };
