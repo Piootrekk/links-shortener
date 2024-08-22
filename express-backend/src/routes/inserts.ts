@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { User } from "@supabase/supabase-js";
-import insertUrl from "../../supabase/db/inserts";
+import insertUrl from "../supabase/db/inserts";
 const router = Router();
+import authenticateUser from "../middlewares/loggedIn";
 
-router.post("/add-link", async (req, res) => {
+router.post("/add-link", authenticateUser, async (req, res) => {
   const user = req.user as User;
   const { orginal_url, short_url, title } = req.body;
   if (!orginal_url || !short_url || !title) {

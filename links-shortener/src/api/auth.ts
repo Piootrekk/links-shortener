@@ -1,0 +1,53 @@
+import { User, Session, WeakPassword } from "@supabase/supabase-js";
+import axiosInstance from "./axios";
+
+type TRegister = {
+  user: User;
+  session: Session;
+};
+
+type TLogin = TRegister & {
+  weakPassword?: WeakPassword;
+};
+
+type TLogout = {
+  success: boolean;
+};
+
+const login = async (email: string, password: string) => {
+  const response = await axiosInstance.post<TLogin>("/login", {
+    email,
+    password,
+  });
+  if (response) {
+    localStorage.setItem("authToken", response.data.session.access_token);
+  }
+  return response.data;
+};
+
+const register = async (email: string, password: string) => {
+  const response = await axiosInstance.post<TRegister>("/register", {
+    email,
+    password,
+  });
+  if (response) {
+    localStorage.setItem("authToken", response.data.session.access_token);
+  }
+  return response.data;
+};
+
+const logout = async () => {
+  const response = await axiosInstance.post<TLogout>("/logout");
+  if (response) {
+    localStorage.removeItem("authToken");
+  }
+  return response.data;
+};
+
+const user = async () => {
+  const response = await axiosInstance.get<User | null>("/user");
+  return response.data;
+};
+
+export { login, register, logout, user };
+export type { TLogin, TRegister, TLogout };

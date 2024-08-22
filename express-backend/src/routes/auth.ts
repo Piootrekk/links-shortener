@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
   }
   try {
     const user = await signUp(email, password);
-    res.status(401).json(user);
+    res.status(201).json(user);
   } catch (error) {
     if (error instanceof AuthError) {
       res.status(400).json({ message: error.message });
@@ -36,7 +36,7 @@ router.post("/register", async (req, res) => {
 router.post("/logout", async (req, res) => {
   try {
     await signOut();
-    res.json({ message: "Logged out" });
+    res.json({ success: true });
   } catch (error) {
     if (error instanceof AuthError) {
       res.status(400).json({ message: error.message });

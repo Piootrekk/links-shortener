@@ -1,6 +1,4 @@
-import supabase from "../supabase";
-import generateQR from "../../utils/qrGenerate";
-import { uploadFile, invokeQR } from "./files";
+import { invokeQR } from "./files";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

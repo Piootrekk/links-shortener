@@ -1,10 +1,11 @@
 import { User } from "@supabase/supabase-js";
 import { Router } from "express";
-import updateUrls from "../../supabase/db/update";
+import updateUrls from "../supabase/db/update";
+import authenticateUser from "../middlewares/loggedIn";
 
 const router = Router();
 
-router.put("/update-link", async (req, res) => {
+router.put("/update-link", authenticateUser, async (req, res) => {
   const user = req.user as User;
   const { id, url, title, shortUrl } = req.body;
   if (!id || !url || !title || !shortUrl) {

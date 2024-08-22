@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { deleteSelectedUrl } from "../../supabase/db/delete";
-
+import { deleteSelectedUrl } from "../supabase/db/delete";
+import authenticateUser from "../middlewares/loggedIn";
 const router = Router();
 
-router.delete("/delete-link", async (req, res) => {
+router.delete("/delete-link", authenticateUser, async (req, res) => {
   const { id, qrPath } = req.body;
   if (!id || !qrPath) {
     return res.status(400).json({ error: "Missing data" });

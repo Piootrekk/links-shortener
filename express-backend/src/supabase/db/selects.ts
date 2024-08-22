@@ -17,11 +17,15 @@ const getLink = async (short_url: string) => {
     where: {
       short_url,
     },
+    include: {
+      hidden_details: true,
+    },
   });
   return link;
 };
+
 // kiedyś dorobić idiki na limity
-const getAllLinks = async () => {
+const getEveryLinks = async () => {
   const links = await prisma.urls.findMany({
     take: 10,
     orderBy: {
@@ -33,16 +37,20 @@ const getAllLinks = async () => {
 };
 
 const getLinksNotAuthInfo = async () => {
+  const detailsCount = await prisma.hidden_details.count();
   const linksCount = await prisma.urls.count();
-  const lastAdded = await prisma.urls.findMany({
+  const lastAdded = await prisma.urls.findFirst({
     select: { created_at: true },
     take: 1,
     orderBy: {
       created_at: "desc",
     },
   });
-  const detailsCount = await prisma.hidden_details.count();
-  return { linksCount, lastAdded, detailsCount };
+  return {
+    total_clicks: detailsCount,
+    total_links: linksCount,
+    last_added: lastAdded?.created_at,
+  };
 };
 
-export { getAllLinks, getLink, getLinks, getLinksNotAuthInfo };
+export { getEveryLinks, getLink, getLinks, getLinksNotAuthInfo };

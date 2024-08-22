@@ -1,8 +1,10 @@
-import supabase from "../supabase";
+
 import { deleteFile } from "./files";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query", "info", "warn", "error"],
+});
 
 const deleteSelectedUrl = async (id: string, qrPath: string) => {
   await deleteFile(qrPath);
