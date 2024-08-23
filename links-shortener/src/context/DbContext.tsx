@@ -2,10 +2,14 @@ import { createContext, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { TUrls, urlsArraySchema } from "@/schemas/dbSchema";
-import { TCrud, userLinks } from "@/Api/crudAuth";
-import updateUrls from "@/supabase/db/update";
-import insertUrl from "@/supabase/db/inserts";
-import { deleteSelectedUrl } from "@/supabase/db/delete";
+import {
+  insertLink,
+  updateLink,
+  deleteLink,
+  TCrud,
+  userLinks,
+} from "@/Api/crudAuth";
+
 import { User } from "@supabase/supabase-js";
 
 type DbContextType = {
@@ -29,13 +33,9 @@ const useDb = () => {
 const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const get = useFetchCallback<TUrls>(userLinks, urlsArraySchema);
-  const insert = useFetchCallback<TCrud>(insertUrl);
-  const update = useFetchCallback<TCrud>(updateUrls);
-  const del = useFetchCallback<TCrud>(deleteSelectedUrl);
-
-  useEffect(() => {
-    if (user !== null && user !== undefined) get.execute();
-  }, []);
+  const insert = useFetchCallback<TCrud>(insertLink);
+  const update = useFetchCallback<TCrud>(updateLink);
+  const del = useFetchCallback<TCrud>(deleteLink);
 
   useEffect(() => {
     if (user !== null && user !== undefined) get.execute();

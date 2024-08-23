@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../supabase";
 
 const getLinks = async (user_id: string) => {
   const links = await prisma.urls.findMany({

@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuthorized, user, logout, isLoading } = useAuth();
+  const { isAuthorized, user, logoutState } = useAuth();
 
   const loginHandler = () => {
     navigate("/auth");
@@ -17,12 +17,12 @@ const Header = () => {
       <Link to="/">
         <h1 className="text-3xl font-bold">URL Shortener</h1>
       </Link>
-      {!isLoading && isAuthorized === false ? (
+      {isAuthorized === false ? (
         <Button variant={"outline"} onClick={loginHandler}>
           Authorize
         </Button>
       ) : (
-        <UserMenu user={user!} logout={logout} />
+        <UserMenu user={user!} logout={logoutState} />
       )}
     </nav>
   );

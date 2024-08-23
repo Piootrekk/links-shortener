@@ -31,7 +31,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   const short = shortUrlGenerate(2, 6);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { user, update } = useDb();
+  const { update } = useDb();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -58,9 +58,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    console.log(formData);
-    if (!user) throw new Error("User not found");
-    await update.execute(user.id, id, formData);
+    await update.execute(id, formData.url, formData.title, formData.shortUrl);
     if (!update.error) return;
   };
 

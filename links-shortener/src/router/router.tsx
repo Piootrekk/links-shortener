@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import DefaultLayout from "./Layout/DefaultLayout";
-import LandingView from "./Pages/LandingView";
+import HomeView from "./Pages/HomeView";
 import DashboardView from "./Pages/DashboardView";
 import AuthView from "./Pages/AuthView";
 import RedirectView from "./Pages/RedirectView";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LandingView />,
+        element: <HomeView />,
       },
       {
         path: "link/:id",

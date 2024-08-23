@@ -12,8 +12,7 @@ router.get(
     const user = req.user as User;
     try {
       const links = await getLinks(user.id);
-      console.log(links);
-      console.log(user.id);
+
       res.json(links);
     } catch (error) {
       res.status(500).json({ error: error });
@@ -24,7 +23,6 @@ router.get(
 router.get("/home-info", async (req, res) => {
   try {
     const notAuthLinks = await getLinksNotAuthInfo();
-    console.log(notAuthLinks);
     res.json(notAuthLinks);
   } catch (error) {
     res.status(500).json({ error: error });

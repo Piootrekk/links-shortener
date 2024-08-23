@@ -13,7 +13,6 @@ passport.use(
       if (error || !data) {
         return done(null, false);
       }
-      console.log(data);
       return done(null, data.user);
     } catch (error) {
       return done(error);

@@ -20,6 +20,7 @@ const login = async (email: string, password: string) => {
     password,
   });
   if (response) {
+    console.log(response.data.session.access_token);
     localStorage.setItem("authToken", response.data.session.access_token);
   }
   return response.data;
@@ -42,7 +43,14 @@ const logout = () => {
 };
 
 const getuserInfo = async () => {
-  const response = await axiosInstance.get<User | null>("/user");
+  const response = await axiosInstance<User | null>({
+    method: "GET",
+    url: "/user",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+
   return response.data;
 };
 

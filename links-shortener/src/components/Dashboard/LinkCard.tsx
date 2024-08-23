@@ -12,7 +12,7 @@ type LinksCardProps = {
 };
 
 const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
-  const URL = import.meta.env.VITE_URL;
+  const URL = import.meta.env.VITE_FRONTEND_URL;
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
@@ -36,21 +36,24 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg">
+    <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg w-full">
       {link.qr_code && <DialogQR qrCode={link.qr_code} />}
-      <div className="flex flex-col">
-        <Link to={`/link/${link.id}`} className=" text-xl font-extrabold">
+      <div className="flex flex-col truncate text-ellipsis">
+        <Link
+          to={`/link/${link.id}`}
+          className="text-xl font-extrabold truncate break-all"
+        >
           {link.title}
         </Link>
         <Link
           to={`/${link.short_url}`}
-          className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer text-clip"
+          className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer truncate break-all"
         >
           {URL}/{link.short_url}
         </Link>
         <a
+          className="flex items-center gap-1 hover:underline cursor-pointer"
           href={link.original_url}
-          className="flex items-center gap-1 hover:underline cursor-pointer "
         >
           {link.original_url}
         </a>
@@ -58,6 +61,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           {new Date(link.created_at).toLocaleString()}
         </span>
       </div>
+
       <div className="flex gap-2 justify-end flex-1">
         <Button variant={"ghost"} onClick={handleCopy}>
           {copied ? (

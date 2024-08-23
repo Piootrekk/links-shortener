@@ -1,17 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../supabase";
 
 // TODO Kiedyś dodać updated_time
-
-const prisma = new PrismaClient();
 
 const updateUrls = async (
   userId: string,
   id: string,
-  formItems: {
-    url: string;
-    title: string;
-    shortUrl: string;
-  }
+  url: string,
+  title: string,
+  shortUrl: string
 ) => {
   const updatedUrl = await prisma.urls.update({
     where: {
@@ -19,9 +15,9 @@ const updateUrls = async (
       user_id: userId,
     },
     data: {
-      original_url: formItems.url,
-      title: formItems.title,
-      short_url: formItems.shortUrl,
+      original_url: url,
+      title: title,
+      short_url: shortUrl,
     },
   });
   return {

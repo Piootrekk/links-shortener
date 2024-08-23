@@ -1,7 +1,5 @@
 import { invokeQR } from "./files";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../supabase";
 
 const insertUrl = async (
   orginal_url: string,
@@ -13,9 +11,9 @@ const insertUrl = async (
   const inserts = await prisma.urls.create({
     data: {
       original_url: orginal_url,
-      short_url,
-      title,
-      user_id,
+      short_url: short_url,
+      title: title,
+      user_id: user_id,
       qr_code: qrPath,
     },
   });

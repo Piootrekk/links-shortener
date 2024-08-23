@@ -5,17 +5,16 @@ import { useNavigate } from "react-router-dom";
 type AuthProtectedProps = PropsWithChildren;
 
 const RequireAuth: React.FC<AuthProtectedProps> = ({ children }) => {
-  const { isAuthorized, isLoading } = useAuth();
+  const { isAuthorized } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthorized && isLoading === false) {
+    if (!isAuthorized) {
       navigate("/auth", { replace: true });
     }
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isAuthorized && !isLoading) return children;
+  if (isAuthorized) return children;
 };
 
 export default RequireAuth;

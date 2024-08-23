@@ -5,13 +5,11 @@ import { Input } from "../ui/input";
 import { signUpSchema, TSignUpSchema } from "@/schemas/authSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { register as authRegister } from "@/Api/auth";
-import useFetchCallback from "@/hooks/useFetchCallback";
-import UserAuthChecker from "./UserAuthChecker";
 import LoadingSpin from "../ui/loading-spin";
+import { useAuth } from "@/context/AuthContext";
 
 const Register = () => {
-  const { data, error, isLoading, execute } = useFetchCallback(authRegister);
+  const { registerState } = useAuth();
   const {
     register,
     handleSubmit,
@@ -21,19 +19,20 @@ const Register = () => {
   });
 
   const onSubmit = (formData: TSignUpSchema) => {
-    execute(formData.email, formData.password);
+    registerState.execute(formData.email, formData.password);
   };
 
   return (
     <>
-      {data && <UserAuthChecker />}
       <Card>
         <CardHeader className="text-2xl">
           Register
           <CardDescription className="text-sm">
             <label>to create an account.</label>
           </CardDescription>
-          {error && <ErrorMessage message={error.message} />}
+          {registerState.error && (
+            <ErrorMessage message={registerState.error.message} />
+          )}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -67,7 +66,7 @@ const Register = () => {
               )}
             </div>
             <Button type="submit" className="w-full p-2">
-              {isLoading ? <LoadingSpin /> : "Register"}
+              {registerState.isLoading ? <LoadingSpin /> : "Register"}
             </Button>
           </form>
         </CardContent>

@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
 import { config } from "dotenv";
 
@@ -11,4 +12,6 @@ if (!supabaseKey) throw new Error("EXPRESS_SUPABASE_KEY is not defined");
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const prisma = new PrismaClient();
+export { prisma };
 export default supabase;

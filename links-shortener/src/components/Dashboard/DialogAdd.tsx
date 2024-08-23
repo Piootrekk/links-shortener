@@ -20,7 +20,6 @@ import insertLinkSchema, {
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
 
-import { useAuth } from "@/context/AuthContext";
 import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
 
@@ -30,7 +29,6 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const short = shortUrlGenerate(2, 6);
   const { insert } = useDb();
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -55,13 +53,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    if (!user) throw new Error("User not found");
-    await insert.execute(
-      formData.url,
-      formData.shortUrl,
-      formData.title,
-      user?.id
-    );
+    await insert.execute(formData.url, formData.shortUrl, formData.title);
     if (!insert.error) return;
   };
 
@@ -104,7 +96,9 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           />
           {errors.url && <ErrorMessage message={errors.url.message} />}
           <div className="flex items-center gap-2 mt-4 mb-4">
-            <Card className="p-2">{import.meta.env.VITE_URL || "URL"}</Card>
+            <Card className="p-2">
+              {import.meta.env.VITE_FRONTEND_URL || "URL"}
+            </Card>
             <span>{"/"}</span>
             <Input
               type="text"

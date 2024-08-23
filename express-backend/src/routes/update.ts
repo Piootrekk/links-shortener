@@ -7,16 +7,18 @@ const router = Router();
 
 router.put("/update-link", authMiddleware, async (req, res) => {
   const user = req.user as User;
-  const { id, url, title, shortUrl } = req.body;
-  if (!id || !url || !title || !shortUrl) {
+  const { id, orginal_url, title, short_url } = req.body;
+  if (!id || !orginal_url || !title || !short_url) {
     return res.status(400).json({ error: "Missing data" });
   }
   try {
-    const updatedUrl = await updateUrls(user.id, id, {
-      url,
+    const updatedUrl = await updateUrls(
+      user.id,
+      id,
+      orginal_url,
       title,
-      shortUrl,
-    });
+      short_url
+    );
     res.json(updatedUrl);
   } catch (error) {
     res.status(500).json({ error: error });

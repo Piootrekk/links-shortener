@@ -6,14 +6,12 @@ import { TLoginSchema, loginSchema } from "@/schemas/authSchema";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useFetchCallback from "@/hooks/useFetchCallback";
-import { login } from "@/Api/auth";
-import UserAuthChecker from "./UserAuthChecker";
 import LoadingSpin from "../ui/loading-spin";
 import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
-  const { data, error, isLoading, execute } = useFetchCallback(login);
+  const { loginState } = useAuth();
 
   const {
     register,
@@ -24,23 +22,24 @@ const Login = () => {
   });
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(loginState.data);
+  }, [loginState.data]);
 
   const onSubmit = (formData: TLoginSchema) => {
-    execute(formData.email, formData.password);
+    loginState.execute(formData.email, formData.password);
   };
 
   return (
     <>
-      {data && <UserAuthChecker />}
       <Card>
         <CardHeader className="text-2xl">
           Login
           <CardDescription>
             <label>to your account if you have one.</label>
           </CardDescription>
-          {error && <ErrorMessage message={error.message} />}
+          {loginState.error && (
+            <ErrorMessage message={loginState.error.message} />
+          )}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,7 +62,7 @@ const Login = () => {
               )}
             </div>
             <Button type="submit" className="w-full p-2">
-              {isLoading ? <LoadingSpin /> : "Login"}
+              {loginState.isLoading ? <LoadingSpin /> : "Login"}
             </Button>
           </form>
         </CardContent>
