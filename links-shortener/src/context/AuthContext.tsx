@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useEffect } from "react";
-import { getCurrentUser, signOut } from "@/supabase/auth";
 import { User } from "@supabase/supabase-js";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
+import { getuserInfo, logout as logoutAuth } from "@/Api/auth";
 
 type AuthContextType = {
   user: User | null | undefined;
   isLoading: boolean;
   isAuthorized: boolean | undefined;
   getUser: (...args: any[]) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,7 +26,7 @@ const useAuth = () => {
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { data, isLoading, execute } = useFetchCallback(getCurrentUser);
+  const { data, isLoading, execute } = useFetchCallback(getuserInfo);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,9 +35,15 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const logout = async () => {
-    await signOut();
-    await execute();
+    const response = logoutAuth();
+    if (response.success) {
+      await execute();
+    }
   };
 
   if (isLoading) {

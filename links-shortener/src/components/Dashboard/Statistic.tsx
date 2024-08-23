@@ -18,8 +18,7 @@ const Statistic: React.FC<StatisticProps> = ({ data }) => {
     },
     {
       title: "Your Links Clicked",
-      content:
-        data?.reduce((acc, curr) => acc + curr.hidden_details.length, 0) || 0,
+      content: 0,
     },
   ];
 

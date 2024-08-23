@@ -16,10 +16,10 @@ const urlSchema = z.object({
   created_at: z.string().datetime({ offset: true }),
   original_url: z.string().url(),
   short_url: z.string(),
-  title: z.string(),
-  qr_code: z.string(),
+  title: z.string().nullable(),
+  qr_code: z.string().nullable(),
   id: z.string().uuid(),
-  hidden_details: detailsArraySchema,
+  user_id: z.string().uuid().nullable(),
 });
 
 const urlsArraySchema = z.array(urlSchema);
@@ -32,5 +32,5 @@ const singleCustomUrlSchema = z.object({
 
 type TCustomeUrl = z.infer<typeof singleCustomUrlSchema>;
 
-export { urlsArraySchema, singleCustomUrlSchema };
+export { urlsArraySchema, singleCustomUrlSchema, detailsArraySchema };
 export type { TUrls, TUrl, TCustomeUrl };

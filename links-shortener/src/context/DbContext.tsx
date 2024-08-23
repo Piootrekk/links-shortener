@@ -2,8 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { TUrls, urlsArraySchema } from "@/schemas/dbSchema";
-import { getAllAuthroized } from "@/supabase/db/selects";
-import { TCrud } from "@/supabase/supabase";
+import { TCrud, userLinks } from "@/Api/crudAuth";
 import updateUrls from "@/supabase/db/update";
 import insertUrl from "@/supabase/db/inserts";
 import { deleteSelectedUrl } from "@/supabase/db/delete";
@@ -29,17 +28,17 @@ const useDb = () => {
 
 const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
-  const get = useFetchCallback<TUrls>(getAllAuthroized, urlsArraySchema);
+  const get = useFetchCallback<TUrls>(userLinks, urlsArraySchema);
   const insert = useFetchCallback<TCrud>(insertUrl);
   const update = useFetchCallback<TCrud>(updateUrls);
   const del = useFetchCallback<TCrud>(deleteSelectedUrl);
 
   useEffect(() => {
-    if (user !== null && user !== undefined) get.execute(user?.id);
+    if (user !== null && user !== undefined) get.execute();
   }, []);
 
   useEffect(() => {
-    if (user !== null && user !== undefined) get.execute(user?.id);
+    if (user !== null && user !== undefined) get.execute();
   }, [insert.data, update.data, del.data]);
 
   if (user === null) return <>{children}</>;

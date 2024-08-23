@@ -37,7 +37,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
 
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg">
-      <DialogQR qrCode={link.qr_code} />
+      {link.qr_code && <DialogQR qrCode={link.qr_code} />}
       <div className="flex flex-col">
         <Link to={`/link/${link.id}`} className=" text-xl font-extrabold">
           {link.title}
@@ -68,7 +68,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         </Button>
         <DialogUpdate
           data={{
-            title: link.title,
+            title: link.title!,
             url: link.original_url,
             shortUrl: link.short_url,
           }}
@@ -77,7 +77,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         <Button variant={"ghost"} onClick={handleDownload}>
           <Download className="w-6 h-6" />
         </Button>
-        <DialogRemove title={link.title} id={link.id} qrPath={link.qr_code} />
+        <DialogRemove title={link.title!} id={link.id} qrPath={link.qr_code!} />
       </div>
     </div>
   );

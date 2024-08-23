@@ -36,18 +36,15 @@ const register = async (email: string, password: string) => {
   return response.data;
 };
 
-const logout = async () => {
-  const response = await axiosInstance.post<TLogout>("/logout");
-  if (response) {
-    localStorage.removeItem("authToken");
-  }
-  return response.data;
+const logout = () => {
+  localStorage.removeItem("authToken");
+  return { success: true };
 };
 
-const user = async () => {
+const getuserInfo = async () => {
   const response = await axiosInstance.get<User | null>("/user");
   return response.data;
 };
 
-export { login, register, logout, user };
+export { login, register, logout, getuserInfo };
 export type { TLogin, TRegister, TLogout };

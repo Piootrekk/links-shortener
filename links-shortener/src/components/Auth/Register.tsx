@@ -5,13 +5,13 @@ import { Input } from "../ui/input";
 import { signUpSchema, TSignUpSchema } from "@/schemas/authSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUp } from "@/supabase/auth";
+import { register as authRegister } from "@/Api/auth";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import UserAuthChecker from "./UserAuthChecker";
 import LoadingSpin from "../ui/loading-spin";
 
 const Register = () => {
-  const { data, error, isLoading, execute } = useFetchCallback(signUp);
+  const { data, error, isLoading, execute } = useFetchCallback(authRegister);
   const {
     register,
     handleSubmit,

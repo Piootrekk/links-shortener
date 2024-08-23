@@ -7,12 +7,13 @@ import { TLoginSchema, loginSchema } from "@/schemas/authSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { signIn } from "@/supabase/auth";
+import { login } from "@/Api/auth";
 import UserAuthChecker from "./UserAuthChecker";
 import LoadingSpin from "../ui/loading-spin";
+import { useEffect } from "react";
 
 const Login = () => {
-  const { data, error, isLoading, execute } = useFetchCallback(signIn);
+  const { data, error, isLoading, execute } = useFetchCallback(login);
 
   const {
     register,
@@ -21,6 +22,10 @@ const Login = () => {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const onSubmit = (formData: TLoginSchema) => {
     execute(formData.email, formData.password);

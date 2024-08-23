@@ -16,6 +16,7 @@ const updateUrls = async (
   const updatedUrl = await prisma.urls.update({
     where: {
       id,
+      user_id: userId,
     },
     data: {
       original_url: formItems.url,
