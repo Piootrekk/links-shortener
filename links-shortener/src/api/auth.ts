@@ -1,33 +1,34 @@
-import { User, Session, WeakPassword } from "@supabase/supabase-js";
 import axiosInstance from "./axios";
-
-type TRegister = {
-  user: User;
-  session: Session;
-};
-
-type TLogin = TRegister & {
-  weakPassword?: WeakPassword;
-};
 
 type TLogout = {
   success: boolean;
 };
 
+type TUser = {
+  id: string;
+  email: string;
+  created_at: string;
+  last_sign_in_at: string;
+  meta_role: string;
+  email_verified: boolean;
+  session: {
+    access_token: string;
+  };
+};
+
 const login = async (email: string, password: string) => {
-  const response = await axiosInstance.post<TLogin>("/login", {
+  const response = await axiosInstance.post<TUser>("/login", {
     email,
     password,
   });
   if (response) {
-    console.log(response.data.session.access_token);
     localStorage.setItem("authToken", response.data.session.access_token);
   }
   return response.data;
 };
 
 const register = async (email: string, password: string) => {
-  const response = await axiosInstance.post<TRegister>("/register", {
+  const response = await axiosInstance.post<TUser>("/register", {
     email,
     password,
   });
@@ -43,7 +44,7 @@ const logout = () => {
 };
 
 const getuserInfo = async () => {
-  const response = await axiosInstance<User | null>({
+  const response = await axiosInstance<TUser | null>({
     method: "GET",
     url: "/user",
     headers: {
@@ -55,4 +56,4 @@ const getuserInfo = async () => {
 };
 
 export { login, register, logout, getuserInfo };
-export type { TLogin, TRegister, TLogout };
+export type { TLogout, TUser };

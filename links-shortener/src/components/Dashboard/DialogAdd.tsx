@@ -22,12 +22,14 @@ import { useForm } from "react-hook-form";
 
 import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
+import { useAuth } from "@/context/AuthContext";
 
 type DialogAddFormProps = {};
 
 const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const short = shortUrlGenerate(2, 6);
   const { insert } = useDb();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const onHandleShortUrlGenerate = () => {
@@ -53,7 +55,12 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await insert.execute(formData.url, formData.shortUrl, formData.title);
+    await insert.execute(
+      user?.session.access_token,
+      formData.url,
+      formData.shortUrl,
+      formData.title
+    );
     if (!insert.error) return;
   };
 

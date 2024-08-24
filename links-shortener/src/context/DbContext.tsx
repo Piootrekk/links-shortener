@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect } from "react";
-import { useAuth } from "./AuthContext";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { TUrls, urlsArraySchema } from "@/schemas/dbSchema";
 import {
@@ -9,15 +8,13 @@ import {
   TCrud,
   userLinks,
 } from "@/Api/crudAuth";
-
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "./AuthContext";
 
 type DbContextType = {
   get: ReturnType<typeof useFetchCallback<TUrls>>;
   insert: ReturnType<typeof useFetchCallback<TCrud>>;
   update: ReturnType<typeof useFetchCallback<TCrud>>;
   del: ReturnType<typeof useFetchCallback<TCrud>>;
-  user: User | null | undefined;
 };
 
 const DbContext = createContext<DbContextType | undefined>(undefined);
@@ -31,32 +28,27 @@ const useDb = () => {
 };
 
 const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
   const get = useFetchCallback<TUrls>(userLinks, urlsArraySchema);
   const insert = useFetchCallback<TCrud>(insertLink);
   const update = useFetchCallback<TCrud>(updateLink);
   const del = useFetchCallback<TCrud>(deleteLink);
-
+  const { user } = useAuth();
   useEffect(() => {
-    if (user !== null && user !== undefined) get.execute();
+    if (get.data) get.execute(user?.session.access_token);
   }, [insert.data, update.data, del.data]);
 
-  if (user === null) return <>{children}</>;
-  else {
-    return (
-      <DbContext.Provider
-        value={{
-          get,
-          insert,
-          update,
-          del,
-          user,
-        }}
-      >
-        {children}
-      </DbContext.Provider>
-    );
-  }
+  return (
+    <DbContext.Provider
+      value={{
+        get,
+        insert,
+        update,
+        del,
+      }}
+    >
+      {children}
+    </DbContext.Provider>
+  );
 };
 export { DbProvider };
 export default useDb;

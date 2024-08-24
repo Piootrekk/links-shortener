@@ -1,23 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
-import {
-  getuserInfo,
-  login,
-  logout,
-  TLogin,
-  TRegister,
-  register,
-} from "@/Api/auth";
+import { getuserInfo, login, logout, register, TUser } from "@/Api/auth";
 
 type AuthContextType = {
-  user: User | null | undefined;
+  user: TUser | null | undefined;
   isAuthorized: boolean;
-  authState: ReturnType<typeof useFetchCallback<User | null>>;
-  loginState: ReturnType<typeof useFetchCallback<TLogin>>;
-  registerState: ReturnType<typeof useFetchCallback<TRegister>>;
+  authState: ReturnType<typeof useFetchCallback<TUser | null>>;
+  loginState: ReturnType<typeof useFetchCallback<TUser>>;
+  registerState: ReturnType<typeof useFetchCallback<TUser>>;
   logoutState: () => void;
 };
 
@@ -34,12 +26,12 @@ const useAuth = () => {
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [user, setUser] = useState<TUser | null | undefined>(undefined);
   const authState = useFetchCallback(getuserInfo);
-  const loginState = useFetchCallback<TLogin>(login);
-  const registerState = useFetchCallback<TRegister>(register);
+  const loginState = useFetchCallback<TUser>(login);
+  const registerState = useFetchCallback<TUser>(register);
 
-  const logoutState = () => {
+  const logoutState = async () => {
     const isOut = logout();
     if (isOut.success) {
       setUser(null);
@@ -56,11 +48,17 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [authState.data]);
 
   useEffect(() => {
-    if (loginState.data) setUser(loginState.data.user);
+    if (loginState.data) {
+      setUser(loginState.data);
+      authState.execute();
+    }
   }, [loginState.data]);
 
   useEffect(() => {
-    if (registerState.data) setUser(registerState.data.user);
+    if (registerState.data) {
+      setUser(registerState.data);
+      authState.execute();
+    }
   }, [registerState.data]);
 
   if (authState.isLoading) {
@@ -73,7 +71,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         value={{
           user,
           isAuthorized: Boolean(user),
-
           authState,
           loginState,
           registerState,

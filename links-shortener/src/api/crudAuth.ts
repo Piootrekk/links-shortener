@@ -6,34 +6,36 @@ type TCrud = {
   success: boolean;
 };
 
-const header = {
-  Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+const getheader = (sessionId: string) => {
+  return { Authorization: `Bearer ${sessionId}` };
 };
 
-const userLinks = async () => {
+const userLinks = async (sessionId: string) => {
   const response = await axiosInstance<TUrls>({
     method: "GET",
     url: "/user-links",
-    headers: header,
+    headers: getheader(sessionId),
   });
   return response.data;
 };
 
 const insertLink = async (
+  sessionId: string,
   orginal_url: string,
   short_url: string,
   title: string
 ) => {
   const response = await axiosInstance<TCrud>({
     method: "POST",
-    url: "/insert-link",
-    headers: header,
+    url: "/add-link",
+    headers: getheader(sessionId),
     data: { orginal_url, short_url, title },
   });
   return response.data;
 };
 
 const updateLink = async (
+  sessionId: string,
   id: string,
   orginal_url: string,
   title: string,
@@ -42,17 +44,17 @@ const updateLink = async (
   const response = await axiosInstance<TCrud>({
     method: "PUT",
     url: "/update-link",
-    headers: header,
+    headers: getheader(sessionId),
     data: { id, orginal_url, title, short_url },
   });
   return response.data;
 };
 
-const deleteLink = async (id: string, qr_code: string) => {
+const deleteLink = async (sessionId: string, id: string, qr_code: string) => {
   const response = await axiosInstance<TCrud>({
     method: "DELETE",
     url: "/delete-link",
-    headers: header,
+    headers: getheader(sessionId),
     data: { id, qr_code },
   });
   return response.data;

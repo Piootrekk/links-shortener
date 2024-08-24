@@ -10,10 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
-import { User } from "@supabase/supabase-js";
 import { Link } from "react-router-dom";
+import { TUser } from "@/Api/auth";
 type UserMenuProps = {
-  user: User;
+  user: TUser;
   logout: () => void;
 };
 

@@ -5,7 +5,7 @@ const router = Router();
 
 router.delete("/delete-link", authMiddleware, async (req, res) => {
   const { id, qr_code } = req.body;
-  if (!id || !qr_code) {
+  if (!id) {
     return res.status(400).json({ error: "Missing data" });
   }
   try {

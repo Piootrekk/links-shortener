@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { TUrl } from "@/schemas/dbSchema";
 import { Button } from "../ui/button";
 import { Copy, CopyCheck, Download } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
 import DialogUpdate from "./DialogUpdate";
+import borderplateQR from "@/../public/borderplate.png";
 
 type LinksCardProps = {
   link: TUrl;
@@ -14,30 +15,26 @@ type LinksCardProps = {
 const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   const URL = import.meta.env.VITE_FRONTEND_URL;
   const [copied, setCopied] = useState(false);
-  const timeoutRef = useRef<number | null>(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`${URL}/${link.short_url}`);
     setCopied(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = window.setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {};
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg w-full">
-      {link.qr_code && <DialogQR qrCode={link.qr_code} />}
+      {link.qr_code ? (
+        <DialogQR qrCode={link.qr_code} />
+      ) : (
+        <img
+          src={borderplateQR}
+          alt="QR Code"
+          className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-not-allowed"
+        />
+      )}
+
       <div className="flex flex-col truncate text-ellipsis">
         <Link
           to={`/link/${link.id}`}

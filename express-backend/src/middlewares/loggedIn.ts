@@ -3,7 +3,8 @@ import { Strategy as BearerStrategy } from "passport-http-bearer";
 import supabase from "../supabase/supabase";
 import { NextFunction, Response, Request } from "express";
 import { User } from "@supabase/supabase-js";
-import { userInfo } from "os";
+
+export type TPasportUser = User & { token: string };
 
 passport.use(
   new BearerStrategy(async (token, done) => {
@@ -13,7 +14,11 @@ passport.use(
       if (error || !data) {
         return done(null, false);
       }
-      return done(null, data.user);
+      const user = {
+        ...data.user,
+        token: token,
+      } as TPasportUser;
+      return done(null, user);
     } catch (error) {
       return done(error);
     }
@@ -29,7 +34,7 @@ export const authMiddleware = (
   passport.authenticate(
     "bearer",
     { session: false },
-    (err: unknown, user: User) => {
+    (err: unknown, user: TPasportUser) => {
       if (err) {
         return res
           .status(500)

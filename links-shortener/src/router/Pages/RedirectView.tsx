@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { getCustomLink } from "@/supabase/db/selects";
 import { singleCustomUrlSchema, TCustomeUrl } from "@/schemas/dbSchema";
-import loadUa from "@/lib/uaParser";
+// import loadUa from "@/lib/uaParser";
 import LoadingSpin from "@/components/ui/loading-spin";
 
 const RedirectView = () => {
@@ -24,8 +24,8 @@ const RedirectView = () => {
     );
   if (error) return <div>Error: {<p>{error.message}</p>}</div>;
   if (data) {
-    const ua = loadUa();
-    console.log(ua);
+    // const y = loadUa();
+
     window.location.href = data.original_url;
   }
 

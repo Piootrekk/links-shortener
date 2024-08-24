@@ -17,6 +17,7 @@ import ErrorMessage from "../Error/ErrorMessage";
 import { useEffect, useState } from "react";
 import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
+import { useAuth } from "@/context/AuthContext";
 
 type DialogRemoveProps = {
   title: string;
@@ -28,6 +29,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const removeSchema = removeLinkSchema(title.trim());
   const { del } = useDb();
+  const { user } = useAuth();
   type TRemoveLinkSchema = z.infer<typeof removeSchema>;
   const {
     register,
@@ -38,9 +40,8 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
     resolver: zodResolver(removeSchema),
   });
 
-  const onSubmit = async (formData: TRemoveLinkSchema) => {
-    console.log(formData);
-    await del.execute(id, qrPath);
+  const onSubmit = async (_: TRemoveLinkSchema) => {
+    await del.execute(user?.session.access_token, id, qrPath);
     if (!del.error) return;
   };
 

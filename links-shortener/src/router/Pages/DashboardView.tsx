@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import DialogAdd from "@/components/Dashboard/DialogAdd";
 import useDb from "@/context/DbContext";
 import LoadingSpin from "@/components/ui/loading-spin";
+import { useAuth } from "@/context/AuthContext";
 
 const DashboardView = () => {
   const { get } = useDb();
+  const { user } = useAuth();
   const [search, setSearch] = useState<string>("");
   const data = get.data;
   const filteredData = data?.filter((link) =>
@@ -16,8 +18,7 @@ const DashboardView = () => {
   );
 
   useEffect(() => {
-    get.execute();
-    console.log("get- dashboard");
+    get.execute(user?.session.access_token);
   }, []);
 
   return (

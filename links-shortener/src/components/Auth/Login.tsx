@@ -7,7 +7,6 @@ import { TLoginSchema, loginSchema } from "@/schemas/authSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpin from "../ui/loading-spin";
-import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
@@ -20,10 +19,6 @@ const Login = () => {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
-
-  useEffect(() => {
-    console.log(loginState.data);
-  }, [loginState.data]);
 
   const onSubmit = (formData: TLoginSchema) => {
     loginState.execute(formData.email, formData.password);

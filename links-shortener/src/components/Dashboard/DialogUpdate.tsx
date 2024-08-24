@@ -21,6 +21,7 @@ import insertLinkSchema, {
 import { useForm } from "react-hook-form";
 import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
+import { useAuth } from "@/context/AuthContext";
 
 type DialogUpdateFormProps = {
   data?: TInsertLinkSchema;
@@ -32,6 +33,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const { update } = useDb();
+  const { user } = useAuth();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -58,7 +60,13 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await update.execute(id, formData.url, formData.title, formData.shortUrl);
+    await update.execute(
+      user?.session.access_token,
+      id,
+      formData.url,
+      formData.title,
+      formData.shortUrl
+    );
     if (!update.error) return;
   };
 
