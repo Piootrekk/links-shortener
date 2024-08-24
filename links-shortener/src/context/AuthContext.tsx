@@ -61,7 +61,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [registerState.data]);
 
-  if (authState.isLoading) {
+  if (authState.isLoading || authState.error) {
     return <RouterProvider router={routerSkeleton} />;
   }
 

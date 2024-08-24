@@ -6,7 +6,9 @@ import { useState } from "react";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
 import DialogUpdate from "./DialogUpdate";
-import borderplateQR from "@/../public/borderplate.png";
+import borderplateQR from "@/assets/borderplate.png";
+import qrDownload from "@/lib/qrDownload";
+import { useAuth } from "@/context/AuthContext";
 
 type LinksCardProps = {
   link: TUrl;
@@ -15,13 +17,15 @@ type LinksCardProps = {
 const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   const URL = import.meta.env.VITE_FRONTEND_URL;
   const [copied, setCopied] = useState(false);
-
+  const { user } = useAuth();
   const handleCopy = () => {
     navigator.clipboard.writeText(`${URL}/${link.short_url}`);
     setCopied(true);
   };
 
-  const handleDownload = () => {};
+  const handleDownload = () => {
+    qrDownload(link.qr_code!, user?.session.access_token!);
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg w-full">
@@ -34,8 +38,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-not-allowed"
         />
       )}
-
-      <div className="flex flex-col truncate text-ellipsis">
+      <div className="flex flex-col truncate text-ellipsis sm:order-1 order-2">
         <Link
           to={`/link/${link.id}`}
           className="text-xl font-extrabold truncate break-all"
@@ -51,7 +54,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         <a
           className="flex items-center gap-1 hover:underline cursor-pointer"
           href={link.original_url}
-        >
+        > 
           {link.original_url}
         </a>
         <span className="flex items-end text-sm flex-1">
@@ -59,7 +62,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         </span>
       </div>
 
-      <div className="flex gap-2 justify-end flex-1">
+      <div className="flex gap-2 sm:justify-end sm:flex-1 sm:order-2 order-1">
         <Button variant={"ghost"} onClick={handleCopy}>
           {copied ? (
             <CopyCheck className="w-6 h-6" />
@@ -75,7 +78,11 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           }}
           id={link.id}
         />
-        <Button variant={"ghost"} onClick={handleDownload}>
+        <Button
+          variant={"ghost"}
+          onClick={handleDownload}
+          disabled={!link.qr_code}
+        >
           <Download className="w-6 h-6" />
         </Button>
         <DialogRemove title={link.title!} id={link.id} qrPath={link.qr_code!} />

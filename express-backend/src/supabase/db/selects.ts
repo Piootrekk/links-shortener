@@ -51,4 +51,80 @@ const getLinksNotAuthInfo = async () => {
   };
 };
 
-export { getEveryLinks, getLink, getLinks, getLinksNotAuthInfo };
+const getLinksInfo = async (userId: string) => {
+  const hiddenDetailsCount = await prisma.hidden_details.count({
+    where: {
+      urls: {
+        user_id: userId,
+      },
+    },
+  });
+  const linksCount = await prisma.urls.count({
+    where: {
+      user_id: userId,
+    },
+  });
+  const lastAdded = await prisma.urls.findFirst({
+    select: { created_at: true },
+    where: {
+      user_id: userId,
+    },
+    take: 1,
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+  return {
+    total_clicks: hiddenDetailsCount,
+    total_links: linksCount,
+    last_added: lastAdded?.created_at,
+  };
+};
+
+const userLinksWithInfo = async (userId: string) => {
+  const [hiddenDetailsCount, linksData] = await prisma.$transaction([
+    prisma.hidden_details.count({
+      where: {
+        urls: {
+          user_id: userId,
+        },
+      },
+    }),
+    prisma.urls.aggregate({
+      where: {
+        user_id: userId,
+      },
+      _count: {
+        _all: true,
+      },
+      _max: {
+        created_at: true,
+      },
+    }),
+  ]);
+
+  const links = await prisma.urls.findMany({
+    where: {
+      user_id: userId,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  return {
+    total_clicks: hiddenDetailsCount,
+    total_links: linksData._count._all,
+    last_added: linksData._max.created_at,
+    links,
+  };
+};
+
+export {
+  getEveryLinks,
+  getLink,
+  getLinks,
+  getLinksNotAuthInfo,
+  getLinksInfo,
+  userLinksWithInfo,
+};

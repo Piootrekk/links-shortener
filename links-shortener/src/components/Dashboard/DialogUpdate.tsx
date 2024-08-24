@@ -65,7 +65,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
       id,
       formData.url,
       formData.title,
-      formData.shortUrl
+      formData.shortUrl 
     );
     if (!update.error) return;
   };

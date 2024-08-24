@@ -22,6 +22,15 @@ const urlSchema = z.object({
   user_id: z.string().uuid().nullable(),
 });
 
+const extendedUrlSchema = z.object({
+  links: z.array(urlSchema),
+  total_clicks: z.number(),
+  total_links: z.number(),
+  last_added: z.string().datetime({ offset: true }),
+});
+
+type TExtendedUrl = z.infer<typeof extendedUrlSchema>;
+
 const urlsArraySchema = z.array(urlSchema);
 type TUrls = z.infer<typeof urlsArraySchema>;
 type TUrl = z.infer<typeof urlSchema>;
@@ -32,5 +41,10 @@ const singleCustomUrlSchema = z.object({
 
 type TCustomeUrl = z.infer<typeof singleCustomUrlSchema>;
 
-export { urlsArraySchema, singleCustomUrlSchema, detailsArraySchema };
-export type { TUrls, TUrl, TCustomeUrl };
+export {
+  urlsArraySchema,
+  singleCustomUrlSchema,
+  detailsArraySchema,
+  extendedUrlSchema,
+};
+export type { TUrls, TUrl, TCustomeUrl, TExtendedUrl };

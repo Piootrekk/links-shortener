@@ -1,17 +1,17 @@
 import { createContext, useContext, useEffect } from "react";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { TUrls, urlsArraySchema } from "@/schemas/dbSchema";
+import { extendedUrlSchema, TExtendedUrl } from "@/schemas/dbSchema";
 import {
   insertLink,
   updateLink,
   deleteLink,
   TCrud,
-  userLinks,
+  userLinksWithInfo,
 } from "@/Api/crudAuth";
 import { useAuth } from "./AuthContext";
 
 type DbContextType = {
-  get: ReturnType<typeof useFetchCallback<TUrls>>;
+  get: ReturnType<typeof useFetchCallback<TExtendedUrl>>;
   insert: ReturnType<typeof useFetchCallback<TCrud>>;
   update: ReturnType<typeof useFetchCallback<TCrud>>;
   del: ReturnType<typeof useFetchCallback<TCrud>>;
@@ -28,13 +28,18 @@ const useDb = () => {
 };
 
 const DbProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const get = useFetchCallback<TUrls>(userLinks, urlsArraySchema);
+  const get = useFetchCallback<TExtendedUrl>(
+    userLinksWithInfo,
+    extendedUrlSchema
+  );
   const insert = useFetchCallback<TCrud>(insertLink);
   const update = useFetchCallback<TCrud>(updateLink);
   const del = useFetchCallback<TCrud>(deleteLink);
+
   const { user } = useAuth();
   useEffect(() => {
-    if (get.data) get.execute(user?.session.access_token);
+    if (get.data !== undefined && get.data !== null)
+      get.execute(user?.session.access_token);
   }, [insert.data, update.data, del.data]);
 
   return (

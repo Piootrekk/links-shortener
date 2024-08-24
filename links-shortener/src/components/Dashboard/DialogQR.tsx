@@ -19,7 +19,7 @@ const DialogQR: React.FC<DialogQRProps> = ({ qrCode }) => {
           <img
             src={`${import.meta.env.VITE_DB_ENDPOINT || ""}/${qrCode}`}
             alt="QR Code"
-            className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-pointer"
+            className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-pointer sm:justify-normal justify-center"
           />
         </DialogTrigger>
         <DialogContent>

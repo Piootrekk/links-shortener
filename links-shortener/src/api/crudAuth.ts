@@ -1,4 +1,4 @@
-import { TUrl, TUrls } from "@/schemas/dbSchema";
+import { TExtendedUrl, TUrl, TUrls } from "@/schemas/dbSchema";
 import axiosInstance from "./axios";
 
 type TCrud = {
@@ -13,7 +13,7 @@ const getheader = (sessionId: string) => {
 const userLinks = async (sessionId: string) => {
   const response = await axiosInstance<TUrls>({
     method: "GET",
-    url: "/user-links",
+    url: "/user-links-old",
     headers: getheader(sessionId),
   });
   return response.data;
@@ -60,5 +60,32 @@ const deleteLink = async (sessionId: string, id: string, qr_code: string) => {
   return response.data;
 };
 
-export { userLinks, insertLink, updateLink, deleteLink };
+const userLinksWithInfo = async (sessionId: string) => {
+  const response = await axiosInstance<TExtendedUrl>({
+    method: "GET",
+    url: "/user-links",
+    headers: getheader(sessionId),
+  });
+  return response.data;
+};
+
+const downloadQrCode = async (qrPath: string, sessionId: string) => {
+  const response = await axiosInstance<Blob>({
+    method: "POST",
+    url: "/download-png",
+    data: { qrPath },
+    headers: getheader(sessionId),
+    responseType: "blob",
+  });
+  return response.data;
+};
+
+export {
+  userLinks,
+  insertLink,
+  updateLink,
+  deleteLink,
+  userLinksWithInfo,
+  downloadQrCode,
+};
 export type { TCrud };

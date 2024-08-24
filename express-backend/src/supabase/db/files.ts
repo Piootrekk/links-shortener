@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import generateQR from "../../utils/qrGenerate";
 import supabase from "../supabase";
-
+import streamifier from "streamifier";
 config();
 
 const BUCKET_ENDPOINT = process.env.BUCKET_ENDPOINT;
@@ -29,4 +29,12 @@ const invokeQR = async (name: string) => {
   return qrPath;
 };
 
-export { uploadFile, deleteFile, invokeQR };
+const downloadFile = async (path: string) => {
+  const { data, error } = await supabase.storage.from("qrs").download(path);
+  if (error) throw new Error(error.message);
+  const buffer = Buffer.from(await data.arrayBuffer());
+  const stream = streamifier.createReadStream(buffer);
+  return stream;
+};
+
+export { uploadFile, deleteFile, invokeQR, downloadFile };
