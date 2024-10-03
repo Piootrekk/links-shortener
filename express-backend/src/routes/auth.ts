@@ -1,6 +1,5 @@
 import { Router, Request, Response, CookieOptions } from "express";
 import { signIn, signUp } from "../supabase/auth";
-import { isLoggedIn, TPasportUser } from "../middlewares/loggedIn";
 import { loginSchema, signUpSchema } from "../schemas/authSchema";
 import { getZodErrors } from "../utils/getZodErrors";
 import { TCookieCredentials, TUserCredentials } from "../schemas/authTypes";
@@ -76,12 +75,16 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/logout", async (req, res) => {
+  const cookies = req.cookies.access_token;
+  if (!cookies) {
+    return res.status(400).json({ message: "Already logged out" });
+  }
   res.clearCookie("access_token");
   res.json({ message: "Logged out successfully" });
 });
 
 router.get("/user", authMiddleware, async (req: Request, res: Response) => {
-  const user = req.user as TUserCredentials;
+  const user = req.user;
   res.json(user);
 });
 

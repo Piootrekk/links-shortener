@@ -9,10 +9,10 @@ const authMiddleware = async (
   const token = req.cookies.access_token;
   if (!token) return res.json(null);
   const tokenObject = JSON.parse(token) as TCookieCredentials;
-  console.log(tokenObject);
+
   try {
     const { user } = await tockenVerify(tokenObject.access_token);
-    console.log(user);
+
     if (!user) return res.json(null);
     const userCredentials: TUserCredentials = {
       id: user.id,

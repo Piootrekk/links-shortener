@@ -10,7 +10,7 @@ const getPersonalLinks = async (user_id: string) => {
   return links;
 };
 
-const getPrersonalLinksLimits = async (
+const getPrersonalLinksRange = async (
   user_id: string,
   min: number,
   max: number
@@ -30,10 +30,17 @@ const getUsersLinks = async () => {
   return links;
 };
 
-const getUsersLinksLimits = async (min: number, max: number) => {
+const getUsersLinksRange = async (min: number, max: number) => {
   const links = await prisma.urls.findMany({
     take: max,
     skip: min,
   });
   return links;
+};
+
+export {
+  getPersonalLinks,
+  getPrersonalLinksRange,
+  getUsersLinks,
+  getUsersLinksRange,
 };

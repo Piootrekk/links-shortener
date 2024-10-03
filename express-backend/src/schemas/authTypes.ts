@@ -1,3 +1,4 @@
+
 type TUserCredentials = {
   id: string;
   email: string;
@@ -9,5 +10,7 @@ type TCookieCredentials = {
   access_token: string;
   role: string;
 };
+
+
 
 export type { TUserCredentials, TCookieCredentials };

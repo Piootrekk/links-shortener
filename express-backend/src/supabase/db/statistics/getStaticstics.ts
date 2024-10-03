@@ -28,7 +28,7 @@ const userLinksWithInfo = async (userId: string) => {
   };
 };
 
-const AllLinksInfo = async () => {
+const allLinksInfo = async () => {
   const [hiddenDetailsCount, linksData] = await prisma.$transaction([
     prisma.hidden_details.count(),
     prisma.urls.aggregate({
@@ -47,4 +47,4 @@ const AllLinksInfo = async () => {
   };
 };
 
-export { userLinksWithInfo, AllLinksInfo };
+export { userLinksWithInfo, allLinksInfo };

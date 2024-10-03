@@ -1,17 +1,13 @@
 import { Router } from "express";
 import authRoutes from "./auth";
-import getsRoutes from "./gets";
-import updateRoutes from "./update";
-import deleteRoutes from "./delete";
-import createRoutes from "./inserts";
+import linksRoutes from "./links";
+import detailsRoutes from "./details";
 import statisticsRoutes from "./statistics";
 const router = Router();
 
 router.use("/", authRoutes);
-router.use("/", getsRoutes);
-router.use("/", updateRoutes);
-router.use("/", deleteRoutes);
-router.use("/", createRoutes);
+router.use("/", linksRoutes);
+router.use("/", detailsRoutes);
 router.use("/", statisticsRoutes);
 
 router.get("/*", (_, res) => {

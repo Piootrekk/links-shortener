@@ -1,6 +1,6 @@
 import { config } from "dotenv";
-import generateQR from "../../utils/qrGenerate";
-import supabase from "../supabase";
+import generateQR from "../utils/qrGenerate";
+import supabase from "./supabase";
 import streamifier from "streamifier";
 config();
 

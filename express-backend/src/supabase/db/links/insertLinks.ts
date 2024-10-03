@@ -26,4 +26,4 @@ const insertUrl = async (
   };
 };
 
-export default insertUrl;
+export { insertUrl };
