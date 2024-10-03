@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
 import { getLinks, userLinksWithInfo } from "../supabase/db/selects";
 import { User } from "@supabase/supabase-js";
-import { getLinksNotAuthInfo, getEveryLinks } from "../supabase/db/selects";
+import { getLinksNotAuthInfo, getEveryLinks } from "../supabase/db/statistics";
 import { authMiddleware } from "../middlewares/loggedIn";
-import { downloadFile } from "../supabase/db/files";
+import { downloadFile } from "../supabase/files";
 
 const router = Router();
 

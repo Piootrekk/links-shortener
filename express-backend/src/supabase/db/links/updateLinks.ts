@@ -1,8 +1,7 @@
-import { prisma } from "../supabase";
+import { prisma } from "../../supabase";
 
-// TODO Kiedyś dodać updated_time
-
-const updateUrls = async (
+//  TODO updatedTime
+const updateUrl = async (
   userId: string,
   id: string,
   url: string,
@@ -26,4 +25,4 @@ const updateUrls = async (
   };
 };
 
-export default updateUrls;
+export { updateUrl };

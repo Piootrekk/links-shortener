@@ -65,7 +65,7 @@ const Register = () => {
                 <ErrorMessage message={errors.confirmPassword.message} />
               )}
             </div>
-            <Button type="submit" className="w-full p-2">
+            <Button type="submit" className="w-full p-2" variant={"secondary"}>
               {registerState.isLoading ? <LoadingSpin /> : "Register"}
             </Button>
           </form>

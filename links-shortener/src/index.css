@@ -66,4 +66,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 30px 30px 30px 30px hsl(var(--background)) inset !important;
+  }
+  input:-webkit-autofill {
+    -webkit-text-fill-color: hsl(var(--foreground)) !important;
+  }
 }

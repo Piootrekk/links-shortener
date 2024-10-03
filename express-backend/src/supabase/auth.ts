@@ -6,7 +6,7 @@ const signUp = async (email: string, password: string) => {
     password,
     options: { data: { role: Role.redneck } },
   });
-  if (error) throw error;
+  if (error) throw error.message;
   return data;
 };
 
@@ -15,20 +15,15 @@ const signIn = async (email: string, password: string) => {
     email,
     password,
   });
-  if (error) throw error;
+  if (error) throw error.message;
   return data;
-};
-
-const getCurrentUser = async () => {
-  const { data, error } = await supabase.auth.getSession();
-  if (error) throw error;
-  return data.session?.user ?? null;
 };
 
 const tockenVerify = async (token: string) => {
   const { data, error } = await supabase.auth.getUser(token);
-  if (error) return { user: null };
+  if (error) throw error.message;
+  if (data === null || data.user === null) return { user: null };
   return data;
 };
 
-export { signUp, signIn, getCurrentUser, tockenVerify };
+export { signUp, signIn, tockenVerify };

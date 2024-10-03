@@ -79,7 +79,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="default">Create New</Button>
+        <Button variant="outline">Create New</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

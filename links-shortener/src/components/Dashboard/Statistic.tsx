@@ -22,12 +22,12 @@ const Statistic: React.FC<StatisticProps> = ({
 }) => {
   const contentInfo: TContentInfo[] = [
     {
-      title: "Total your links",
+      title: "Total links",
       content: totalLinks || 0,
       niceIcon: <Link2 size={24} />,
     },
     {
-      title: "Total your clicks",
+      title: "Total clicks",
       content: totalClicks || 0,
       niceIcon: <MousePointerClick size={24} />,
     },

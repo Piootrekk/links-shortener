@@ -34,7 +34,7 @@ const DashboardView = () => {
         <h1 className="text-4xl font-bold">My Links:</h1>
         <div className="flex gap-4">
           <Button
-            variant="default"
+            variant="outline"
             disabled={get.isLoading}
             onClick={() => get.execute(user?.session.access_token)}
           >
@@ -57,7 +57,9 @@ const DashboardView = () => {
       ) : filteredData === undefined ? (
         <p></p>
       ) : filteredData?.length === 0 ? (
-        <p className=" text-center text-sm">No Links Found</p>
+        <p className=" text-center text-sm text-muted-foreground">
+          No Links Found
+        </p>
       ) : (
         filteredData.map((link) => <LinkCard key={link.id} link={link} />)
       )}

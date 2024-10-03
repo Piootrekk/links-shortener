@@ -52,7 +52,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           {URL}/{link.short_url}
         </Link>
         <a
-          className="flex items-center gap-1 hover:underline cursor-pointer"
+          className="flex items-center gap-1 hover:underline cursor-pointer text-muted-foreground"
           href={link.original_url}
         > 
           {link.original_url}

@@ -56,7 +56,7 @@ const Login = () => {
                 <ErrorMessage message={errors.password.message!} />
               )}
             </div>
-            <Button type="submit" className="w-full p-2">
+            <Button type="submit" className="w-full p-2" variant={"secondary"}>
               {loginState.isLoading ? <LoadingSpin /> : "Login"}
             </Button>
           </form>

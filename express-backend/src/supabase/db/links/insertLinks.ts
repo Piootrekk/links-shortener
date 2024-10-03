@@ -1,5 +1,5 @@
-import { invokeQR } from "./files";
-import { prisma } from "../supabase";
+import { invokeQR } from "../../files";
+import { prisma } from "../../supabase";
 
 const insertUrl = async (
   orginal_url: string,

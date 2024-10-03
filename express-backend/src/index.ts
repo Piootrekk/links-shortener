@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import express, { Express, Request, Response } from "express";
 import router from "./routes";
 import headerMiddleware, { corsOptionsMiddleware } from "./middlewares/cors";
-import passport from "passport";
+import cookieParser from "cookie-parser";
 import { passportMiddleware } from "./middlewares/loggedIn";
 
 config();
@@ -16,6 +16,7 @@ app.use(passportMiddleware);
 
 app.use(corsOptionsMiddleware);
 app.use(headerMiddleware);
+app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 
