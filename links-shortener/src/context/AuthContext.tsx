@@ -1,16 +1,20 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import useFetchCallback from "@/hooks/useFetchCallback";
+import React, { createContext, PropsWithChildren, useContext } from "react";
+import useFetchMultiple from "@/hooks/useFetchCallback";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
-import { getuserInfo, login, logout, register, TUser } from "@/Api/auth";
+import { TUserCredentials } from "@/schemas/authSchema";
+import { login, logout, register } from "@/Api/auth";
 
 type AuthContextType = {
-  user: TUser | null | undefined;
+  user: ReturnType<typeof useFetchMultiple<TUserCredentials>>;
   isAuthorized: boolean;
-  authState: ReturnType<typeof useFetchCallback<TUser | null>>;
-  loginState: ReturnType<typeof useFetchCallback<TUser>>;
-  registerState: ReturnType<typeof useFetchCallback<TUser>>;
-  logoutState: () => void;
+  handleLogin: (email: string, password: string) => Promise<void>;
+  handleRegister: (
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => Promise<void>;
+  handleLogout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,45 +27,26 @@ const useAuth = () => {
   return context;
 };
 
-const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [user, setUser] = useState<TUser | null | undefined>(undefined);
-  const authState = useFetchCallback(getuserInfo);
-  const loginState = useFetchCallback<TUser>(login);
-  const registerState = useFetchCallback<TUser>(register);
+const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const user = useFetchMultiple<TUserCredentials>();
 
-  const logoutState = async () => {
-    const isOut = logout();
-    if (isOut.success) {
-      setUser(null);
-      authState.execute();
-    }
+  const handleLogin = async (email: string, password: string) => {
+    await user.execute(login, email, password);
   };
 
-  useEffect(() => {
-    authState.execute();
-  }, []);
+  const handleRegister = async (
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
+    await user.execute(register, email, password, confirmPassword);
+  };
 
-  useEffect(() => {
-    if (authState.data !== undefined) setUser(authState.data);
-  }, [authState.data]);
+  const handleLogout = async () => {
+    await user.execute(logout);
+  };
 
-  useEffect(() => {
-    if (loginState.data) {
-      setUser(loginState.data);
-      authState.execute();
-    }
-  }, [loginState.data]);
-
-  useEffect(() => {
-    if (registerState.data) {
-      setUser(registerState.data);
-      authState.execute();
-    }
-  }, [registerState.data]);
-
-  if (authState.isLoading || authState.error) {
+  if (user.isLoading || user.error) {
     return <RouterProvider router={routerSkeleton} />;
   }
 
@@ -71,10 +56,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         value={{
           user,
           isAuthorized: Boolean(user),
-          authState,
-          loginState,
-          registerState,
-          logoutState,
+          handleLogin,
+          handleRegister,
+          handleLogout,
         }}
       >
         {children}

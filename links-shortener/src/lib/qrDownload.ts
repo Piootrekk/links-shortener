@@ -1,4 +1,4 @@
-import { downloadQrCode } from "@/Api/crudAuth";
+import { downloadQrCode } from "@/Api/endpoints";
 
 const qrDownload = async (qrCode: string, sessionId: string) => {
   const qrStream = await downloadQrCode(qrCode, sessionId);

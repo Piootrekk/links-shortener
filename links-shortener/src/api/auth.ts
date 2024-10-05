@@ -1,59 +1,36 @@
 import axiosInstance from "./axios";
-
-type TLogout = {
-  success: boolean;
-};
-
-type TUser = {
-  id: string;
-  email: string;
-  created_at: string;
-  last_sign_in_at: string;
-  meta_role: string;
-  email_verified: boolean;
-  session: {
-    access_token: string;
-  };
-};
+import { TLogout, TUserCredentials } from "../schemas/authSchema";
 
 const login = async (email: string, password: string) => {
-  const response = await axiosInstance.post<TUser>("/login", {
+  const response = await axiosInstance.post<TUserCredentials>("/login", {
     email,
     password,
   });
-  if (response) {
-    localStorage.setItem("authToken", response.data.session.access_token);
-  }
   return response.data;
 };
 
-const register = async (email: string, password: string) => {
-  const response = await axiosInstance.post<TUser>("/register", {
+const register = async (
+  email: string,
+  password: string,
+  confirmPassword: string
+) => {
+  const response = await axiosInstance.post<TUserCredentials>("/register", {
     email,
     password,
+    confirmPassword,
   });
-  if (response) {
-    localStorage.setItem("authToken", response.data.session.access_token);
-  }
   return response.data;
 };
 
-const logout = () => {
-  localStorage.removeItem("authToken");
-  return { success: true };
+const logout = async () => {
+  const response = await axiosInstance.post<TLogout>("/logout");
+  return response.data;
 };
 
 const getuserInfo = async () => {
-  const response = await axiosInstance<TUser | null>({
-    method: "GET",
-    url: "/user",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-    },
-  });
-
+  const response = await axiosInstance.get<TUserCredentials | null>("/user");
   return response.data;
 };
 
 export { login, register, logout, getuserInfo };
-export type { TLogout, TUser };
+export type { TUserCredentials };

@@ -1,7 +1,8 @@
-import { prisma } from "../../supabase";
+import { prisma, seletedColumns } from "../../supabase";
 
 const getPersonalLinks = async (user_id: string) => {
   const links = await prisma.urls.findMany({
+    select: seletedColumns,
     where: {
       user_id,
     },
@@ -12,26 +13,30 @@ const getPersonalLinks = async (user_id: string) => {
 
 const getPrersonalLinksRange = async (
   user_id: string,
-  min: number,
-  max: number
+  take: number,
+  skip: number
 ) => {
   const links = await prisma.urls.findMany({
+    select: seletedColumns,
     where: {
       user_id,
     },
-    take: max,
-    skip: min,
+    take: take,
+    skip: skip,
   });
   return links;
 };
 
 const getUsersLinks = async () => {
-  const links = await prisma.urls.findMany();
+  const links = await prisma.urls.findMany({
+    select: seletedColumns,
+  });
   return links;
 };
 
 const getUsersLinksRange = async (min: number, max: number) => {
   const links = await prisma.urls.findMany({
+    select: seletedColumns,
     take: max,
     skip: min,
   });

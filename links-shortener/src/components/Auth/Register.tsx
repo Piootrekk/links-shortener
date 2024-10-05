@@ -9,7 +9,7 @@ import LoadingSpin from "../ui/loading-spin";
 import { useAuth } from "@/context/AuthContext";
 
 const Register = () => {
-  const { registerState } = useAuth();
+  const { user, handleRegister } = useAuth();
   const {
     register,
     handleSubmit,
@@ -19,7 +19,7 @@ const Register = () => {
   });
 
   const onSubmit = (formData: TSignUpSchema) => {
-    registerState.execute(formData.email, formData.password);
+    handleRegister(formData.email, formData.password, formData.confirmPassword);
   };
 
   return (
@@ -30,8 +30,8 @@ const Register = () => {
           <CardDescription className="text-sm">
             <label>to create an account.</label>
           </CardDescription>
-          {registerState.error && (
-            <ErrorMessage message={registerState.error.message} />
+          {user.error && (
+            <ErrorMessage message={user.error.message} />
           )}
         </CardHeader>
         <CardContent>
@@ -66,7 +66,7 @@ const Register = () => {
               )}
             </div>
             <Button type="submit" className="w-full p-2" variant={"secondary"}>
-              {registerState.isLoading ? <LoadingSpin /> : "Register"}
+              {user.isLoading ? <LoadingSpin /> : "Register"}
             </Button>
           </form>
         </CardContent>

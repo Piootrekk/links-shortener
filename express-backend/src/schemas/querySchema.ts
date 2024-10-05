@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 const querySchema = z.object({
-  min: z
+  take: z
     .number()
     .int({ message: "Must be number" })
     .min(0, { message: "Min 0" })
     .default(0),
-  max: z
+  skip: z
     .number()
     .int({ message: "Must be number" })
     .min(1, { message: "Min 1" })

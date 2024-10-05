@@ -10,7 +10,7 @@ import LoadingSpin from "../ui/loading-spin";
 import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
-  const { loginState } = useAuth();
+  const { handleLogin, user } = useAuth();
 
   const {
     register,
@@ -21,7 +21,7 @@ const Login = () => {
   });
 
   const onSubmit = (formData: TLoginSchema) => {
-    loginState.execute(formData.email, formData.password);
+    handleLogin(formData.email, formData.password);
   };
 
   return (
@@ -32,8 +32,8 @@ const Login = () => {
           <CardDescription>
             <label>to your account if you have one.</label>
           </CardDescription>
-          {loginState.error && (
-            <ErrorMessage message={loginState.error.message} />
+          {user.error && (
+            <ErrorMessage message={user.error.message} />
           )}
         </CardHeader>
         <CardContent>
@@ -57,7 +57,7 @@ const Login = () => {
               )}
             </div>
             <Button type="submit" className="w-full p-2" variant={"secondary"}>
-              {loginState.isLoading ? <LoadingSpin /> : "Login"}
+              {user.isLoading ? <LoadingSpin /> : "Login"}
             </Button>
           </form>
         </CardContent>

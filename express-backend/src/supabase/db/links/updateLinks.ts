@@ -1,4 +1,4 @@
-import { prisma } from "../../supabase";
+import { prisma, seletedColumns } from "../../supabase";
 
 //  TODO updatedTime
 const updateUrl = async (
@@ -9,6 +9,7 @@ const updateUrl = async (
   shortUrl: string
 ) => {
   const updatedUrl = await prisma.urls.update({
+    select: seletedColumns,
     where: {
       id,
       user_id: userId,

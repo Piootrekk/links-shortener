@@ -80,7 +80,7 @@ router.post("/logout", async (req, res) => {
     return res.status(400).json({ message: "Already logged out" });
   }
   res.clearCookie("access_token");
-  res.json({ message: "Logged out successfully" });
+  res.json(null);
 });
 
 router.get("/user", authMiddleware, async (req: Request, res: Response) => {

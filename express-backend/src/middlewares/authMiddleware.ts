@@ -1,19 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import { tockenVerify } from "../supabase/auth";
-import { TCookieCredentials, TUserCredentials } from "../schemas/authTypes";
+import {
+  TCookieCredentials,
+  TMasterCredentials,
+  TUserCredentials,
+} from "../schemas/authTypes";
 const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const token = req.cookies.access_token;
-  if (!token) return res.json(null);
+  if (!token) return res.status(401).json({ messege: "Unauthorized" });
   const tokenObject = JSON.parse(token) as TCookieCredentials;
 
   try {
-    const { user } = await tockenVerify(tokenObject.access_token);
+    const user = await tockenVerify(tokenObject.access_token);
 
-    if (!user) return res.json(null);
+    if (!user) return res.status(401).json({ messege: "Unauthorized" });
     const userCredentials: TUserCredentials = {
       id: user.id,
       email: user.email!,
@@ -33,17 +37,19 @@ const authAsMasterMiddleware = async (
   next: NextFunction
 ) => {
   const token = req.cookies.access_token;
-  if (!token) return res.json(null);
+  if (!token) return res.status(403).json({ messege: "Unauthorized" });
   const tokenObject = JSON.parse(token) as TCookieCredentials;
-  if (tokenObject.role !== "master") return res.json(null);
+  if (tokenObject.role !== "master")
+    return res.status(403).json({ message: "Forbidden" });
   try {
-    const { user } = await tockenVerify(tokenObject.access_token);
-    if (!user) return res.json(null);
-    const userCredentials: TUserCredentials = {
+    const user = await tockenVerify(tokenObject.access_token);
+    if (!user) return res.status(403).json({ messege: "Unauthorized" });
+    const userCredentials: TMasterCredentials = {
       id: user.id,
       email: user.email!,
       created_at: user.created_at!,
       last_sign_in_at: user.last_sign_in_at!,
+      role: user.user_metadata.role,
     };
     req.user = userCredentials;
     next();

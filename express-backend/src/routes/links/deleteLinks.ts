@@ -7,7 +7,7 @@ import { deleteSelectedUrl } from "../../supabase/db/links/deleteLinks";
 const router = Router();
 
 router.delete(
-  "/delete-link",
+  "/link",
   authMiddleware,
   async (req: Request, res: Response) => {
     const { id, qr_code } = req.query;

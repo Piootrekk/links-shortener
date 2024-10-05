@@ -1,5 +1,5 @@
 import { invokeQR } from "../../files";
-import { prisma } from "../../supabase";
+import { prisma, seletedColumns } from "../../supabase";
 
 const insertUrl = async (
   orginal_url: string,
@@ -9,6 +9,7 @@ const insertUrl = async (
 ) => {
   const qrPath = await invokeQR(short_url);
   const inserts = await prisma.urls.create({
+    select: seletedColumns,
     data: {
       original_url: orginal_url,
       short_url: short_url,
@@ -21,7 +22,7 @@ const insertUrl = async (
     throw new Error("Insert failed");
   }
   return {
-    inserts,
+    data: inserts,
     success: true,
   };
 };

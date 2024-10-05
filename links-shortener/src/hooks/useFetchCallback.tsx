@@ -1,23 +1,31 @@
 import { useState, useCallback } from "react";
 import { ZodSchema, ZodError } from "zod";
 
-interface FetchState<T> {
-  data: T | null | undefined;
+type FetchState<T> = {
+  data: T | null;
   error: Error | null;
   isLoading: boolean;
-  execute: (...args: any[]) => Promise<void>;
-}
+};
 
-const useFetchCallback = <T = unknown,>(
-  asyncFunction: (...args: any[]) => Promise<T>,
+type UseFetchMultiple<T> = FetchState<T> & {
+  execute: (
+    asyncFunction: (...args: any[]) => Promise<T | null>,
+    ...args: any[]
+  ) => Promise<void>;
+};
+
+const useFetchMultiple = <T = unknown,>(
   validationSchema?: ZodSchema<T>
-): FetchState<T> => {
-  const [data, setData] = useState<T | undefined>(undefined);
+): UseFetchMultiple<T> => {
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const execute = useCallback(
-    async (...args: any[]) => {
+    async (
+      asyncFunction: (...args: unknown[]) => Promise<T | null>,
+      ...args: unknown[]
+    ) => {
       setIsLoading(true);
       setError(null);
       try {
@@ -38,10 +46,10 @@ const useFetchCallback = <T = unknown,>(
         setIsLoading(false);
       }
     },
-    [asyncFunction, validationSchema]
+    [validationSchema]
   );
 
   return { data, error, isLoading, execute };
 };
 
-export default useFetchCallback;
+export default useFetchMultiple;

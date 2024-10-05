@@ -19,7 +19,6 @@ const urlSchema = z.object({
   title: z.string().nullable(),
   qr_code: z.string().nullable(),
   id: z.string().uuid(),
-  user_id: z.string().uuid().nullable(),
 });
 
 const extendedUrlSchema = z.object({
@@ -41,10 +40,15 @@ const singleCustomUrlSchema = z.object({
 
 type TCustomeUrl = z.infer<typeof singleCustomUrlSchema>;
 
+type TCrud = {
+  data: TUrl | null;
+  success: boolean;
+};
+
 export {
   urlsArraySchema,
   singleCustomUrlSchema,
   detailsArraySchema,
   extendedUrlSchema,
 };
-export type { TUrls, TUrl, TCustomeUrl, TExtendedUrl };
+export type { TUrls, TUrl, TCustomeUrl, TExtendedUrl, TCrud };

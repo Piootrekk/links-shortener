@@ -22,8 +22,8 @@ const signIn = async (email: string, password: string) => {
 const tockenVerify = async (token: string) => {
   const { data, error } = await supabase.auth.getUser(token);
   if (error) throw error.message;
-  if (data === null || data.user === null) return { user: null };
-  return data;
+  if (data === null || data.user === null) throw "User not found";
+  return data.user;
 };
 
 export { signUp, signIn, tockenVerify };

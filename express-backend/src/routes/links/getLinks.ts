@@ -12,7 +12,9 @@ const router = Router();
 router.get("/links", authMiddleware, async (req, res) => {
   const user = req.user;
   if (!user) {
-    return res.status(400).json({ message: "Unauthorized or invalid credentials" });
+    return res
+      .status(401)
+      .json({ message: "Unauthorized or invalid credentials" });
   }
   try {
     const links = await getPersonalLinks(user.id);
@@ -26,26 +28,29 @@ router.get(
   "/links-range",
   authMiddleware,
   async (req: Request, res: Response) => {
-    const { min, max } = req.query;
-    const minMax = {
-      min: parseInt(min as string),
-      max: parseInt(max as string),
+    const { take, skip } = req.query;
+    const takeSkip = {
+      take: parseInt(take as string),
+      skip: parseInt(skip as string),
     };
-    const validatedminMax = querySchema.safeParse(minMax);
-    if (!validatedminMax.success) {
-      const errors = getZodErrors(validatedminMax.error.errors);
+    const valiedatedTakeSkip = querySchema.safeParse(takeSkip);
+    if (!valiedatedTakeSkip.success) {
+      const errors = getZodErrors(valiedatedTakeSkip.error.errors);
       return res.status(400).json(errors);
     }
     const user = req.user;
     if (!user) {
-      return res.status(400).json({ message: "Unauthorized or invalid credentials" });
+      return res
+        .status(400)
+        .json({ message: "Unauthorized or invalid credentials" });
     }
     try {
-      const links = getPrersonalLinksRange(
+      const links = await getPrersonalLinksRange(
         user.id,
-        validatedminMax.data.min,
-        validatedminMax.data.max
+        valiedatedTakeSkip.data.take,
+        valiedatedTakeSkip.data.skip
       );
+      res.json(links);
     } catch (error) {
       res.status(500).json(error);
     }

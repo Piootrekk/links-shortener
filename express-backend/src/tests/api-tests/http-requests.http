@@ -1,0 +1,40 @@
+
+### Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### Register
+POST {{baseUrl}}/register
+Content-Type: application/json
+{
+    "email": "",
+    "password": ""
+    "confirmPassword": ""
+
+}
+
+### Logout
+POST {{baseUrl}}/logout
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### Get user
+GET {{baseUrl}}/user
+Content-Type: application/json
+
+### Get user links
+GET {{baseUrl}}/links
+
+### Get details of a link
+GET {{baseUrl}}/links/:id
+
+### Get links with range
+GET {{baseUrl}}/links-range?skip=3&take=1

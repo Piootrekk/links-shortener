@@ -7,7 +7,7 @@ import {
   deleteLink,
   TCrud,
   userLinksWithInfo,
-} from "@/Api/crudAuth";
+} from "@/Api/endpoints";
 import { useAuth } from "./AuthContext";
 
 type DbContextType = {
