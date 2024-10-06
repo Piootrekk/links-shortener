@@ -19,17 +19,16 @@ import insertLinkSchema, {
   TInsertLinkSchema,
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
-
-import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
-import { useAuth } from "@/context/AuthContext";
+import useFetchMultiple from "@/hooks/useFetchCallback";
+import { TCrud } from "@/schemas/dbSchema";
+import { insertPersonalLink } from "@/Api/endpoints";
 
 type DialogAddFormProps = {};
 
 const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const short = shortUrlGenerate(2, 6);
-  const { insert } = useDb();
-  const { user } = useAuth();
+  const { data, isLoading, error, execute } = useFetchMultiple<TCrud>();
   const [isOpen, setIsOpen] = useState(false);
 
   const onHandleShortUrlGenerate = () => {
@@ -55,24 +54,19 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await insert.execute(
-      user?.session.access_token,
-      formData.url,
-      formData.shortUrl,
-      formData.title
-    );
-    if (!insert.error) return;
+    await execute(insertPersonalLink, { ...formData });
+    if (!error) return;
   };
 
   useEffect(() => {
-    if (insert.data?.success) {
+    if (data && data.success) {
       formsReset();
       setIsOpen(false);
     }
-  }, [insert.data]);
+  }, [data]);
 
   const handleOpenChange = (open: boolean) => {
-    if (!insert.isLoading) {
+    if (!isLoading) {
       setIsOpen(open);
     }
   };
@@ -86,7 +80,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           <DialogTitle>Add link</DialogTitle>
           <DialogDescription>Create a new link</DialogDescription>
         </DialogHeader>
-        {insert.error && <ErrorMessage message={insert.error.message} />}
+        {error && <ErrorMessage message={error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -125,8 +119,8 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
             <ErrorMessage message={errors.shortUrl.message} />
           )}
           <DialogFooter>
-            <Button type="submit" disabled={insert.isLoading}>
-              {insert.isLoading ? <LoadingSpin /> : "Save changes"}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>
         </form>

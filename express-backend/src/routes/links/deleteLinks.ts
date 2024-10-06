@@ -10,7 +10,7 @@ router.delete(
   "/link",
   authMiddleware,
   async (req: Request, res: Response) => {
-    const { id, qr_code } = req.query;
+    const { id, qr_code } = req.body;
     const validatedId = deleteRouteSchema.safeParse({ id, qr_code });
     if (!validatedId.success) {
       const errors = getZodErrors(validatedId.error.errors);

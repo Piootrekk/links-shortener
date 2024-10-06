@@ -1,13 +1,17 @@
-import React, { createContext, PropsWithChildren, useContext } from "react";
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+} from "react";
 import useFetchMultiple from "@/hooks/useFetchCallback";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
 import { TUserCredentials } from "@/schemas/authSchema";
-import { login, logout, register } from "@/Api/auth";
+import { getuserInfo, login, logout, register } from "@/Api/auth";
 
 type AuthContextType = {
   user: ReturnType<typeof useFetchMultiple<TUserCredentials>>;
-  isAuthorized: boolean;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleRegister: (
     email: string,
@@ -30,6 +34,10 @@ const useAuth = () => {
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const user = useFetchMultiple<TUserCredentials>();
 
+  useEffect(() => {
+    user.execute(getuserInfo);
+  }, []);
+
   const handleLogin = async (email: string, password: string) => {
     await user.execute(login, email, password);
   };
@@ -46,7 +54,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     await user.execute(logout);
   };
 
-  if (user.isLoading || user.error) {
+  if (user.isLoading || user.error || user === undefined) {
     return <RouterProvider router={routerSkeleton} />;
   }
 
@@ -55,7 +63,6 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       <AuthContext.Provider
         value={{
           user,
-          isAuthorized: Boolean(user),
           handleLogin,
           handleRegister,
           handleLogout,

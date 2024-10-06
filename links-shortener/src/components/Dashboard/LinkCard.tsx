@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
 import { TUrl } from "@/schemas/dbSchema";
-import { Button } from "../ui/button";
-import { Copy, CopyCheck, Download } from "lucide-react";
-import { useState } from "react";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
 import DialogUpdate from "./DialogUpdate";
 import borderplateQR from "@/assets/borderplate.png";
-import qrDownload from "@/lib/qrDownload";
-import { useAuth } from "@/context/AuthContext";
+import DialogCopy from "./DialogCopy";
+import DialogDownload from "./DialogDownload";
 
 type LinksCardProps = {
   link: TUrl;
@@ -16,16 +13,6 @@ type LinksCardProps = {
 
 const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   const URL = import.meta.env.VITE_FRONTEND_URL;
-  const [copied, setCopied] = useState(false);
-  const { user } = useAuth();
-  const handleCopy = () => {
-    navigator.clipboard.writeText(`${URL}/${link.short_url}`);
-    setCopied(true);
-  };
-
-  const handleDownload = () => {
-    qrDownload(link.qr_code!, user?.session.access_token!);
-  };
 
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg w-full">
@@ -54,22 +41,15 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         <a
           className="flex items-center gap-1 hover:underline cursor-pointer text-muted-foreground"
           href={link.original_url}
-        > 
+        >
           {link.original_url}
         </a>
         <span className="flex items-end text-sm flex-1">
           {new Date(link.created_at).toLocaleString()}
         </span>
       </div>
-
       <div className="flex gap-2 sm:justify-end sm:flex-1 sm:order-2 order-1">
-        <Button variant={"ghost"} onClick={handleCopy}>
-          {copied ? (
-            <CopyCheck className="w-6 h-6" />
-          ) : (
-            <Copy className="w-6 h-6" />
-          )}
-        </Button>
+        <DialogCopy shortUrl={link.short_url} />
         <DialogUpdate
           data={{
             title: link.title!,
@@ -78,13 +58,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           }}
           id={link.id}
         />
-        <Button
-          variant={"ghost"}
-          onClick={handleDownload}
-          disabled={!link.qr_code}
-        >
-          <Download className="w-6 h-6" />
-        </Button>
+        <DialogDownload qrCode={link.qr_code!} />
         <DialogRemove title={link.title!} id={link.id} qrPath={link.qr_code!} />
       </div>
     </div>

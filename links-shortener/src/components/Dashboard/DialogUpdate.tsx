@@ -19,9 +19,10 @@ import insertLinkSchema, {
   TInsertLinkSchema,
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
-import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
-import { useAuth } from "@/context/AuthContext";
+import useFetchMultiple from "@/hooks/useFetchCallback";
+import { TCrud } from "@/schemas/dbSchema";
+import { updatePersonalLink } from "@/Api/endpoints";
 
 type DialogUpdateFormProps = {
   data?: TInsertLinkSchema;
@@ -32,8 +33,6 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   const short = shortUrlGenerate(2, 6);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { update } = useDb();
-  const { user } = useAuth();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -52,6 +51,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
       url: data?.url,
     },
   });
+  const { data: insert, isLoading, error, execute } = useFetchMultiple<TCrud>();
 
   const formsReset = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -60,25 +60,20 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await update.execute(
-      user?.session.access_token,
-      id,
-      formData.url,
-      formData.title,
-      formData.shortUrl 
-    );
-    if (!update.error) return;
+    await execute(updatePersonalLink, id, { ...formData });
+
+    if (!error) return;
   };
 
   useEffect(() => {
-    if (update.data?.success) {
+    if (insert && insert.success) {
       formsReset();
       setIsOpen(false);
     }
-  }, [update.data]);
+  }, [insert]);
 
   const handleOpenChange = (open: boolean) => {
-    if (!update.isLoading) {
+    if (!isLoading) {
       setIsOpen(open);
     }
   };
@@ -94,7 +89,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
           <DialogTitle>Edit link</DialogTitle>
           <DialogDescription>Edit your link</DialogDescription>
         </DialogHeader>
-        {update.error && <ErrorMessage message={update.error.message} />}
+        {error && <ErrorMessage message={error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -131,8 +126,8 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
             <ErrorMessage message={errors.shortUrl.message} />
           )}
           <DialogFooter>
-            <Button type="submit" disabled={update.isLoading}>
-              {update.isLoading ? <LoadingSpin /> : "Save changes"}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>
         </form>

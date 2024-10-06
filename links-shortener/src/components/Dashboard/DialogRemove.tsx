@@ -15,9 +15,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ErrorMessage from "../Error/ErrorMessage";
 import { useEffect, useState } from "react";
-import useDb from "@/context/DbContext";
 import LoadingSpin from "../ui/loading-spin";
-import { useAuth } from "@/context/AuthContext";
+import useFetchMultiple from "@/hooks/useFetchCallback";
+import { TCrud } from "@/schemas/dbSchema";
+import { deletePersonalLink } from "@/Api/endpoints";
 
 type DialogRemoveProps = {
   title: string;
@@ -28,8 +29,6 @@ type DialogRemoveProps = {
 const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const removeSchema = removeLinkSchema(title.trim());
-  const { del } = useDb();
-  const { user } = useAuth();
   type TRemoveLinkSchema = z.infer<typeof removeSchema>;
   const {
     register,
@@ -40,20 +39,22 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
     resolver: zodResolver(removeSchema),
   });
 
+  const { data, isLoading, error, execute } = useFetchMultiple<TCrud>();
+
   const onSubmit = async (_: TRemoveLinkSchema) => {
-    await del.execute(user?.session.access_token, id, qrPath);
-    if (!del.error) return;
+    await execute(deletePersonalLink, id, qrPath);
+    if (!error) return;
   };
 
   useEffect(() => {
-    if (del.data?.success) {
+    if (data && data.success) {
       setValue("title", "");
       setIsOpen(false);
     }
-  }, [del.data]);
+  }, [data]);
 
   const handleOpenChange = (open: boolean) => {
-    if (!del.isLoading) {
+    if (!isLoading) {
       setIsOpen(open);
     }
   };
@@ -73,7 +74,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
             link to confirm.
           </DialogDescription>
         </DialogHeader>
-        {del.error && <ErrorMessage message={del.error.message} />}
+        {error && <ErrorMessage message={error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -83,7 +84,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
           />
           {errors.title && <ErrorMessage message={errors.title.message!} />}
           <Button type="submit" variant={"destructive"} className="mt-4">
-            {del.isLoading ? <LoadingSpin /> : "Delete"}
+            {isLoading ? <LoadingSpin /> : "Delete"}
           </Button>
         </form>
       </DialogContent>

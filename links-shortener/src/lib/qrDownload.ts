@@ -1,7 +1,7 @@
 import { downloadQrCode } from "@/Api/endpoints";
 
-const qrDownload = async (qrCode: string, sessionId: string) => {
-  const qrStream = await downloadQrCode(qrCode, sessionId);
+const qrDownload = async (qrCode: string) => {
+  const qrStream = await downloadQrCode(qrCode);
   const qrUrl = URL.createObjectURL(
     new Blob([qrStream], { type: "image/png" })
   );

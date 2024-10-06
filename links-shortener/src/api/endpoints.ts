@@ -36,16 +36,17 @@ const updatePersonalLink = async (
 
 const deletePersonalLink = async (id: string, qr_code: string) => {
   const response = await axiosInstance.delete<TCrud>("/link", {
-    data: { id, qr_code },
+    data: {
+      id,
+      qr_code,
+    },
   });
   return response.data;
 };
 
 const downloadQrCode = async (qrPath: string) => {
-  const response = await axiosInstance<Blob>({
-    method: "POST",
-    url: "/download-png",
-    data: { qrPath },
+  const response = await axiosInstance.post<Blob>("/download-png", {
+    qrPath,
     responseType: "blob",
   });
   return response.data;

@@ -1,9 +1,9 @@
 import { Router, Request, Response, CookieOptions } from "express";
-import { signIn, signUp } from "../supabase/auth";
+import { signIn, signUp, tockenVerify } from "../supabase/auth";
 import { loginSchema, signUpSchema } from "../schemas/authSchema";
 import { getZodErrors } from "../utils/getZodErrors";
 import { TCookieCredentials, TUserCredentials } from "../schemas/authTypes";
-import { authMiddleware } from "../middlewares/authMiddleware";
+
 const cookieOptions: CookieOptions = {
   httpOnly: true,
 };
@@ -83,9 +83,23 @@ router.post("/logout", async (req, res) => {
   res.json(null);
 });
 
-router.get("/user", authMiddleware, async (req: Request, res: Response) => {
-  const user = req.user;
-  res.json(user);
+router.get("/user", async (req: Request, res: Response) => {
+  const token = req.cookies.access_token;
+  try {
+    if (!token) return res.json(null);
+    const tokenObject = JSON.parse(token) as TCookieCredentials;
+    const user = await tockenVerify(tokenObject.access_token);
+    if (!user) return res.json(null);
+    const userCredentials: TUserCredentials = {
+      id: user.id,
+      email: user.email!,
+      created_at: user.created_at!,
+      last_sign_in_at: user.last_sign_in_at!,
+    };
+    res.json(userCredentials);
+  } catch (error) {
+    res.json(null);
+  }
 });
 
 export default router;

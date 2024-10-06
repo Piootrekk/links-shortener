@@ -11,9 +11,10 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Link } from "react-router-dom";
-import { TUser } from "@/Api/auth";
+import { TUserCredentials } from "@/schemas/authSchema";
+
 type UserMenuProps = {
-  user: TUser;
+  user: TUserCredentials;
   logout: () => void;
 };
 

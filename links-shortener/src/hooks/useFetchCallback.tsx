@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { ZodSchema, ZodError } from "zod";
 
 type FetchState<T> = {
-  data: T | null;
+  data: T | null | undefined;
   error: Error | null;
   isLoading: boolean;
 };
@@ -17,7 +17,7 @@ type UseFetchMultiple<T> = FetchState<T> & {
 const useFetchMultiple = <T = unknown,>(
   validationSchema?: ZodSchema<T>
 ): UseFetchMultiple<T> => {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T | null | undefined>(undefined);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
