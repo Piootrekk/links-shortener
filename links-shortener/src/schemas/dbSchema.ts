@@ -31,7 +31,6 @@ const extendedUrlSchema = z.object({
 type TExtendedUrl = z.infer<typeof extendedUrlSchema>;
 
 const urlsArraySchema = z.array(urlSchema);
-type TUrls = z.infer<typeof urlsArraySchema>;
 type TUrl = z.infer<typeof urlSchema>;
 
 const singleCustomUrlSchema = z.object({
@@ -45,10 +44,16 @@ type TCrud = {
   success: boolean;
 };
 
+type TStats = {
+  last_added: string | null;
+  total_links: number;
+  total_clicks: number;
+};
+
 export {
   urlsArraySchema,
   singleCustomUrlSchema,
   detailsArraySchema,
   extendedUrlSchema,
 };
-export type { TUrls, TUrl, TCustomeUrl, TExtendedUrl, TCrud };
+export type { TUrl, TCustomeUrl, TExtendedUrl, TCrud, TStats };

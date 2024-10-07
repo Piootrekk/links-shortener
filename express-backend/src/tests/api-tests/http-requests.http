@@ -38,3 +38,7 @@ GET {{baseUrl}}/links/:id
 
 ### Get links with range
 GET {{baseUrl}}/links-range?skip=3&take=1
+
+
+### Get links with stats
+GET {{baseUrl}}/links-with-stats

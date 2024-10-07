@@ -18,9 +18,9 @@ router.get("/links", authMiddleware, async (req, res) => {
   }
   try {
     const links = await getPersonalLinks(user.id);
-    res.json(links);
+    return res.json(links);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -50,9 +50,9 @@ router.get(
         valiedatedTakeSkip.data.take,
         valiedatedTakeSkip.data.skip
       );
-      res.json(links);
+      return res.json(links);
     } catch (error) {
-      res.status(500).json(error);
+      return res.status(500).json(error);
     }
   }
 );

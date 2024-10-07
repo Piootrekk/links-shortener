@@ -17,7 +17,7 @@ import ErrorMessage from "../Error/ErrorMessage";
 import { useEffect, useState } from "react";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchMultiple from "@/hooks/useFetchCallback";
-import { TCrud } from "@/schemas/dbSchema";
+
 import { deletePersonalLink } from "@/Api/endpoints";
 
 type DialogRemoveProps = {
@@ -39,10 +39,11 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
     resolver: zodResolver(removeSchema),
   });
 
-  const { data, isLoading, error, execute } = useFetchMultiple<TCrud>();
+  const { data, isLoading, error, execute } =
+    useFetchMultiple(deletePersonalLink);
 
   const onSubmit = async (_: TRemoveLinkSchema) => {
-    await execute(deletePersonalLink, id, qrPath);
+    await execute(id, qrPath);
     if (!error) return;
   };
 
@@ -62,7 +63,11 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"}>
+        <Button
+          variant={"ghost"}
+          className=" border border-transparent hover:border-primary 
+          focus:outline-none transition-colors duration-200"
+        >
           <Trash className="w-6 h-6" />
         </Button>
       </DialogTrigger>

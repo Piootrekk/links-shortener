@@ -22,9 +22,9 @@ router.post("/link", authMiddleware, async (req: Request, res: Response) => {
       parsed.data.title,
       user.id
     );
-    res.json(insertedLink);
+    return res.json(insertedLink);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 

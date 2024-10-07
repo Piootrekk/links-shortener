@@ -25,9 +25,9 @@ router.delete(
         validatedId.data.id,
         validatedId.data.qr_code
       );
-      res.json(links);
+      return res.json(links);
     } catch (error) {
-      res.status(500).json(error);
+      return res.status(500).json(error);
     }
   }
 );

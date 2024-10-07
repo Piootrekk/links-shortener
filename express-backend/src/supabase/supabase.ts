@@ -21,6 +21,9 @@ const seletedColumns = {
   created_at: true,
 };
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query", "info", "warn"],
+  errorFormat: "pretty",
+});
 export { prisma, seletedColumns };
 export default supabase;

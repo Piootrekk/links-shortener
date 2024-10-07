@@ -15,7 +15,11 @@ const DialogCopy: React.FC<DialogCopyProps> = ({ shortUrl }) => {
   };
 
   return (
-    <Button variant={"ghost"} onClick={handleCopy}>
+    <Button
+      variant={"ghost"}
+      onClick={handleCopy}
+      className="border border-transparent hover:border-primary focus:outline-none transition-colors duration-200"
+    >
       {copied ? (
         <CopyCheck className="w-6 h-6" />
       ) : (

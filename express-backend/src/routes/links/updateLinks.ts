@@ -31,9 +31,9 @@ router.put("/link", authMiddleware, async (req: Request, res: Response) => {
       parsed.data.title,
       parsed.data.short_url
     );
-    res.json(updatedLink);
+    return res.json(updatedLink);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 

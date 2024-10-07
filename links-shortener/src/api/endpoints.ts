@@ -1,8 +1,13 @@
-import { TUrls, TCrud } from "@/schemas/dbSchema";
+import { TCrud, TStats, TUrl } from "@/schemas/dbSchema";
 import axiosInstance from "./axios";
 
-const personalLinks = async () => {
-  const response = await axiosInstance.get<TUrls>("/links");
+const getPersonalLinks = async () => {
+  const response = await axiosInstance.get<TUrl[]>("/links");
+  return response.data;
+};
+
+const getPersonalLinksWithStats = async () => {
+  const response = await axiosInstance.get<TUrl[]>("/links-with-stats");
   return response.data;
 };
 
@@ -52,11 +57,18 @@ const downloadQrCode = async (qrPath: string) => {
   return response.data;
 };
 
+const getPersonalStatistics = async () => {
+  const response = await axiosInstance.get<TStats>("/personal-statistics");
+  return response.data;
+};
+
 export {
-  personalLinks,
+  getPersonalLinks,
   insertPersonalLink,
   updatePersonalLink,
   deletePersonalLink,
   downloadQrCode,
+  getPersonalStatistics,
+  getPersonalLinksWithStats,
 };
 export type { TCrud };

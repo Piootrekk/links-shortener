@@ -53,21 +53,20 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   });
   const { data: insert, isLoading, error, execute } = useFetchMultiple<TCrud>();
 
-  const formsReset = () => {
-    setValue("shortUrl", shortUrlGenerate(2, 6));
-    setValue("title", "");
-    setValue("url", "");
-  };
-
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await execute(updatePersonalLink, id, { ...formData });
+    await execute(
+      updatePersonalLink,
+      id,
+      formData.url,
+      formData.title,
+      formData.shortUrl
+    );
 
     if (!error) return;
   };
 
   useEffect(() => {
     if (insert && insert.success) {
-      formsReset();
       setIsOpen(false);
     }
   }, [insert]);
@@ -80,7 +79,11 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"}>
+        <Button
+          variant={"ghost"}
+          className=" border border-transparent 
+          hover:border-primary focus:outline-none transition-colors duration-200"
+        >
           <Edit className="w-6 h-6" />
         </Button>
       </DialogTrigger>

@@ -2,7 +2,7 @@ import { Router } from "express";
 import authRoutes from "./auth";
 import linksRoutes from "./links";
 import detailsRoutes from "./details";
-import statisticsRoutes from "./statistics";
+import statisticsRoutes from "./stats";
 import fileRoutes from "./files";
 const router = Router();
 
@@ -12,7 +12,7 @@ router.use("/", linksRoutes);
 router.use("/", detailsRoutes);
 router.use("/", statisticsRoutes);
 
-router.get("/*", (_, res) => {
+router.all("/*", (_, res) => {
   res.status(404).json({ message: "Not Found" });
 });
 

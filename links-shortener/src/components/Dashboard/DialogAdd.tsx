@@ -20,15 +20,15 @@ import insertLinkSchema, {
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
-import useFetchMultiple from "@/hooks/useFetchCallback";
-import { TCrud } from "@/schemas/dbSchema";
+import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertPersonalLink } from "@/Api/endpoints";
 
 type DialogAddFormProps = {};
 
 const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const short = shortUrlGenerate(2, 6);
-  const { data, isLoading, error, execute } = useFetchMultiple<TCrud>();
+  const { data, isLoading, error, execute } =
+    useFetchCallback(insertPersonalLink);
   const [isOpen, setIsOpen] = useState(false);
 
   const onHandleShortUrlGenerate = () => {
@@ -54,7 +54,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await execute(insertPersonalLink, { ...formData });
+    await execute(formData.url, formData.shortUrl, formData.title);
     if (!error) return;
   };
 

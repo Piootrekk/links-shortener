@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import LoadingSpin from "@/components/ui/loading-spin";
+import { TStats } from "@/schemas/dbSchema";
 import { Link2, MousePointerClick, TimerResetIcon } from "lucide-react";
+
 type TContentInfo = {
   title: string;
   content: number | string | Date;
@@ -8,32 +9,26 @@ type TContentInfo = {
 };
 
 type StatisticProps = {
-  totalLinks?: number;
-  totalClicks?: number;
-  lastLink?: string | null;
-  isLoading: boolean;
+  data: TStats;
 };
 
-const Statistic: React.FC<StatisticProps> = ({
-  totalLinks,
-  totalClicks,
-  lastLink,
-  isLoading,
-}) => {
+const Statistic: React.FC<StatisticProps> = ({ data }) => {
   const contentInfo: TContentInfo[] = [
     {
       title: "Total links",
-      content: totalLinks || 0,
+      content: data.total_links,
       niceIcon: <Link2 size={24} />,
     },
     {
       title: "Total clicks",
-      content: totalClicks || 0,
+      content: data.total_clicks,
       niceIcon: <MousePointerClick size={24} />,
     },
     {
       title: "Last added",
-      content: lastLink ? new Date(lastLink).toLocaleString() : "No links yet",
+      content: data.last_added
+        ? new Date(data.last_added).toLocaleString()
+        : "No links yet",
       niceIcon: <TimerResetIcon size={24} />,
     },
   ];
@@ -42,31 +37,23 @@ const Statistic: React.FC<StatisticProps> = ({
     <div className="flex flex-row flex-wrap gap-4 mt-12 w-full truncate text-ellipsis">
       {contentInfo.map((info, index) => (
         <Card key={index} className="flex-1 h-32">
-          {isLoading ? (
-            <div className="flex justify-center items-center h-full">
-              <LoadingSpin />
-            </div>
-          ) : (
-            <>
-              <CardHeader className="flex flex-col sm:flex-row items-center">
-                <CardTitle className="hidden sm:block sm:pr-4">
-                  {info.title}
-                </CardTitle>
-                {info.niceIcon && (
-                  <div
-                    className={`flex ${
-                      info.title ? "sm:justify-center" : "justify-center"
-                    }`}
-                  >
-                    {info.niceIcon}
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent className="sm:text-left text-center">
-                <p>{info.content.toString()}</p>
-              </CardContent>
-            </>
-          )}
+          <CardHeader className="flex flex-col sm:flex-row items-center">
+            <CardTitle className="hidden sm:block sm:pr-4">
+              {info.title}
+            </CardTitle>
+            {info.niceIcon && (
+              <div
+                className={`flex ${
+                  info.title ? "sm:justify-center" : "justify-center"
+                }`}
+              >
+                {info.niceIcon}
+              </div>
+            )}
+          </CardHeader>
+          <CardContent className="sm:text-left text-center">
+            <p>{info.content.toString()}</p>
+          </CardContent>
         </Card>
       ))}
     </div>

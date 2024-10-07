@@ -7,7 +7,7 @@ type FetchState<T> = {
   isLoading: boolean;
 };
 
-const useFetch = <T = unknown,>(
+const useInstantFetch = <T = unknown,>(
   asyncFunction: (...args: unknown[]) => Promise<any>,
   validationSchema?: ZodSchema<T>
 ): FetchState<T> => {
@@ -39,4 +39,4 @@ const useFetch = <T = unknown,>(
   return { data, error, isLoading };
 };
 
-export default useFetch;
+export default useInstantFetch;
