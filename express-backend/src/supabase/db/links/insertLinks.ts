@@ -27,4 +27,19 @@ const insertUrl = async (
   };
 };
 
-export { insertUrl };
+const insertUrlAnonymously = async (orginal_url: string, short_url: string) => {
+  const inserts = await prisma.urls.create({
+    select: { id: true, original_url: true, short_url: true, created_at: true },
+    data: {
+      original_url: orginal_url,
+      short_url: short_url,
+    },
+  });
+  if (!inserts) throw new Error("Insert failed");
+  return {
+    data: inserts,
+    success: true,
+  };
+};
+
+export { insertUrl, insertUrlAnonymously };

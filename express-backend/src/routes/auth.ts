@@ -96,7 +96,7 @@ router.get("/user", async (req: Request, res: Response) => {
       created_at: user.created_at!,
       last_sign_in_at: user.last_sign_in_at!,
     };
-    res.json(userCredentials);
+    res.json(user);
   } catch (error) {
     res.json(null);
   }

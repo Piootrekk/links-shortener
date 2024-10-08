@@ -9,6 +9,7 @@ import RequireAuth from "./Guard/RequireAuth";
 import LinkView from "./Pages/LinkView";
 import ColorsTest from "@/components/Mock/ColorsTest";
 import RouteEndpoints from "@/components/Mock/RouteEndpoints";
+import NotFound from "./Pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -51,8 +52,8 @@ const router = createBrowserRouter([
         element: <RouteEndpoints />,
       },
       {
-        path: "*",
-        element: <div>404</div>,
+        path: "/*",
+        element: <NotFound />,
       },
     ],
   },

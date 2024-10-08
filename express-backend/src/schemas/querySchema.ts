@@ -15,10 +15,7 @@ const querySchema = z.object({
 });
 
 const insertRouteSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "Min 1 character" })
-    .max(255, { message: "Max 255 characters" }),
+  title: z.string().max(255, { message: "Max 255 characters" }),
   orginal_url: z
     .string()
     .url({ message: "Invalid URL" })
@@ -28,6 +25,10 @@ const insertRouteSchema = z.object({
   }),
 });
 
+const insertAnonymouslySchema = insertRouteSchema.pick({
+  orginal_url: true,
+  short_url: true,
+});
 const updateRouteSchema = insertRouteSchema.merge(
   z.object({
     id: z.string().uuid({ message: "Invalid ID" }),
@@ -39,4 +40,10 @@ const deleteRouteSchema = z.object({
   qr_code: z.string().optional(),
 });
 
-export { querySchema, insertRouteSchema, updateRouteSchema, deleteRouteSchema };
+export {
+  querySchema,
+  insertRouteSchema,
+  updateRouteSchema,
+  deleteRouteSchema,
+  insertAnonymouslySchema,
+};

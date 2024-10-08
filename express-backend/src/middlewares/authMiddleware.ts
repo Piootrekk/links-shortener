@@ -18,13 +18,8 @@ const authMiddleware = async (
     const user = await tockenVerify(tokenObject.access_token);
 
     if (!user) return res.status(401).json({ messege: "Unauthorized" });
-    const userCredentials: TUserCredentials = {
-      id: user.id,
-      email: user.email!,
-      created_at: user.created_at!,
-      last_sign_in_at: user.last_sign_in_at!,
-    };
-    req.user = userCredentials;
+    
+    req.user = user;
     next();
   } catch (error) {
     res.status(400).json({ message: error });
@@ -44,14 +39,7 @@ const authAsMasterMiddleware = async (
   try {
     const user = await tockenVerify(tokenObject.access_token);
     if (!user) return res.status(403).json({ messege: "Unauthorized" });
-    const userCredentials: TMasterCredentials = {
-      id: user.id,
-      email: user.email!,
-      created_at: user.created_at!,
-      last_sign_in_at: user.last_sign_in_at!,
-      role: user.user_metadata.role,
-    };
-    req.user = userCredentials;
+    req.user = user;
     next();
   } catch (error) {
     res.status(400).json({ message: error });

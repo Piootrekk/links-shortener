@@ -43,9 +43,19 @@ const getUsersLinksRange = async (min: number, max: number) => {
   return links;
 };
 
+const getUserLinksCount = async (user_id: string) => {
+  const count = await prisma.urls.count({
+    where: {
+      user_id,
+    },
+  });
+  return count;
+};
+
 export {
   getPersonalLinks,
   getPrersonalLinksRange,
   getUsersLinks,
   getUsersLinksRange,
+  getUserLinksCount,
 };
