@@ -1,8 +1,10 @@
-import { PropsWithChildren, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-type AuthProtectedProps = PropsWithChildren;
+type AuthProtectedProps = {
+  children: React.ReactNode;
+};
 
 const RequireNotAuth: React.FC<AuthProtectedProps> = ({ children }) => {
   const { user } = useAuth();

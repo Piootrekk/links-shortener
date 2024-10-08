@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
 import { TUserCredentials } from "@/schemas/authSchema";
@@ -34,6 +29,10 @@ type TAuthMethods = {
   ) => Promise<TUserCredentials>;
 };
 
+type AuthProviderProps = {
+  children: React.ReactNode;
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const useAuth = () => {
@@ -44,7 +43,7 @@ const useAuth = () => {
   return context;
 };
 
-const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const methods = {
     getuserInfo,
     login,

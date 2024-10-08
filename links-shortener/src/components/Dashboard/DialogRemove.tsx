@@ -19,6 +19,7 @@ import LoadingSpin from "../ui/loading-spin";
 import useFetchMultiple from "@/hooks/useFetchCallback";
 
 import { deletePersonalLink } from "@/Api/endpoints";
+import { useRefreshData } from "@/context/RefreshDataContext";
 
 type DialogRemoveProps = {
   title: string;
@@ -28,6 +29,7 @@ type DialogRemoveProps = {
 
 const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { refreshBoth } = useRefreshData();
   const removeSchema = removeLinkSchema(title.trim());
   type TRemoveLinkSchema = z.infer<typeof removeSchema>;
   const {
@@ -51,6 +53,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
     if (data && data.success) {
       setValue("title", "");
       setIsOpen(false);
+      refreshBoth();
     }
   }, [data]);
 

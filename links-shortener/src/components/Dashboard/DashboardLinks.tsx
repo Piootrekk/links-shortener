@@ -5,6 +5,7 @@ import DialogAdd from "./DialogAdd";
 import LinkCard from "./LinkCard";
 import { useState } from "react";
 import DashboardFilters from "./DashboardFilters";
+import { useRefreshData } from "@/context/RefreshDataContext";
 
 type DashboardLinksProps = {
   links: TUrl[];
@@ -12,15 +13,21 @@ type DashboardLinksProps = {
 
 const DashboardLinks: React.FC<DashboardLinksProps> = ({ links }) => {
   const [search, setSearch] = useState<string>("");
-  const filteredData = links?.filter((link) =>
+  const filteredData = links.filter((link) =>
     link.title!.toLowerCase().includes(search.toLowerCase().trim())
   );
+
+  const { refreshBoth } = useRefreshData();
+  const handleRefresh = async () => {
+    await refreshBoth();
+  };
+
   return (
     <>
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
         <div className="flex gap-4">
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleRefresh}>
             <RefreshCwIcon />
           </Button>
           <DialogAdd />

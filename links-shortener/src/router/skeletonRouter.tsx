@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import DefaultSkeletonLayout from "./Layout/DefaultSkeletonLayout";
 import SkeletonHome from "@/components/Loading/SkeletonHome";
 import SkeletonAuth from "@/components/Loading/SkeletonAuth";
+import SkeletonDashboard from "@/components/Loading/SkeletonDashboard";
 
 const routerSkeleton = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const routerSkeleton = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <SkeletonHome />,
+        element: <SkeletonDashboard />,
       },
       {
         path: "/auth",

@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertPersonalLink } from "@/Api/endpoints";
+import { useRefreshData } from "@/context/RefreshDataContext";
 
 type DialogAddFormProps = {};
 
@@ -30,6 +31,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const { data, isLoading, error, execute } =
     useFetchCallback(insertPersonalLink);
   const [isOpen, setIsOpen] = useState(false);
+  const { refreshBoth } = useRefreshData();
 
   const onHandleShortUrlGenerate = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
@@ -62,6 +64,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
     if (data && data.success) {
       formsReset();
       setIsOpen(false);
+      refreshBoth();
     }
   }, [data]);
 

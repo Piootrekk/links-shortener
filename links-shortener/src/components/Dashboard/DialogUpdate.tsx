@@ -20,9 +20,9 @@ import insertLinkSchema, {
 } from "@/schemas/InsertLinkSchema";
 import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
-import useFetchMultiple from "@/hooks/useFetchCallback";
-import { TCrud } from "@/schemas/dbSchema";
+import useFetchCallback from "@/hooks/useFetchCallback";
 import { updatePersonalLink } from "@/Api/endpoints";
+import { useRefreshData } from "@/context/RefreshDataContext";
 
 type DialogUpdateFormProps = {
   data?: TInsertLinkSchema;
@@ -31,7 +31,7 @@ type DialogUpdateFormProps = {
 
 const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   const short = shortUrlGenerate(2, 6);
-
+  const { refreshBoth } = useRefreshData();
   const [isOpen, setIsOpen] = useState(false);
 
   const onHandleShortUrlGenerate = () => {
@@ -51,23 +51,22 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
       url: data?.url,
     },
   });
-  const { data: insert, isLoading, error, execute } = useFetchMultiple<TCrud>();
+  const {
+    data: insert,
+    isLoading,
+    error,
+    execute,
+  } = useFetchCallback(updatePersonalLink);
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await execute(
-      updatePersonalLink,
-      id,
-      formData.url,
-      formData.title,
-      formData.shortUrl
-    );
-
+    await execute(id, formData.url, formData.title, formData.shortUrl);
     if (!error) return;
   };
 
   useEffect(() => {
     if (insert && insert.success) {
       setIsOpen(false);
+      refreshBoth();
     }
   }, [insert]);
 
