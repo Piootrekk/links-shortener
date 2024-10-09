@@ -1,17 +1,22 @@
-import Bullshit from "@/components/LandingPage/Bullshit";
+import Faq from "@/components/LandingPage/Faq";
 import Futures from "@/components/LandingPage/Futures";
 import LinkAnonymous from "@/components/LandingPage/LinkAnonymous";
 
 const LandingView = () => {
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="my-14 sm:my-24 sm:text-6xl lg:text-7xl text-4xl font-extrabold text-center text-wrap">
-        Short or hide your link👇👇
-      </h1>
-      <LinkAnonymous />
-      <Futures />
-      <Bullshit />
-    </div>
+    <>
+      <div className="flex flex-col items-center">
+        <section className="text-center mb-12">
+          <h2 className="text-5xl font-bold mb-4 ">Short or hide your link</h2>
+          <p className="text-xl text-muted-foreground mb-8">
+            Create short, custom, and secure links in seconds!
+          </p>
+          <LinkAnonymous />
+        </section>
+        <Futures />
+        <Faq />
+      </div>
+    </>
   );
 };
 

@@ -29,16 +29,20 @@ const LinkAnonymous = () => {
   return (
     <>
       <form
-        className="md:h-16 flex flex-col flex-wrap items-center gap-2 justify-center w-4/5"
         onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col sm:flex-row gap-2 sm:gap-0"
       >
         <Input
           placeholder="Enter your link"
-          className="h-full p-4"
+          className="flex-grow p-2 border rounded-md sm:rounded-r-none"
           {...register("url")}
         />
-        <Button type="submit" variant="outline" className="h-12 md:h-full">
-          Short it!
+        <Button
+          type="submit"
+          variant="outline"
+          className=" rounded-md sm:rounded-l-none"
+        >
+          Short
         </Button>
         <ConfirmLink
           isOpen={isOpen}
@@ -47,7 +51,7 @@ const LinkAnonymous = () => {
         />
       </form>
       {errors.url && (
-        <ErrorMessage message={errors.url.message} className="text-xl" />
+        <ErrorMessage message={errors.url.message} className="text-md" />
       )}
     </>
   );

@@ -23,7 +23,7 @@ const DashboardLinks: React.FC<DashboardLinksProps> = ({ links }) => {
   };
 
   return (
-    <>
+    <div className="space-y-4">
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">My Links:</h1>
         <div className="flex gap-4">
@@ -41,7 +41,7 @@ const DashboardLinks: React.FC<DashboardLinksProps> = ({ links }) => {
       ) : (
         filteredData.map((link) => <LinkCard key={link.id} link={link} />)
       )}
-    </>
+    </div>
   );
 };
 

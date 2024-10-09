@@ -17,7 +17,7 @@ const Header = () => {
       {user.data !== undefined && (
         <nav className="flex justify-between items-center py-4 ">
           <Link to="/">
-            <h1 className="text-3xl font-bold">URL Shortener</h1>
+            <h1 className="text-3xl  font-bold">URL Shortener</h1>
           </Link>
           {user.data === null ? (
             <Button variant={"outline"} onClick={loginHandler}>

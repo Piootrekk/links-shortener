@@ -16,77 +16,69 @@ import {
   Bell,
 } from "lucide-react";
 
-type TCardItem = {
-  title: string;
-  description: string;
-  icon: JSX.Element;
-};
-
 const Futures = () => {
-  const cardItems: TCardItem[] = [
+  const features = [
     {
       title: "Custom Link",
       description:
         "Create a custom link to make it more memorable and easy to share.",
-      icon: <Link className="h-12 w-12" />,
+      icon: Link,
     },
     {
       title: "QR Code",
       description:
         "Generate a QR code for your short URL to share it more easily.",
-      icon: <ScanQrCode className="h-12 w-12" />,
+      icon: ScanQrCode,
     },
     {
       title: "Analytics",
       description:
         "Track the performance of your short URLs with our built-in analytics.",
-      icon: <ChartNoAxesCombined className="h-12 w-12" />,
+      icon: ChartNoAxesCombined,
     },
     {
       title: "Profiled URLs",
       description: "Create a profile to manage all your URLs in one place.",
-      icon: <User className="h-12 w-12" />,
+      icon: User,
     },
     {
       title: "Anonymously",
       description: "Create a short link without creating an account.",
-      icon: <UserX className="h-12 w-12" />,
+      icon: UserX,
     },
     {
       title: "Protected",
       description:
         "Create a short link with password protection. (Feature Soon!).",
-      icon: <FileLock2 className="h-12 w-12" />,
+      icon: FileLock2,
     },
     {
       title: "Timed URL",
       description:
         "Set an expiration date for your short URL to limit its availability. (Feature Soon!)",
-      icon: <Timer className="h-12 w-12" />,
+      icon: Timer,
     },
     {
       title: "Notifications",
       description:
         "Get mail notified when your short URL is clicked. (Feature Soon!)",
-      icon: <Bell className="h-12 w-12" />,
+      icon: Bell,
     },
   ];
   return (
-    <div className="flex flex-row flex-wrap justify-center items-stretch gap-4 pt-24 py-11 w-3/4 ">
-      {cardItems.map((item, index) => (
-        <Card key={index} className="w-48">
-          <CardHeader className="flex flex-col gap-2 items-center">
-            <CardTitle>{item.title}</CardTitle>
-            {item.icon}
+    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {features.map((feature, index) => (
+        <Card key={index} className="bg-secondary">
+          <CardHeader>
+            <feature.icon className="w-10 h-10 text-blue-400 mb-2" />
+            <CardTitle>{feature.title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription className="text-center">
-              {item.description}
-            </CardDescription>
+            <CardDescription>{feature.description}</CardDescription>
           </CardContent>
         </Card>
       ))}
-    </div>
+    </section>
   );
 };
 

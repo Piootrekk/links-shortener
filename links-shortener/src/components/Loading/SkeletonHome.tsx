@@ -1,17 +1,19 @@
 import { Skeleton } from "../ui/skeleton";
-import SkeletonBullshit from "./SkeletonBullshit";
+import Skeletonfaq from "./Skeletonfaq";
 import SkeletonFutures from "./SkeletonFutures";
 
 const SkeletonHome = () => {
   return (
-    <div className="flex flex-col items-center">
-      <Skeleton className="my-14 sm:my-24 h-12 sm:h-20 lg:h-24 w-3/4" />
-      <div className="md:h-16 flex flex-col flex-wrap items-center gap-2 justify-center w-4/5">
-        <Skeleton className="h-16 w-full p-4" />
-        <Skeleton className="h-16 w-32" />
-      </div>
+    <div className="flex flex-col items-center gap-8">
+      <section className="text-center mb-12 flex flex-col items-center gap-4 ">
+        <Skeleton className="w-[520px] h-12" />
+        <Skeleton className="w-[500px] h-5" />
+        <div className="h-10">
+          <Skeleton className="w-[510px] h-10" />
+        </div>
+      </section>
       <SkeletonFutures />
-      <SkeletonBullshit />
+      <Skeletonfaq />
     </div>
   );
 };

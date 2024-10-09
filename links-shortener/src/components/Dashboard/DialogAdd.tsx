@@ -123,7 +123,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
             <ErrorMessage message={errors.shortUrl.message} />
           )}
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" variant={"outline"} disabled={isLoading}>
               {isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>

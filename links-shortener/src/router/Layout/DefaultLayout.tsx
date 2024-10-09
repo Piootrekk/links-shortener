@@ -9,7 +9,7 @@ const DefaultLayout: React.FC = () => {
         <header>
           <Header />
         </header>
-        <main>
+        <main className="container mx-auto px-4 py-12">
           <Outlet />
         </main>
       </div>
