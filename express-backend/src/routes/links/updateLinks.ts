@@ -6,12 +6,11 @@ import { getZodErrors } from "../../utils/getZodErrors";
 const router = Router();
 
 router.put("/link", authMiddleware, async (req: Request, res: Response) => {
-  const { id, title, orginal_url, short_url } = req.body;
+  const { id, title, orginal_url } = req.body;
   const parsed = updateRouteSchema.safeParse({
     id,
     orginal_url,
     title,
-    short_url,
   });
   if (!parsed.success) {
     const errors = getZodErrors(parsed.error.errors);
@@ -28,8 +27,7 @@ router.put("/link", authMiddleware, async (req: Request, res: Response) => {
       user.id,
       parsed.data.id,
       parsed.data.orginal_url,
-      parsed.data.title,
-      parsed.data.short_url
+      parsed.data.title
     );
     return res.json(updatedLink);
   } catch (error) {

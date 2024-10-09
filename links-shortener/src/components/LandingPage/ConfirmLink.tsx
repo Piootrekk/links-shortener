@@ -9,7 +9,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 
 import TransformLinkVisualize from "./TransformLinkVisualize";
-import { QrCode, BarChart2, UserCircle, Lock } from "lucide-react";
+import { QrCode, BarChart2, UserCircle, Lock, FilePlus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { Card } from "../ui/card";
@@ -39,7 +39,6 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
             in, you will not have access to features like:
           </DialogDescription>
         </DialogHeader>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
           <Card className="flex flex-col items-center justify-center h-24">
             <QrCode className="mb-2" />
@@ -74,8 +73,8 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
           </div>
         )}
         <TransformLinkVisualize link={link} />
-        <Button variant={"outline"} className="w-2/3 self-center">
-          Generate
+        <Button variant={"outline"} className="w-2/3 self-center gap-2">
+          <FilePlus /> Generate Link
         </Button>
       </DialogContent>
     </Dialog>

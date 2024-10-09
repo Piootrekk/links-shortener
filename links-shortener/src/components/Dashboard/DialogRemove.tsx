@@ -16,7 +16,7 @@ import { z } from "zod";
 import ErrorMessage from "../Error/ErrorMessage";
 import { useEffect, useState } from "react";
 import LoadingSpin from "../ui/loading-spin";
-import useFetchMultiple from "@/hooks/useFetchCallback";
+import useFetchCallback from "@/hooks/useFetchCallback";
 
 import { deletePersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
@@ -42,7 +42,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
   });
 
   const { data, isLoading, error, execute } =
-    useFetchMultiple(deletePersonalLink);
+    useFetchCallback(deletePersonalLink);
 
   const onSubmit = async (_: TRemoveLinkSchema) => {
     await execute(id, qrPath);

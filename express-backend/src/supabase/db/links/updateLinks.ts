@@ -5,8 +5,7 @@ const updateUrl = async (
   userId: string,
   id: string,
   url: string,
-  title: string,
-  shortUrl: string
+  title: string
 ) => {
   const updatedUrl = await prisma.urls.update({
     select: seletedColumns,
@@ -17,7 +16,6 @@ const updateUrl = async (
     data: {
       original_url: url,
       title: title,
-      short_url: shortUrl,
     },
   });
   return {

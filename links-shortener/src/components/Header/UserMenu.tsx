@@ -3,32 +3,26 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar } from "../ui/avatar";
-import { Link as LinkIcon, LogOut, User as UserIcon } from "lucide-react";
+import AvatarHeader from "./Avatar";
+import { Link as LinkIcon, LogOut } from "lucide-react";
 import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Link } from "react-router-dom";
-import { TUserCredentials } from "@/schemas/authSchema";
+import { useAuth } from "@/context/AuthContext";
 
-type UserMenuProps = {
-  user: TUserCredentials;
-  logout: () => void;
-};
-
-const UserMenu: React.FC<UserMenuProps> = ({ user, logout }) => {
+const UserMenu: React.FC<{}> = () => {
+  const { user, handleLogout } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-10 rounded-full overflow-hiddenfocus:outline-none">
-        <Avatar className="flex justify-center items-center cursor-pointer border focus:outline-none">
-          <UserIcon />
-        </Avatar>
+        <AvatarHeader />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="text-center text-wrap">
-          {user.email}
+          {user.data?.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link to="/dashboard">
@@ -37,7 +31,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, logout }) => {
             <span className="ml-2">My Links</span>
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuItem onClick={logout} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
           <LogOut className="h-4 w-4" />
           <span className="ml-2">Logout</span>
         </DropdownMenuItem>

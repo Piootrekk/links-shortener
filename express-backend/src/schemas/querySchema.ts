@@ -29,11 +29,14 @@ const insertAnonymouslySchema = insertRouteSchema.pick({
   orginal_url: true,
   short_url: true,
 });
-const updateRouteSchema = insertRouteSchema.merge(
-  z.object({
-    id: z.string().uuid({ message: "Invalid ID" }),
-  })
-);
+const updateRouteSchema = z.object({
+  id: z.string().uuid({ message: "Invalid ID" }),
+  title: z.string().max(255, { message: "Max 255 characters" }),
+  orginal_url: z
+    .string()
+    .url({ message: "Invalid URL" })
+    .max(300, { message: "Don't be greedy" }),
+});
 
 const deleteRouteSchema = z.object({
   id: z.string().uuid({ message: "Invalid ID" }),

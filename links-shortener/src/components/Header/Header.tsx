@@ -3,11 +3,13 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { useAuth } from "@/context/AuthContext";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import UserMenuMobile from "./UserMenuMobile";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, handleLogout } = useAuth();
-
+  const { user } = useAuth();
+  const isNotMobile = useMediaQuery("small");
   const loginHandler = () => {
     navigate("/auth");
   };
@@ -23,8 +25,10 @@ const Header = () => {
             <Button variant={"outline"} onClick={loginHandler}>
               Authorize
             </Button>
+          ) : isNotMobile ? (
+            <UserMenu />
           ) : (
-            <UserMenu user={user.data} logout={handleLogout} />
+            <UserMenuMobile />
           )}
         </nav>
       )}

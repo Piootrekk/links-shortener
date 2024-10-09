@@ -10,14 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "../ui/input";
 import ErrorMessage from "../Error/ErrorMessage";
-import { Card } from "../ui/card";
-import { Edit, RefreshCcw } from "lucide-react";
-import shortUrlGenerate from "@/lib/shortUrlGenerate";
+import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import insertLinkSchema, {
-  TInsertLinkSchema,
-} from "@/schemas/InsertLinkSchema";
+import updateSchema, { TUpdateLinkSchema } from "@/schemas/updateLinkSchema";
 import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
@@ -25,50 +21,43 @@ import { updatePersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 
 type DialogUpdateFormProps = {
-  data?: TInsertLinkSchema;
+  data?: TUpdateLinkSchema;
   id: string;
 };
 
 const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
-  const short = shortUrlGenerate(2, 6);
   const { refreshBoth } = useRefreshData();
   const [isOpen, setIsOpen] = useState(false);
-
-  const onHandleShortUrlGenerate = () => {
-    setValue("shortUrl", shortUrlGenerate(2, 6));
-  };
 
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
-  } = useForm<TInsertLinkSchema>({
-    resolver: zodResolver(insertLinkSchema),
+  } = useForm<TUpdateLinkSchema>({
+    resolver: zodResolver(updateSchema),
     defaultValues: {
-      shortUrl: data?.shortUrl || short,
       title: data?.title,
       url: data?.url,
     },
   });
   const {
-    data: insert,
+    data: update,
     isLoading,
     error,
     execute,
   } = useFetchCallback(updatePersonalLink);
 
-  const onSubmit = async (formData: TInsertLinkSchema) => {
-    await execute(id, formData.url, formData.title, formData.shortUrl);
+  const onSubmit = async (formData: TUpdateLinkSchema) => {
+    await execute(id, formData.url, formData.title);
     if (!error) return;
   };
 
   useEffect(() => {
-    if (insert && insert.success) {
+    if (update && update.success) {
       setIsOpen(false);
       refreshBoth();
     }
-  }, [insert]);
+  }, [update]);
 
   const handleOpenChange = (open: boolean) => {
     if (!isLoading) {
@@ -92,43 +81,16 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
           <DialogDescription>Edit your link</DialogDescription>
         </DialogHeader>
         {error && <ErrorMessage message={error.message} />}
-        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            type="text"
-            placeholder="Title"
-            {...register("title")}
-            className="mt-4"
-          />
+        <form
+          className="flex flex-col gap-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Input type="text" placeholder="Title" {...register("title")} />
           {errors.title && <ErrorMessage message={errors.title.message} />}
-          <Input
-            type="text"
-            placeholder="URL"
-            {...register("url")}
-            className="mt-4"
-          />
+          <Input type="text" placeholder="URL" {...register("url")} />
           {errors.url && <ErrorMessage message={errors.url.message} />}
-          <div className="flex items-center gap-2 mt-4 mb-4">
-            <Card className="p-2">{import.meta.env.VITE_URL || "URL"}</Card>
-            <span>{"/"}</span>
-            <Input
-              type="text"
-              placeholder="Short URL"
-              {...register("shortUrl")}
-              className="flex-1"
-            />
-            <Button
-              variant="ghost"
-              type="button"
-              onClick={() => onHandleShortUrlGenerate()}
-            >
-              <RefreshCcw />
-            </Button>
-          </div>
-          {errors.shortUrl && (
-            <ErrorMessage message={errors.shortUrl.message} />
-          )}
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} variant={"outline"}>
               {isLoading ? <LoadingSpin /> : "Save changes"}
             </Button>
           </DialogFooter>

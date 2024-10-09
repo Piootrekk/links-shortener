@@ -6,7 +6,7 @@ const SkeletonDashboard = () => {
   return (
     <div className="flex flex-col gap-8 pb-12">
       <SkeletonStats />
-      <div className="flex justify-between gap-8">
+      <div className="flex justify-between sm:flex-row flex-col gap-4 ">
         <Skeleton className="w-40 h-10" />
         <div className="flex gap-4">
           <Skeleton className="w-14 h-10" />

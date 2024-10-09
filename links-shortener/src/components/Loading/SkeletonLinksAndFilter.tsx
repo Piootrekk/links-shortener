@@ -6,8 +6,8 @@ import SkeletonLinks from "./SkeletonLinks";
 const SkeletonLinksAndFilter = () => {
   return (
     <>
-      <div className="flex justify-between">
-        <h1 className="text-4xl font-bold">My Links:</h1>
+      <div className="flex justify-between sm:flex-row flex-col gap-4 ">
+        <h1 className="text-3xl font-bold">My Links:</h1>
         <div className="flex gap-4">
           <Button variant="outline">
             <RefreshCwIcon />

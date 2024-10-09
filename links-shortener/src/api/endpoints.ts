@@ -27,14 +27,12 @@ const insertPersonalLink = async (
 const updatePersonalLink = async (
   id: string,
   orginal_url: string,
-  title: string,
-  short_url: string
+  title: string
 ) => {
   const response = await axiosInstance.put<TCrud>("/link", {
     id,
     orginal_url,
     title,
-    short_url,
   });
   return response.data;
 };
