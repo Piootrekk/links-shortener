@@ -22,10 +22,10 @@ interface FetchState<TData, TFunction extends AsyncFunction> {
   execute: (...args: InferAsyncFunctionArgs<TFunction>) => Promise<void>;
 }
 
-function useFetchCallback<TFunction extends AsyncFunction>(
+const useFetchCallback = <TFunction extends AsyncFunction>(
   asyncFunction: TFunction,
   validationSchema?: ZodSchema<InferAsyncFunctionResult<TFunction>>
-): FetchState<InferAsyncFunctionResult<TFunction>, TFunction> {
+): FetchState<InferAsyncFunctionResult<TFunction>, TFunction> => {
   type TData = InferAsyncFunctionResult<TFunction>;
 
   const [data, setData] = useState<TData | null>(null);
@@ -60,6 +60,6 @@ function useFetchCallback<TFunction extends AsyncFunction>(
   );
 
   return { data, error, isLoading, execute };
-}
+};
 
 export default useFetchCallback;

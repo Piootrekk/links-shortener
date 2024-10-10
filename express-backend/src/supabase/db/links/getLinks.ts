@@ -52,10 +52,21 @@ const getUserLinksCount = async (user_id: string) => {
   return count;
 };
 
+const getShortUrl = async (short_url: string) => {
+  const custom_url = await prisma.urls.findFirst({
+    select: { id: true },
+    where: {
+      short_url,
+    },
+  });
+  return custom_url;
+};
+
 export {
   getPersonalLinks,
   getPrersonalLinksRange,
   getUsersLinks,
   getUsersLinksRange,
   getUserLinksCount,
+  getShortUrl,
 };

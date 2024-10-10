@@ -54,7 +54,7 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
           </Card>
           <Card className="flex flex-col items-center justify-center h-24">
             <UserCircle className="mb-2" />
-            Profiled all
+            Profiled all links
           </Card>
         </div>
         {user.data && (

@@ -60,6 +60,13 @@ const getPersonalStatistics = async () => {
   return response.data;
 };
 
+const redirectingToUrl = async (shortUrl: string) => {
+  const response = await axiosInstance.get<{ success: boolean }>(
+    `/redirect/${shortUrl}`
+  );
+  return response.data;
+};
+
 export {
   getPersonalLinks,
   insertPersonalLink,
@@ -68,5 +75,6 @@ export {
   downloadQrCode,
   getPersonalStatistics,
   getPersonalLinksWithStats,
+  redirectingToUrl,
 };
 export type { TCrud };

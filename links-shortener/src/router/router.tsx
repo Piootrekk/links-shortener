@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/:custom_link",
+        path: "/direct/:custom_link",
         element: <RedirectView />,
       },
       {
@@ -53,6 +53,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/*",
+        element: <NotFound />,
+      },
+      {
+        path: "/404",
         element: <NotFound />,
       },
     ],

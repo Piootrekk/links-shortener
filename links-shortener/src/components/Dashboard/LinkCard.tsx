@@ -33,7 +33,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           {link.title}
         </Link>
         <Link
-          to={`/${link.short_url}`}
+          to={`/direct/${link.short_url}`}
           className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer truncate break-all"
         >
           {URL}/{link.short_url}
@@ -54,7 +54,6 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           data={{
             title: link.title!,
             url: link.original_url,
-            shortUrl: link.short_url,
           }}
           id={link.id}
         />

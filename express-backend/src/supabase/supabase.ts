@@ -22,7 +22,7 @@ const seletedColumns = {
 };
 
 const prisma = new PrismaClient({
-  log: ["query", "info", "warn"],
+  log: ["warn"],
   errorFormat: "pretty",
 });
 export { prisma, seletedColumns };

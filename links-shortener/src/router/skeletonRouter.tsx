@@ -3,6 +3,7 @@ import DefaultSkeletonLayout from "./Layout/DefaultSkeletonLayout";
 import SkeletonHome from "@/components/Loading/SkeletonHome";
 import SkeletonAuth from "@/components/Loading/SkeletonAuth";
 import SkeletonDashboard from "@/components/Loading/SkeletonDashboard";
+import SkeletonUniversal from "@/components/Loading/SkeletonUniversal";
 
 const routerSkeleton = createBrowserRouter([
   {
@@ -25,12 +26,16 @@ const routerSkeleton = createBrowserRouter([
         element: <SkeletonAuth />,
       },
       {
-        path: "/:custom_link",
-        element: <SkeletonHome />,
+        path: "/direct/:custom_link",
+        element: <SkeletonUniversal />,
       },
       {
         path: "*",
-        element: <SkeletonHome />,
+        element: <SkeletonUniversal />,
+      },
+      {
+        path: "/404",
+        element: <SkeletonUniversal />,
       },
     ],
   },
