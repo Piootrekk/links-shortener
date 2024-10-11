@@ -9,7 +9,7 @@ const limits = {
 };
 
 const validateUserLimit = (limit: number, role: TUserRoles) => {
-  if (limit > limits[role]) {
+  if (limit >= limits[role]) {
     throw `User limit exceeded. Your limit is ${limits[role]}`;
   }
 };
@@ -23,11 +23,9 @@ const limitLinksMiddleware = async (
   const role: TUserRoles = user?.user_metadata.role;
   if (!user) return res.status(401).json({ message: "Unauthorized" });
   if (!isValidUserRole(role))
-    return res
-      .status(403)
-      .json({
-        message: "Wtf, u dont have a role, please contact contact support",
-      });
+    return res.status(403).json({
+      message: "Wtf, u dont have a role, please contact contact support",
+    });
   try {
     const linksCount = await getUserLinksCount(user.id);
     validateUserLimit(linksCount, role);

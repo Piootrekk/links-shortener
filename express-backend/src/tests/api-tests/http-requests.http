@@ -43,5 +43,5 @@ GET {{baseUrl}}/links-range?skip=3&take=1
 ### Get links with stats
 GET {{baseUrl}}/links-with-stats
 
-### redirect to link
+### only for tests /redirect
 GET {{baseUrl}}/redirect

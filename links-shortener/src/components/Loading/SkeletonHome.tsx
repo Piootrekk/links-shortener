@@ -4,7 +4,7 @@ import SkeletonFutures from "./SkeletonFutures";
 
 const SkeletonHome = () => {
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-center gap-8 pb-4">
       <section className="text-center mb-12 flex flex-col items-center gap-4 ">
         <Skeleton className="w-[520px] h-12" />
         <Skeleton className="w-[500px] h-5" />

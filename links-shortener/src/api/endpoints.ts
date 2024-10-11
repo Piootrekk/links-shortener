@@ -1,14 +1,34 @@
 import { TCrud, TStats, TUrl } from "@/schemas/dbSchema";
 import axiosInstance from "./axios";
+import { AxiosError } from "axios";
+
+const setErrorIfNot200 = (error: unknown) => {
+  if (error instanceof AxiosError) {
+    if (error.response)
+      throw new Error(
+        error.response.data.message || "An unknown error occurred"
+      );
+    else if (error.request) throw new Error("No response from server");
+    else throw new Error("An unknown error occurred");
+  }
+};
 
 const getPersonalLinks = async () => {
-  const response = await axiosInstance.get<TUrl[]>("/links");
-  return response.data;
+  try {
+    const response = await axiosInstance.get<TUrl[]>("/links");
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const getPersonalLinksWithStats = async () => {
-  const response = await axiosInstance.get<TUrl[]>("/links-with-stats");
-  return response.data;
+  try {
+    const response = await axiosInstance.get<TUrl[]>("/links-with-stats");
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const insertPersonalLink = async (
@@ -16,12 +36,16 @@ const insertPersonalLink = async (
   short_url: string,
   title: string
 ) => {
-  const response = await axiosInstance.post<TCrud>("/link", {
-    orginal_url,
-    short_url,
-    title,
-  });
-  return response.data;
+  try {
+    const response = await axiosInstance.post<TCrud>("/link", {
+      orginal_url,
+      short_url,
+      title,
+    });
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const updatePersonalLink = async (
@@ -29,42 +53,62 @@ const updatePersonalLink = async (
   orginal_url: string,
   title: string
 ) => {
-  const response = await axiosInstance.put<TCrud>("/link", {
-    id,
-    orginal_url,
-    title,
-  });
-  return response.data;
+  try {
+    const response = await axiosInstance.put<TCrud>("/link", {
+      id,
+      orginal_url,
+      title,
+    });
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const deletePersonalLink = async (id: string, qr_code: string) => {
-  const response = await axiosInstance.delete<TCrud>("/link", {
-    data: {
-      id,
-      qr_code,
-    },
-  });
-  return response.data;
+  try {
+    const response = await axiosInstance.delete<TCrud>("/link", {
+      data: {
+        id,
+        qr_code,
+      },
+    });
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const downloadQrCode = async (qrPath: string) => {
-  const response = await axiosInstance.post<Blob>("/download-png", {
-    qrPath,
-    responseType: "blob",
-  });
-  return response.data;
+  try {
+    const response = await axiosInstance.post<Blob>("/download-png", {
+      qrPath,
+      responseType: "blob",
+    });
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const getPersonalStatistics = async () => {
-  const response = await axiosInstance.get<TStats>("/personal-statistics");
-  return response.data;
+  try {
+    const response = await axiosInstance.get<TStats>("/personal-statistics");
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 const redirectingToUrl = async (shortUrl: string) => {
-  const response = await axiosInstance.get<{ success: boolean }>(
-    `/redirect/${shortUrl}`
-  );
-  return response.data;
+  try {
+    const response = await axiosInstance.get<{ original_url: string }>(
+      `/redirect/${shortUrl}`
+    );
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
 };
 
 export {

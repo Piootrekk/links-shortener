@@ -9,7 +9,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 
 import TransformLinkVisualize from "./TransformLinkVisualize";
-import { QrCode, BarChart2, UserCircle, Lock, FilePlus } from "lucide-react";
+import { QrCode, BarChart2, UserCircle, Lock, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { Card } from "../ui/card";
@@ -74,7 +74,7 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
         )}
         <TransformLinkVisualize link={link} />
         <Button variant={"outline"} className="w-2/3 self-center gap-2">
-          <FilePlus /> Generate Link
+          <Plus /> Generate Link
         </Button>
       </DialogContent>
     </Dialog>

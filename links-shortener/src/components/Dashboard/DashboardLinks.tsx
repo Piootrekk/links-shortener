@@ -1,6 +1,6 @@
 import { TUrl } from "@/schemas/dbSchema";
 import { Button } from "../ui/button";
-import { RefreshCwIcon } from "lucide-react";
+import { RefreshCcwIcon } from "lucide-react";
 import DialogAdd from "./DialogAdd";
 import LinkCard from "./LinkCard";
 import { useState } from "react";
@@ -27,8 +27,9 @@ const DashboardLinks: React.FC<DashboardLinksProps> = ({ links }) => {
       <div className="flex justify-between sm:flex-row flex-col gap-4 ">
         <h1 className="text-3xl font-bold">My Links:</h1>
         <div className="flex gap-4">
-          <Button variant="outline" onClick={handleRefresh}>
-            <RefreshCwIcon />
+          <Button variant="outline" onClick={handleRefresh} className="gap-2">
+            <RefreshCcwIcon />
+            Refresh
           </Button>
           <DialogAdd />
         </div>

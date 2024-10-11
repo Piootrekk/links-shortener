@@ -8,6 +8,8 @@ type DialogCopyProps = {
 
 const DialogCopy: React.FC<DialogCopyProps> = ({ shortUrl }) => {
   const URL = import.meta.env.VITE_FRONTEND_URL;
+  if (!URL) throw new Error("VITE_FRONTEND_URL is not defined");
+
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     navigator.clipboard.writeText(`${URL}/${shortUrl}`);
@@ -18,7 +20,7 @@ const DialogCopy: React.FC<DialogCopyProps> = ({ shortUrl }) => {
     <Button
       variant={"ghost"}
       onClick={handleCopy}
-      className="border border-transparent hover:border-primary focus:outline-none transition-colors duration-200"
+      className="border border-transparent text-primary hover:border-primary focus:outline-none transition-colors duration-200"
     >
       {copied ? (
         <CopyCheck className="w-6 h-6" />

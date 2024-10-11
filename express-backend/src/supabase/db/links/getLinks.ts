@@ -54,7 +54,7 @@ const getUserLinksCount = async (user_id: string) => {
 
 const getShortUrl = async (short_url: string) => {
   const custom_url = await prisma.urls.findFirst({
-    select: { id: true },
+    select: { id: true, original_url: true },
     where: {
       short_url,
     },

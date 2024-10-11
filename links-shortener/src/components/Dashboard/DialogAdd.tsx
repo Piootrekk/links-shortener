@@ -23,7 +23,7 @@ import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertPersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
-import { RefreshCcw } from "lucide-react";
+import { Plus, RefreshCcw } from "lucide-react";
 
 type DialogAddFormProps = {};
 
@@ -77,7 +77,10 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create New</Button>
+        <Button variant="outline" className="gap-2">
+          <Plus />
+          Create New
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

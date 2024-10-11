@@ -69,7 +69,7 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
       <DialogTrigger asChild>
         <Button
           variant={"ghost"}
-          className=" border border-transparent 
+          className=" border border-transparent text-primary
           hover:border-primary focus:outline-none transition-colors duration-200"
         >
           <Edit className="w-6 h-6" />

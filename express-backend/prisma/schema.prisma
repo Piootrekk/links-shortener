@@ -9,24 +9,32 @@ datasource db {
 }
 
 model hidden_details {
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  city       String?
-  device     String?
-  country    String?
-  latitude   Float?
-  longitude  Float?
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  urls_id    String?  @db.Uuid
-  urls       urls?    @relation(fields: [urls_id], references: [id], onUpdate: NoAction)
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  city        String?
+  device      String?
+  country     String?
+  latitude    Float?
+  longitude   Float?
+  user_agent  String?
+  browser     String?
+  os          String?
+  device_type String?
+  cpu         String?
+  ip          String?
+  urls_id     String?  @db.Uuid
+  urls        urls?    @relation(fields: [urls_id], references: [id], onUpdate: NoAction)
 }
 
 model urls {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime?
+  password       String?
   original_url   String
   short_url      String           @unique
   user_id        String?          @db.Uuid
   title          String?
   qr_code        String?
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   hidden_details hidden_details[]
 }

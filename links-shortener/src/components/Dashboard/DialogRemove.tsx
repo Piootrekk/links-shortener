@@ -68,7 +68,7 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
       <DialogTrigger asChild>
         <Button
           variant={"ghost"}
-          className=" border border-transparent hover:border-primary 
+          className=" border text-primary border-transparent hover:border-primary 
           focus:outline-none transition-colors duration-200"
         >
           <Trash className="w-6 h-6" />

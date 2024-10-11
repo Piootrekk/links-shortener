@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TStats } from "@/schemas/dbSchema";
 import { Link2, MousePointerClick, TimerResetIcon } from "lucide-react";
 
@@ -30,15 +29,18 @@ const Statistic: React.FC<StatisticProps> = ({ data }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {contentInfo.map((info, index) => (
-        <Card key={index}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{info.title}</CardTitle>
-            <info.niceIcon className="h-4 w-4 text-muted-foreground " />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold truncate">{info.content}</div>
-          </CardContent>
-        </Card>
+        <div
+          className="rounded-lg p-4 flex items-center justify-between bg-secondary shadow-md"
+          key={index}
+        >
+          <div className="flex items-center">
+            <info.niceIcon className="w-8 h-8 " />
+            <span className="ml-2 ">{info.title}</span>
+          </div>
+          <span className="text-xl font-semibold break-all">
+            {info.content}
+          </span>
+        </div>
       ))}
     </div>
   );

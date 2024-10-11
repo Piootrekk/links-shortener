@@ -13,21 +13,33 @@ router.get("/redirect/:short_url", async (req: Request, res: Response) => {
     if (!checkIfShortUrlExists) {
       return res.status(404).json({ error: "Short url not found" });
     }
-    res.json({ success: true });
+    res.json({ original_url: checkIfShortUrlExists.original_url });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }
   const ip =
     req.socket.remoteAddress ||
+    req.ip ||
     req.headers["x-forwarded-for"] ||
     req.headers["cf-connecting-ip"] ||
-    req.headers["x-real-ip"] ||
-    req.ip;
+    req.headers["x-real-ip"];
   const userAgent = req.headers["user-agent"];
   const ua = uap(userAgent);
   console.log(ip, ua);
-  console.log("test");
+});
+
+router.get("/redirect", async (req: Request, res: Response) => {
+  const ip =
+    req.socket.remoteAddress ||
+    req.ip ||
+    req.headers["x-forwarded-for"] ||
+    req.headers["cf-connecting-ip"] ||
+    req.headers["x-real-ip"];
+  const userAgent = req.headers["user-agent"];
+  const ua = uap(userAgent);
+  console.log(ip, ua);
+  res.json({ ip, ua });
 });
 
 export default router;

@@ -1,4 +1,4 @@
-import { Filter, RefreshCwIcon } from "lucide-react";
+import { Filter, Plus, RefreshCcwIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import SkeletonLinks from "./SkeletonLinks";
@@ -9,10 +9,14 @@ const SkeletonLinksAndFilter = () => {
       <div className="flex justify-between sm:flex-row flex-col gap-4 ">
         <h1 className="text-3xl font-bold">My Links:</h1>
         <div className="flex gap-4">
-          <Button variant="outline">
-            <RefreshCwIcon />
+          <Button variant="outline" className="gap-2">
+            <RefreshCcwIcon />
+            Refresh
           </Button>
-          <Button variant="outline">Create New</Button>
+          <Button variant="outline">
+            <Plus />
+            Create New
+          </Button>
         </div>
       </div>
       <div className="relative">
