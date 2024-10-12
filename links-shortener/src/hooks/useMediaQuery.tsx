@@ -12,7 +12,7 @@ const breakpoints: MediaQueryBreakpoints = {
   medium: "(min-width: 768px)",
   large: "(min-width: 1024px)",
   xlarge: "(min-width: 1280px)",
-};
+} as const;
 
 const useMediaQuery = (size: keyof MediaQueryBreakpoints) => {
   const [value, setValue] = useState(false);

@@ -32,9 +32,7 @@ const Login = () => {
           <CardDescription>
             <label>to your account if you have one.</label>
           </CardDescription>
-          {user.error && (
-            <ErrorMessage message={user.error.message} />
-          )}
+          {user.error && <ErrorMessage message={user.error.message} />}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -45,7 +43,7 @@ const Login = () => {
                 {...register("email")}
                 autoComplete="email"
               />
-              {errors.email && <ErrorMessage message={errors.email.message!} />}
+              {errors.email && <ErrorMessage message={errors.email.message} />}
             </div>
             <div className="mb-4">
               <Input
@@ -55,7 +53,7 @@ const Login = () => {
                 autoComplete="current-password"
               />
               {errors.password && (
-                <ErrorMessage message={errors.password.message!} />
+                <ErrorMessage message={errors.password.message} />
               )}
             </div>
             <Button type="submit" className="w-full p-2" variant={"secondary"}>

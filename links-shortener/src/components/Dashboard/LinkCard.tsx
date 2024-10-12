@@ -13,19 +13,22 @@ type LinksCardProps = {
 
 const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
   const URL = import.meta.env.VITE_FRONTEND_URL;
+  if (!URL) throw new Error("VITE_FRONTEND_URL is not defined");
 
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-secondary rounded-lg w-full">
-      {link.qr_code ? (
-        <DialogQR qrCode={link.qr_code} />
-      ) : (
-        <img
-          src={borderplateQR}
-          alt="QR Code"
-          className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-not-allowed"
-        />
-      )}
-      <div className="flex flex-col truncate text-ellipsis sm:order-1 order-2">
+      <div className="flex items-center justify-center h-32 w-32 min-h-32 min-w-32 md:mx-1 mx-auto">
+        {link.qr_code ? (
+          <DialogQR qrCode={link.qr_code} />
+        ) : (
+          <img
+            src={borderplateQR}
+            alt="QR Code"
+            className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-not-allowed"
+          />
+        )}
+      </div>
+      <div className="flex flex-col truncate text-ellipsis md:order-1 order-3">
         <Link
           to={`/link/${link.id}`}
           className="text-xl font-extrabold truncate break-all"
@@ -48,7 +51,7 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
           {new Date(link.created_at).toLocaleString()}
         </span>
       </div>
-      <div className="flex gap-2 sm:justify-end sm:flex-1 sm:order-2 order-1">
+      <div className="flex flex-wrap md:flex-nowrap gap-2 justify-center md:justify-end md:flex-1 order-1">
         <DialogCopy shortUrl={link.short_url} />
         <DialogUpdate
           data={{

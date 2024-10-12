@@ -16,6 +16,7 @@ const updateUrl = async (
     data: {
       original_url: url,
       title: title,
+      updated_at: new Date(),
     },
   });
   return {

@@ -19,7 +19,7 @@ const DialogQR: React.FC<DialogQRProps> = ({ qrCode }) => {
           <img
             src={`${import.meta.env.VITE_DB_ENDPOINT || ""}/${qrCode}`}
             alt="QR Code"
-            className="h-32 object-contain rounded-md ring ring-blue-500 self-start cursor-pointer sm:justify-normal justify-center"
+            className="h-fit w-fit object-contain rounded-md ring ring-blue-500 cursor-pointer justify-center"
           />
         </DialogTrigger>
         <DialogContent>
@@ -29,13 +29,12 @@ const DialogQR: React.FC<DialogQRProps> = ({ qrCode }) => {
               Scan the QR code to open the link
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center justify-center">
-            <img
-              src={`${import.meta.env.VITE_DB_ENDPOINT || ""}/${qrCode}`}
-              alt="QR Code"
-              className="w-full h-auto object-contain rounded-md ring ring-blue-500"
-            />
-          </div>
+
+          <img
+            src={`${import.meta.env.VITE_DB_ENDPOINT || ""}/${qrCode}`}
+            alt="QR Code"
+            className="w-fit h-fit object-contain rounded-md ring ring-blue-500"
+          />
         </DialogContent>
       </Dialog>
     </>
