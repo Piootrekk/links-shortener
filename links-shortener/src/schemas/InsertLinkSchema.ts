@@ -6,9 +6,10 @@ const insertLinkSchema = z.object({
     .string()
     .min(1, { message: "Minimum 1 character" })
     .max(100, { message: "Maximum 100 characters" }),
-  shortUrl: z.string().min(2, { message: "Minimum 2 characters" }).max(20, {
+  shortUrl: z.string().min(1, { message: "Minimum 1 characters" }).max(64, {
     message: "Maximum 20 characters",
   }),
+  password: z.string().optional(),
 });
 
 type TInsertLinkSchema = z.infer<typeof insertLinkSchema>;

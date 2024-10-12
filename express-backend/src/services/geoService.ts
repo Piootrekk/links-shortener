@@ -5,11 +5,12 @@ type TGeoData = {
   city: string;
   lat: number;
   lon: number;
+  isp: string;
   query: string;
 };
 
 const apiURL =
-  "http://ip-api.com/json/{query}?fields=status,message,country,city,lat,lon,query";
+  "http://ip-api.com/json/{query}?fields=status,isp,message,country,city,lat,lon,query";
 
 const getGetDetails = async (ip: string) => {
   const url = apiURL.replace("{query}", ip);

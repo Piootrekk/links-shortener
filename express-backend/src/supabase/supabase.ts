@@ -16,9 +16,11 @@ const seletedColumns = {
   id: true,
   original_url: true,
   short_url: true,
+  password: true,
   title: true,
   qr_code: true,
   created_at: true,
+  updated_at: true,
 };
 
 const prisma = new PrismaClient({

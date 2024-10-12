@@ -54,12 +54,22 @@ const getUserLinksCount = async (user_id: string) => {
 
 const getShortUrl = async (short_url: string) => {
   const custom_url = await prisma.urls.findFirst({
-    select: { id: true, original_url: true },
+    select: { id: true, original_url: true, password: true },
     where: {
       short_url,
     },
   });
   return custom_url;
+};
+
+const getHashPassword = async (short_url: string) => {
+  const password = await prisma.urls.findFirst({
+    select: { password: true },
+    where: {
+      short_url,
+    },
+  });
+  return password?.password;
 };
 
 export {
@@ -69,4 +79,5 @@ export {
   getUsersLinksRange,
   getUserLinksCount,
   getShortUrl,
+  getHashPassword,
 };

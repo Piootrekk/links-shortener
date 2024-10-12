@@ -24,6 +24,7 @@ import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertPersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 import { Plus, RefreshCcw } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
 
 type DialogAddFormProps = {};
 
@@ -32,6 +33,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const { data, isLoading, error, execute } =
     useFetchCallback(insertPersonalLink);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
   const { refreshBoth } = useRefreshData();
 
   const onHandleShortUrlGenerate = () => {
@@ -54,10 +56,19 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
     setValue("shortUrl", shortUrlGenerate(2, 6));
     setValue("title", "");
     setValue("url", "");
+    setValue("password", undefined);
+    setIsPasswordEnabled(false);
   };
 
   const onSubmit = async (formData: TInsertLinkSchema) => {
-    await execute(formData.url, formData.shortUrl, formData.title);
+    await execute(
+      formData.url,
+      formData.shortUrl,
+      formData.title,
+      isPasswordEnabled || formData.password === ""
+        ? formData.password
+        : undefined
+    );
     if (!error) return;
   };
 
@@ -74,6 +85,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
       setIsOpen(open);
     }
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
@@ -103,6 +115,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
             className="mt-4"
           />
           {errors.url && <ErrorMessage message={errors.url.message} />}
+
           <div className="flex items-center gap-2 mt-4 mb-4">
             <Card className="p-2">
               {import.meta.env.VITE_FRONTEND_URL || "URL"}
@@ -125,6 +138,27 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           {errors.shortUrl && (
             <ErrorMessage message={errors.shortUrl.message} />
           )}
+          <div className="mt-4 mb-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="enable-password"
+                checked={isPasswordEnabled}
+                onClick={() => setIsPasswordEnabled(!isPasswordEnabled)}
+              />
+              <label htmlFor="enable-password">Enable password</label>
+            </div>
+            <Input
+              type="password"
+              placeholder={isPasswordEnabled ? "Password" : "Enter password"}
+              {...register("password")}
+              className="mt-4"
+              disabled={!isPasswordEnabled}
+            />
+          </div>
+          {errors.password && (
+            <ErrorMessage message={errors.password.message} />
+          )}
+
           <DialogFooter>
             <Button type="submit" variant={"outline"} disabled={isLoading}>
               {isLoading ? <LoadingSpin /> : "Save changes"}

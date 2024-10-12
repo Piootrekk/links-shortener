@@ -18,6 +18,7 @@ model hidden_details {
   longitude   Float?
   user_agent  String?
   browser     String?
+  isp         String?
   os          String?
   device_type String?
   cpu         String?

@@ -14,8 +14,10 @@ const detailsArraySchema = z.array(detailsSchema);
 
 const urlSchema = z.object({
   created_at: z.string().datetime({ offset: true }),
+  updated_at: z.string().datetime({ offset: true }).nullable(),
   original_url: z.string().url(),
   short_url: z.string(),
+  password: z.string().nullable(),
   title: z.string().nullable(),
   qr_code: z.string().nullable(),
   id: z.string().uuid(),
@@ -50,10 +52,15 @@ type TStats = {
   total_clicks: number;
 };
 
+type TRedirect = {
+  original_url: string;
+  password: boolean;
+};
+
 export {
   urlsArraySchema,
   singleCustomUrlSchema,
   detailsArraySchema,
   extendedUrlSchema,
 };
-export type { TUrl, TCustomeUrl, TExtendedUrl, TCrud, TStats };
+export type { TUrl, TCustomeUrl, TExtendedUrl, TCrud, TStats, TRedirect };

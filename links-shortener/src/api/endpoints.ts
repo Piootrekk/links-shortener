@@ -1,4 +1,4 @@
-import { TCrud, TStats, TUrl } from "@/schemas/dbSchema";
+import { TCrud, TRedirect, TStats, TUrl } from "@/schemas/dbSchema";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 
@@ -34,13 +34,15 @@ const getPersonalLinksWithStats = async () => {
 const insertPersonalLink = async (
   orginal_url: string,
   short_url: string,
-  title: string
+  title: string,
+  password?: string
 ) => {
   try {
     const response = await axiosInstance.post<TCrud>("/link", {
       orginal_url,
       short_url,
       title,
+      password,
     });
     return response.data;
   } catch (err: unknown) {
@@ -102,8 +104,23 @@ const getPersonalStatistics = async () => {
 
 const redirectingToUrl = async (shortUrl: string) => {
   try {
-    const response = await axiosInstance.get<{ original_url: string }>(
+    const response = await axiosInstance.get<TRedirect>(
       `/redirect/${shortUrl}`
+    );
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
+};
+
+const validatePassword = async (short_url: string, password: string) => {
+  try {
+    const response = await axiosInstance.post<{ success: boolean }>(
+      `/validate-password`,
+      {
+        password,
+        short_url,
+      }
     );
     return response.data;
   } catch (err: unknown) {
@@ -120,5 +137,6 @@ export {
   getPersonalStatistics,
   getPersonalLinksWithStats,
   redirectingToUrl,
+  validatePassword,
 };
 export type { TCrud };

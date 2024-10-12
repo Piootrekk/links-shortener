@@ -24,7 +24,7 @@ const deleteFile = async (path: string) => {
 };
 
 const invokeQR = async (name: string) => {
-  const qrBlob = await generateQR(`${URL_FRONT}/${name}`, name);
+  const qrBlob = await generateQR(`${URL_FRONT}/direct/${name}`, name);
   const qrPath = await uploadFile(qrBlob);
   return qrPath;
 };

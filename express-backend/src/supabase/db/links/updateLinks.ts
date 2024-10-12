@@ -1,6 +1,5 @@
 import { prisma, seletedColumns } from "../../supabase";
 
-//  TODO updatedTime
 const updateUrl = async (
   userId: string,
   id: string,

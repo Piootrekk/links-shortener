@@ -20,9 +20,10 @@ const insertRouteSchema = z.object({
     .string()
     .url({ message: "Invalid URL" })
     .max(300, { message: "Don't be greedy" }),
-  short_url: z.string().min(3, { message: "min 3 characters" }).max(64, {
+  short_url: z.string().min(1, { message: "min 1 characters" }).max(64, {
     message: "Wtf are you doing 0_o are u shortening? or writing a book?",
   }),
+  password: z.string().optional(),
 });
 
 const insertAnonymouslySchema = insertRouteSchema.pick({

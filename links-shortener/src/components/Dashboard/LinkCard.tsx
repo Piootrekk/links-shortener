@@ -6,6 +6,7 @@ import DialogUpdate from "./DialogUpdate";
 import borderplateQR from "@/assets/borderplate.png";
 import DialogCopy from "./DialogCopy";
 import DialogDownload from "./DialogDownload";
+import { Lock } from "lucide-react";
 
 type LinksCardProps = {
   link: TUrl;
@@ -35,11 +36,21 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         >
           {link.title}
         </Link>
+
         <Link
           to={`/direct/${link.short_url}`}
-          className="text-2xl text-blue-400 font-bold hover:underline cursor-pointer truncate break-all"
+          className="text-2xl flex items-center gap-1 text-blue-400 font-bold hover:underline cursor-pointer truncate break-all"
         >
-          {URL}/{link.short_url}
+          {link.password !== null ? (
+            <>
+              <Lock className="min-w-5 min-h-5  max-w-5 max-h-5" /> {URL}
+              /direct/{link.short_url}
+            </>
+          ) : (
+            <>
+              {URL}/direct/{link.short_url}
+            </>
+          )}
         </Link>
         <a
           className="flex items-center gap-1 hover:underline cursor-pointer text-muted-foreground"
@@ -47,9 +58,18 @@ const LinkCard: React.FC<LinksCardProps> = ({ link }) => {
         >
           {link.original_url}
         </a>
-        <span className="flex items-end text-sm flex-1">
-          {new Date(link.created_at).toLocaleString()}
-        </span>
+        <div className="flex flex-row flex-wrap items-end text-sm flex-1 gap-x-4">
+          {link.updated_at ? (
+            <>
+              <span>Edited: {new Date(link.updated_at).toLocaleString()}</span>
+              <span className=" text-muted-foreground">
+                Created at: {new Date(link.created_at).toLocaleString()}
+              </span>
+            </>
+          ) : (
+            <span>{new Date(link.created_at).toLocaleString()}</span>
+          )}
+        </div>
       </div>
       <div className="flex flex-wrap md:flex-nowrap gap-2 justify-center md:justify-end md:flex-1 order-1">
         <DialogCopy shortUrl={link.short_url} />

@@ -10,22 +10,27 @@ import {
   insertUrlAnonymously,
 } from "../../supabase/db/links/insertLinks";
 import limitLinksMiddleware from "../../middlewares/validateUserLimit";
+import { generateHash } from "../../utils/cryptPassword";
+
 const router = Router();
+
 router.post(
   "/link",
   authMiddleware,
   limitLinksMiddleware,
   async (req: Request, res: Response) => {
-    const { title, orginal_url, short_url } = req.body;
+    const { title, orginal_url, short_url, password } = req.body;
     const parsed = insertRouteSchema.safeParse({
       title,
       orginal_url,
       short_url,
+      password,
     });
     if (!parsed.success) {
       const errors = getZodErrors(parsed.error.errors);
       return res.status(400).json(errors);
     }
+    const hashedPassword = password ? await generateHash(password) : undefined;
     const user = req.user;
     if (!user) {
       return res.status(400).json({
@@ -37,7 +42,8 @@ router.post(
         parsed.data.orginal_url,
         parsed.data.short_url,
         parsed.data.title,
-        user.id
+        user.id,
+        hashedPassword
       );
       return res.json(insertedLink);
     } catch (error) {
