@@ -1,7 +1,8 @@
+import { validateRedirect } from "@/Api/endpoints";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { ExternalLink, ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import ErrorMessage from "../Error/ErrorMessage";
+import { ExternalLink, ArrowRight, Lock } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -9,29 +10,34 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "../ui/card";
+import { Input } from "../ui/input";
 import LoadingSpin from "../ui/loading-spin";
-import { validateRedirect } from "@/Api/endpoints";
 
-type DirectMainPageProps = {
+type DirectWithPasswordProps = {
   custom_link: string;
 };
 
-const DirectMainPage: React.FC<DirectMainPageProps> = ({ custom_link }) => {
-  const getOriginalUrl = useFetchCallback(validateRedirect);
-
-  useEffect(() => {
-    getOriginalUrl.execute(custom_link);
-    if (getOriginalUrl.data?.original_url) {
-      window.location.replace(getOriginalUrl.data.original_url);
-    }
-  }, [getOriginalUrl.data]);
+const DirectWithPassword: React.FC<DirectWithPasswordProps> = ({
+  custom_link,
+}) => {
+  const postPasswordToRedirect = useFetchCallback(validateRedirect);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (getOriginalUrl.data)
-      window.location.replace(getOriginalUrl.data.original_url);
+    e.stopPropagation();
+    const formData = new FormData(e.currentTarget);
+    const inputPassword = formData.get("password") as string;
+    if (!inputPassword) return;
+    postPasswordToRedirect.execute(custom_link, inputPassword);
   };
+
+  useEffect(() => {
+    if (postPasswordToRedirect.data?.success) {
+      window.location.replace(postPasswordToRedirect.data.original_url);
+    }
+  }, [postPasswordToRedirect.data]);
 
   return (
     <section className="flex items-start justify-center p-4 min-h-screen">
@@ -50,15 +56,25 @@ const DirectMainPage: React.FC<DirectMainPageProps> = ({ custom_link }) => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {getOriginalUrl.error && (
-              <ErrorMessage message={getOriginalUrl.error.message} />
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <Lock size={16} />
+                <span>This link is password protected</span>
+              </div>
+              <Input type="password" placeholder="Password" name="password" />
+            </div>
+            {postPasswordToRedirect.error && (
+              <ErrorMessage
+                message={postPasswordToRedirect.error.message}
+                className="text-center"
+              />
             )}
             <Button
               type="submit"
               className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-              disabled={getOriginalUrl.isLoading}
+              disabled={postPasswordToRedirect.isLoading}
             >
-              {getOriginalUrl.isLoading ? (
+              {postPasswordToRedirect.isLoading ? (
                 <>
                   <LoadingSpin /> <span>Redirecting...</span>
                 </>
@@ -71,9 +87,12 @@ const DirectMainPage: React.FC<DirectMainPageProps> = ({ custom_link }) => {
             </Button>
           </form>
         </CardContent>
+        <CardFooter className="justify-center text-muted-foreground">
+          <p className="text-xs">Secured by LinkShortener™</p>
+        </CardFooter>
       </Card>
     </section>
   );
 };
 
-export default DirectMainPage;
+export default DirectWithPassword;

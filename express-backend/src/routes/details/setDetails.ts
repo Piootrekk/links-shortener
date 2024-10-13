@@ -15,7 +15,6 @@ router.get("/redirect/:short_url", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Short url not found" });
     }
     res.json({
-      original_url: checkIfShortUrlExists.original_url,
       password: checkIfShortUrlExists.password ? true : false,
     });
   } catch (error) {
@@ -23,23 +22,32 @@ router.get("/redirect/:short_url", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/validate-password", async (req: Request, res: Response) => {
+router.post("/validate-redirect", async (req: Request, res: Response) => {
   const { password, short_url } = req.body;
-  if (!password || !short_url) {
+  if (!short_url) {
     return res
       .status(400)
-      .json({ message: "No password or short URL provided" });
+      .json({ message: "No short URL provided" });
   }
   try {
     const hashedPassword = await getHashPassword(short_url);
     if (!hashedPassword) {
       return res.status(404).json({ message: "Short url not found" });
     }
-    const validate = await compareHash(password, hashedPassword);
+    if (hashedPassword?.password === null) {
+      return res.json({
+        success: true,
+        original_url: hashedPassword.original_url,
+      });
+    }
+    const validate = await compareHash(password, hashedPassword.password);
     if (!validate) {
       return res.status(400).json({ message: "Invalid password" });
     }
-    return res.json({ success: true });
+    return res.json({
+      success: true,
+      original_url: hashedPassword.original_url,
+    });
   } catch (error) {
     return res.status(500).json(error || "Internal server error");
   }

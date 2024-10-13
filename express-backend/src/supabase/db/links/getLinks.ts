@@ -54,7 +54,7 @@ const getUserLinksCount = async (user_id: string) => {
 
 const getShortUrl = async (short_url: string) => {
   const custom_url = await prisma.urls.findFirst({
-    select: { id: true, original_url: true, password: true },
+    select: { id: true, password: true },
     where: {
       short_url,
     },
@@ -63,13 +63,13 @@ const getShortUrl = async (short_url: string) => {
 };
 
 const getHashPassword = async (short_url: string) => {
-  const password = await prisma.urls.findFirst({
-    select: { password: true },
+  const query = await prisma.urls.findFirst({
+    select: { password: true, original_url: true },
     where: {
       short_url,
     },
   });
-  return password?.password;
+  return query;
 };
 
 export {

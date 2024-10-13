@@ -53,7 +53,6 @@ type TStats = {
 };
 
 type TRedirect = {
-  original_url: string;
   password: boolean;
 };
 

@@ -113,15 +113,15 @@ const redirectingToUrl = async (shortUrl: string) => {
   }
 };
 
-const validatePassword = async (short_url: string, password: string) => {
+const validateRedirect = async (short_url: string, password?: string) => {
   try {
-    const response = await axiosInstance.post<{ success: boolean }>(
-      `/validate-password`,
-      {
-        password,
-        short_url,
-      }
-    );
+    const response = await axiosInstance.post<{
+      success: boolean;
+      original_url: string;
+    }>(`/validate-redirect`, {
+      password,
+      short_url,
+    });
     return response.data;
   } catch (err: unknown) {
     setErrorIfNot200(err);
@@ -137,6 +137,6 @@ export {
   getPersonalStatistics,
   getPersonalLinksWithStats,
   redirectingToUrl,
-  validatePassword,
+  validateRedirect,
 };
 export type { TCrud };
