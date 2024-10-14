@@ -83,10 +83,11 @@ const deletePersonalLink = async (id: string, qr_code: string) => {
 
 const downloadQrCode = async (qrPath: string) => {
   try {
-    const response = await axiosInstance.post<Blob>("/download-png", {
-      qrPath,
-      responseType: "blob",
-    });
+    const response = await axiosInstance.post<Blob>(
+      "/download-png",
+      { qrPath },
+      { responseType: "blob" }
+    );
     return response.data;
   } catch (err: unknown) {
     setErrorIfNot200(err);

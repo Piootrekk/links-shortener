@@ -4,6 +4,7 @@ import { ZodSchema, ZodError } from "zod";
 
 type FetchState<T> = {
   data: T | null | undefined;
+  setDataManually: (data: T) => void;
   error: Error | null;
   isLoading: boolean;
 };
@@ -66,7 +67,7 @@ const useMultiFetches = <
     return execMethods as UseFetchMultiple<T, M>["exec"];
   }, [methods, execute]);
 
-  return { data, error, isLoading, exec };
+  return { data, error, isLoading, exec, setDataManually: setData };
 };
 
 export default useMultiFetches;

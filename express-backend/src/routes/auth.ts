@@ -59,9 +59,15 @@ router.post("/register", async (req, res) => {
     if (!user.user || !user.session || !user) {
       return res.status(400).json({ message: "User not found" });
     }
-    res.cookie("access_token", user.session.access_token, {
-      httpOnly: true,
-    });
+    const cookieCredentials: TCookieCredentials = {
+      access_token: user.session.access_token,
+      role: user.user.user_metadata.role,
+    };
+    res.cookie(
+      "access_token",
+      JSON.stringify(cookieCredentials),
+      cookieOptions
+    );
     const userCredentials: TUserCredentials = {
       id: user.user.id,
       email: user.user.email!,

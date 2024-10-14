@@ -14,7 +14,7 @@ const RequireAuth: React.FC<AuthProtectedProps> = ({ children }) => {
     if (user.data === null) {
       navigate("/auth", { replace: true });
     }
-  }, []);
+  }, [user.data]);
 
   if (user.data) return children;
 };

@@ -4,11 +4,10 @@ import routerSkeleton from "@/router/skeletonRouter";
 import { TUserCredentials } from "@/schemas/authSchema";
 import { getuserInfo, login, logout, register } from "@/Api/auth";
 import useMultiFetches from "@/hooks/useMultiFetches";
+import useInstantFetch from "@/hooks/useInstantFetch";
 
 type AuthContextType = {
-  user: ReturnType<
-    typeof useMultiFetches<TUserCredentials | null, TAuthMethods>
-  >;
+  user: ReturnType<typeof useInstantFetch>;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleRegister: (
     email: string,
@@ -17,9 +16,7 @@ type AuthContextType = {
   ) => Promise<void>;
   handleLogout: () => Promise<void>;
 };
-
 type TAuthMethods = {
-  getuserInfo: () => Promise<TUserCredentials | null>;
   login: (email: string, password: string) => Promise<TUserCredentials>;
   logout: () => Promise<null>;
   register: (
@@ -52,12 +49,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const user = useMultiFetches<TUserCredentials | null, TAuthMethods>(methods);
+  const baseUserInfo = useInstantFetch(getuserInfo, []);
+
   useEffect(() => {
-    user.exec.getuserInfo();
-  }, []);
+    if (baseUserInfo.data !== undefined) {
+      user.setDataManually(baseUserInfo.data);
+    }
+  }, [baseUserInfo.data]);
 
   const handleLogin = async (email: string, password: string) => {
     await user.exec.login(email, password);
+    if (user.data !== undefined) {
+      baseUserInfo.setDataManually(user.data);
+    }
   };
 
   const handleRegister = async (
@@ -66,13 +70,23 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     confirmPassword: string
   ) => {
     await user.exec.register(email, password, confirmPassword);
+    if (user.data !== undefined) {
+      baseUserInfo.setDataManually(null);
+    }
   };
 
   const handleLogout = async () => {
     await user.exec.logout();
+    if (user.data !== undefined) {
+      baseUserInfo.setDataManually(null);
+    }
   };
 
-  if (user.isLoading || user.error || user === undefined) {
+  if (
+    baseUserInfo.isLoading ||
+    baseUserInfo.error ||
+    baseUserInfo.data === undefined
+  ) {
     return <RouterProvider router={routerSkeleton} />;
   }
 
@@ -80,7 +94,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return (
       <AuthContext.Provider
         value={{
-          user,
+          user: user,
           handleLogin,
           handleRegister,
           handleLogout,

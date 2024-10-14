@@ -17,6 +17,7 @@ type InferAsyncFunctionResult<T extends AsyncFunction> = T extends (
 
 type FetchState<T> = {
   data: T | null | undefined;
+  setDataManually: (data: T) => void;
   error: Error | null;
   isLoading: boolean;
 };
@@ -59,7 +60,7 @@ const useInstantFetch = <TFunction extends AsyncFunction>(
     fetchData();
   }, []);
 
-  return { data, error, isLoading };
+  return { data, error, isLoading, setDataManually: setData };
 };
 
 export default useInstantFetch;

@@ -17,6 +17,7 @@ type InferAsyncFunctionResult<T extends AsyncFunction> = T extends (
 
 interface FetchState<TData, TFunction extends AsyncFunction> {
   data: TData | null;
+  setDataManually: (data: TData) => void;
   error: Error | null;
   isLoading: boolean;
   execute: (...args: InferAsyncFunctionArgs<TFunction>) => Promise<void>;
@@ -59,7 +60,7 @@ const useFetchCallback = <TFunction extends AsyncFunction>(
     [asyncFunction, validationSchema]
   );
 
-  return { data, error, isLoading, execute };
+  return { data, error, isLoading, execute, setDataManually: setData };
 };
 
 export default useFetchCallback;
