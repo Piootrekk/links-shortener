@@ -1,4 +1,33 @@
+import { config } from "dotenv";
 import { z } from "zod";
+config();
+
+const front = process.env.URL_FRONT;
+if (!front) {
+  throw new Error("FRONTEND_URL is not set");
+}
+const restrictedPath = "/direct/";
+
+const insertRouteSchema = z.object({
+  title: z.string().max(255, { message: "Max 255 characters" }),
+  orginal_url: z
+    .string()
+    .url({ message: "Invalid URL" })
+    .max(300, { message: "Don't be greedy" })
+    .refine(
+      (url) =>
+        !new RegExp(
+          `^${front.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}${restrictedPath}`
+        ).test(url),
+      {
+        message: `Nice try with making infinite loop, but nope`,
+      }
+    ),
+  short_url: z.string().min(1, { message: "min 1 characters" }).max(64, {
+    message: "Wtf are you doing 0_o are u shortening? or writing a book?",
+  }),
+  password: z.string().optional(),
+});
 
 const querySchema = z.object({
   take: z
@@ -14,18 +43,6 @@ const querySchema = z.object({
     .default(1),
 });
 
-const insertRouteSchema = z.object({
-  title: z.string().max(255, { message: "Max 255 characters" }),
-  orginal_url: z
-    .string()
-    .url({ message: "Invalid URL" })
-    .max(300, { message: "Don't be greedy" }),
-  short_url: z.string().min(1, { message: "min 1 characters" }).max(64, {
-    message: "Wtf are you doing 0_o are u shortening? or writing a book?",
-  }),
-  password: z.string().optional(),
-});
-
 const insertAnonymouslySchema = insertRouteSchema.pick({
   orginal_url: true,
   short_url: true,
@@ -36,7 +53,16 @@ const updateRouteSchema = z.object({
   orginal_url: z
     .string()
     .url({ message: "Invalid URL" })
-    .max(300, { message: "Don't be greedy" }),
+    .max(300, { message: "Don't be greedy" })
+    .refine(
+      (url) =>
+        !new RegExp(
+          `^${front.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}${restrictedPath}`
+        ).test(url),
+      {
+        message: `Nice try with making infinite loop, but nope`,
+      }
+    ),
 });
 
 const deleteRouteSchema = z.object({

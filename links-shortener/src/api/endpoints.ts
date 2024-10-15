@@ -1,4 +1,10 @@
-import { TCrud, TRedirect, TStats, TUrl } from "@/schemas/dbSchema";
+import {
+  TCrud,
+  TGetDetails,
+  TRedirect,
+  TStats,
+  TUrl,
+} from "@/schemas/dbSchema";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 
@@ -129,6 +135,16 @@ const validateRedirect = async (short_url: string, password?: string) => {
   }
 };
 
+const getDetails = async (id: string) => {
+  try {
+    console.log(id);
+    const response = await axiosInstance.get<TGetDetails>(`/get-details/${id}`);
+    return response.data;
+  } catch (err: unknown) {
+    setErrorIfNot200(err);
+  }
+};
+
 export {
   getPersonalLinks,
   insertPersonalLink,
@@ -139,5 +155,6 @@ export {
   getPersonalLinksWithStats,
   redirectingToUrl,
   validateRedirect,
+  getDetails,
 };
 export type { TCrud };

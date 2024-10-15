@@ -1,13 +1,15 @@
 import { ZodIssue } from "zod";
 
 const getZodErrors = (errors: ZodIssue[]) => {
-  const errorObject: Record<string, string> = {};
+  const errorMessages: string[] = [];
 
   errors.forEach((error) => {
-    errorObject[error.path[0]] = error.message;
+    errorMessages.push(error.message);
   });
 
-  return errorObject;
+  return {
+    message: `Errors from server: ${errorMessages.join(", ")}.`,
+  };
 };
 
 export { getZodErrors };

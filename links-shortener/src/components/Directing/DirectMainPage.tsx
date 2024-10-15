@@ -22,16 +22,19 @@ const DirectMainPage: React.FC<DirectMainPageProps> = ({ custom_link }) => {
 
   useEffect(() => {
     getOriginalUrl.execute(custom_link);
-    const redirectTimeout = setTimeout(() => {
-      if (getOriginalUrl.data?.success && getOriginalUrl.data.original_url) {
-        window.location.replace(getOriginalUrl.data.original_url);
-      }
-    }, 100);
-    return () => clearTimeout(redirectTimeout);
+  }, []);
+
+  useEffect(() => {
+    if (getOriginalUrl.data?.success) {
+      window.location.replace(getOriginalUrl.data.original_url);
+    }
   }, [getOriginalUrl.data]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (getOriginalUrl.data?.success) {
+      window.location.replace(getOriginalUrl.data.original_url);
+    }
   };
 
   return (

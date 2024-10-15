@@ -12,15 +12,16 @@ type TDetailsInsert = {
   device_type?: string;
   cpu?: string;
   ip?: string;
+  isp?: string;
 };
 
-const setDetails = async (id: string, details: TDetailsInsert) => {
+const setDetails = async (short_url: string, details: TDetailsInsert) => {
   const data = await prisma.hidden_details.create({
     data: {
       ...details,
       urls: {
         connect: {
-          id,
+          short_url,
         },
       },
     },

@@ -5,6 +5,7 @@ import { TUserCredentials } from "@/schemas/authSchema";
 import { getuserInfo, login, logout, register } from "@/Api/auth";
 import useMultiFetches from "@/hooks/useMultiFetches";
 import useInstantFetch from "@/hooks/useInstantFetch";
+import { UnableToEstablishConnection } from "@/router/Pages/Error";
 
 type AuthContextType = {
   user: ReturnType<typeof useInstantFetch>;
@@ -82,12 +83,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  if (
-    baseUserInfo.isLoading ||
-    baseUserInfo.error ||
-    baseUserInfo.data === undefined
-  ) {
+  if (baseUserInfo.isLoading) {
     return <RouterProvider router={routerSkeleton} />;
+  }
+
+  if (baseUserInfo.error || baseUserInfo.data === undefined) {
+    return <UnableToEstablishConnection />;
   }
 
   if (user !== undefined) {

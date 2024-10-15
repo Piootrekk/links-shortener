@@ -118,7 +118,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
 
           <div className="flex items-center gap-2 mt-4 mb-4">
             <Card className="p-2">
-              {import.meta.env.VITE_FRONTEND_URL || "URL"}
+              {import.meta.env.VITE_FRONTEND_URL + "/direct" || "URL"}
             </Card>
             <span>{"/"}</span>
             <Input

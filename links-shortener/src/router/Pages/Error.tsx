@@ -8,10 +8,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
+import React from "react";
 type NotFoundProps = {
   alertText?: string;
+  extraButtonAction?: React.ReactNode;
 };
-const Error: React.FC<NotFoundProps> = ({ alertText }) => {
+const Error: React.FC<NotFoundProps> = ({ alertText, extraButtonAction }) => {
   return (
     <div className="flex justify-center items-center mt-20 text-center">
       <Card className="w-full max-w-md">
@@ -28,9 +30,13 @@ const Error: React.FC<NotFoundProps> = ({ alertText }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="ghost" className="w-full" asChild>
-            <Link to="/">Go back to home</Link>
-          </Button>
+          {extraButtonAction ? (
+            extraButtonAction
+          ) : (
+            <Button variant="ghost" className="w-full" asChild>
+              <Link to="/">Go back to home</Link>
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -47,6 +53,19 @@ const Unauthorized = () => (
   <Error alertText="You are not authorized to access this page." />
 );
 
-export { NotFound, Forbidden, Unauthorized };
+const UnableToEstablishConnection = () => (
+  <Error
+    alertText="Unable to establish connection to the server."
+    extraButtonAction={
+      <Button
+        variant="outline"
+        className="w-full text-wrap"
+        onClick={(_) => window.location.reload()}
+      >Retry to connect by refreshing page</Button>
+    }
+  />
+);
+
+export { NotFound, Forbidden, Unauthorized, UnableToEstablishConnection };
 
 export default Error;
