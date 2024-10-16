@@ -10,7 +10,7 @@ const DefaultSkeletonLayout: React.FC = () => {
         <header>
           <SkeletonHeader />
         </header>
-        <main>
+        <main className="container mx-auto px-4 py-12">
           <Outlet />
         </main>
       </div>

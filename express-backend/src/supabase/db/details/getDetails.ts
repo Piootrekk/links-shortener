@@ -31,30 +31,18 @@ const getLinkWithDetailsUnauthorizedLimits = async (
   return link;
 };
 
-// const getDetails = async (id: string, user_id: string) => {
-//   const hidden_details = await prisma.hidden_details.findMany({
-//     where: {
-//       urls: {
-//         id,
-//         user_id,
-//       },
-//     },
-//     distinct: ["id"],
-//   });
-
-//   console.log(hidden_details);
-//   return hidden_details;
-// };
-
 const getDetails = async (id: string, user_id: string) => {
   const linksWithDetails = await prisma.urls.findUnique({
     where: {
       id,
       user_id,
     },
-
     select: {
-      hidden_details: true,
+      hidden_details: {
+        orderBy: {
+          created_at: "asc",
+        },
+      },
     },
   });
   return linksWithDetails;

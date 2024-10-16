@@ -30,9 +30,7 @@ const Register = () => {
           <CardDescription className="text-sm">
             <label>to create an account.</label>
           </CardDescription>
-          {user.error && (
-            <ErrorMessage message={user.error.message} />
-          )}
+          {user.error && <ErrorMessage message={user.error.message} />}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>

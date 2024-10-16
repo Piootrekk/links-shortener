@@ -20,8 +20,44 @@ router.get(
     }
     try {
       const details = await getDetails(id, user.id);
-      console.log(details);
-      return res.json(details);
+      if (details === null) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+      const { hidden_details } = details;
+      const totalClicks = details.hidden_details.length;
+      const uniqueClicks = new Set(
+        details.hidden_details.map((item) => item.ip)
+      ).size;
+      const uniqueCountries = new Set(
+        details.hidden_details.map((item) => item.country)
+      ).size;
+      const uniqueISP = new Set(details.hidden_details.map((item) => item.isp))
+        .size;
+      const uniqueDevices = new Set(
+        details.hidden_details.map((item) => item.device)
+      ).size;
+
+      const uniqueBrowsers = new Set(
+        details.hidden_details.map((item) => item.browser)
+      ).size;
+      console.log({
+        hidden_details,
+        totalClicks,
+        uniqueClicks,
+        uniqueCountries,
+        uniqueISP,
+        uniqueDevices,
+        uniqueBrowsers,
+      });
+      return res.json({
+        hidden_details,
+        totalClicks,
+        uniqueClicks,
+        uniqueCountries,
+        uniqueISP,
+        uniqueDevices,
+        uniqueBrowsers,
+      });
     } catch (error) {
       return res.status(500).json(error);
     }

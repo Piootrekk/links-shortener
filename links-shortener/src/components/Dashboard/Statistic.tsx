@@ -1,5 +1,5 @@
 import { TStats } from "@/schemas/dbSchema";
-import { Link2, MousePointerClick, TimerResetIcon } from "lucide-react";
+import { CalendarArrowDownIcon, Link2, MousePointerClick } from "lucide-react";
 
 type StatisticProps = {
   data: TStats;
@@ -10,19 +10,19 @@ const Statistic: React.FC<StatisticProps> = ({ data }) => {
     {
       title: "Total links",
       content: data.total_links,
-      niceIcon: Link2,
+      niceIcon: <Link2 />,
     },
     {
       title: "Total clicks",
       content: data.total_clicks,
-      niceIcon: MousePointerClick,
+      niceIcon: <MousePointerClick />,
     },
     {
       title: "Last added",
       content: data.last_added
         ? new Date(data.last_added).toLocaleString()
         : "No links yet",
-      niceIcon: TimerResetIcon,
+      niceIcon: <CalendarArrowDownIcon />,
     },
   ];
 
@@ -34,7 +34,9 @@ const Statistic: React.FC<StatisticProps> = ({ data }) => {
           key={index}
         >
           <div className="flex items-center">
-            <info.niceIcon className="w-8 h-8 " />
+            <div className="flex-shrink-0 bg-icon-blue rounded-md p-3">
+              {info.niceIcon}
+            </div>
             <span className="ml-2 ">{info.title}</span>
           </div>
           <span className="text-xl font-semibold break-all">

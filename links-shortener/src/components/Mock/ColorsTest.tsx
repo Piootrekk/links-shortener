@@ -22,6 +22,12 @@ const ColorsTest = () => {
         <Button variant={"secondary"}>secondary</Button>
         <Button variant={"link"}>link</Button>
       </div>
+      <div className="h-12 bg-ring">bg-ring</div>
+      <div className="h-12 bg-input">bg-ring</div>
+      <div className="h-12 bg-destructive-foreground">bg-ring</div>
+      <div className="h-12 bg-muted-foreground">bg-ring</div>
+      <div className="h-12 bg-accent-foreground">bg-ring</div>
+      <div className="h-12 bg-icon-blue">bg-icon-blue</div>
     </div>
   );
 };

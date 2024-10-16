@@ -15,13 +15,13 @@ type InferAsyncFunctionResult<T extends AsyncFunction> = T extends (
   ? R
   : never;
 
-interface FetchState<TData, TFunction extends AsyncFunction> {
+type FetchState<TData, TFunction extends AsyncFunction> = {
   data: TData | null;
   setDataManually: (data: TData) => void;
   error: Error | null;
   isLoading: boolean;
   execute: (...args: InferAsyncFunctionArgs<TFunction>) => Promise<void>;
-}
+};
 
 const useFetchCallback = <TFunction extends AsyncFunction>(
   asyncFunction: TFunction,

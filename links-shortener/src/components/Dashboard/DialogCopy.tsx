@@ -12,7 +12,7 @@ const DialogCopy: React.FC<DialogCopyProps> = ({ shortUrl }) => {
 
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${URL}/${shortUrl}`);
+    navigator.clipboard.writeText(`${URL}/direct/${shortUrl}`);
     setCopied(true);
   };
 

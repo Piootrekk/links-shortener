@@ -137,7 +137,6 @@ const validateRedirect = async (short_url: string, password?: string) => {
 
 const getDetails = async (id: string) => {
   try {
-    console.log(id);
     const response = await axiosInstance.get<TGetDetails>(`/get-details/${id}`);
     return response.data;
   } catch (err: unknown) {

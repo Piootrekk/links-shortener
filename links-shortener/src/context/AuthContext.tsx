@@ -87,8 +87,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return <RouterProvider router={routerSkeleton} />;
   }
 
-  if (baseUserInfo.error || baseUserInfo.data === undefined) {
+  if (baseUserInfo.error) {
     return <UnableToEstablishConnection />;
+  }
+  if (baseUserInfo.data === undefined) {
+    return null;
   }
 
   if (user !== undefined) {

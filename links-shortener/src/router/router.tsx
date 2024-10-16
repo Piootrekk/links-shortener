@@ -6,7 +6,7 @@ import AuthView from "./Pages/AuthView";
 import RedirectView from "./Pages/RedirectView";
 import RequireNotAuth from "./Guard/RequireNotAuth";
 import RequireAuth from "./Guard/RequireAuth";
-import LinkView from "./Pages/LinkView";
+import LinkAnalytics from "./Pages/LinkAnalytics";
 import ColorsTest from "@/components/Mock/ColorsTest";
 import RouteEndpoints from "@/components/Mock/RouteEndpoints";
 import { NotFound, Forbidden } from "./Pages/Error";
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "link/:id",
-        element: <LinkView />,
+        element: <LinkAnalytics />,
       },
       {
         path: "/auth",
