@@ -10,9 +10,13 @@ import {
 
 type AnalyticsTableProps = {
   details: TDetails[];
+  onRowClick: (id: string) => void;
 };
 
-const AnalyticsTable: React.FC<AnalyticsTableProps> = ({ details }) => {
+const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
+  details,
+  onRowClick,
+}) => {
   const tableHeaders = [
     "Date",
     "Location",
@@ -35,7 +39,7 @@ const AnalyticsTable: React.FC<AnalyticsTableProps> = ({ details }) => {
         </TableHeader>
         <TableBody>
           {details.map((detail) => (
-            <TableRow key={detail.id}>
+            <TableRow onClick={() => onRowClick(detail.id)} key={detail.id} className="cursor-pointer">
               <TableCell>
                 {new Date(detail.created_at).toLocaleString()}
               </TableCell>
