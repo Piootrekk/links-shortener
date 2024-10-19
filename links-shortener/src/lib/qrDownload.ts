@@ -12,10 +12,10 @@ const qrDownload = async (qrCode: string) => {
     a.download = qrCode;
     a.click();
     URL.revokeObjectURL(qrUrl);
-    
+
     // Kiedyś przerobić to na toast/
   } else {
-    console.error("QR Stream is undefined. Cannot generate QR code.");
+    console.error("Cannot generate QR code.");
   }
 };
 

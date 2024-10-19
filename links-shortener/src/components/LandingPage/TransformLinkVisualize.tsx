@@ -14,7 +14,8 @@ const TransformLinkVisualize: React.FC<TransformLinkProp> = ({ link }) => {
       <Card className="p-2 text-center w-full">Orginal: {link}</Card>
       <ArrowDownIcon size={36} className="self-center" />
       <Card className="p-2 text-center w-full">
-        Created: {import.meta.env.VITE_FRONTEND_URL || "URL"}/{shortUrl}
+        Created: {import.meta.env.VITE_FRONTEND_URL || "URL"}/{"direct"}/
+        {shortUrl}
       </Card>
     </div>
   );
