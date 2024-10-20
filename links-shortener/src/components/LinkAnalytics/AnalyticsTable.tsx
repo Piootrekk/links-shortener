@@ -7,15 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 
 type AnalyticsTableProps = {
-  details: TDetails[];
   onRowClick: (id: string) => void;
+  onColumnClick: (column: string) => void;
+  selectedColumn: string | null;
 };
 
 const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
-  details,
   onRowClick,
+  onColumnClick,
+  selectedColumn,
 }) => {
   const tableHeaders = [
     "Date",
@@ -27,19 +30,34 @@ const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
     "ISP",
   ];
 
+  const { analytics } = useAnalyticsData();
+  if (!analytics.data) return null;
+  const details: TDetails[] = analytics.data.hidden_details;
   return (
     <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
             {tableHeaders.map((header) => (
-              <TableHead key={header}>{header}</TableHead>
+              <TableHead
+                onClick={() => onColumnClick(header)}
+                key={header}
+                className={`${
+                  selectedColumn === header && "bg-secondary"
+                } cursor-pointer`}
+              >
+                {header}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {details.map((detail) => (
-            <TableRow onClick={() => onRowClick(detail.id)} key={detail.id} className="cursor-pointer">
+            <TableRow
+              onClick={() => onRowClick(detail.id)}
+              key={detail.id}
+              className="cursor-pointer"
+            >
               <TableCell>
                 {new Date(detail.created_at).toLocaleString()}
               </TableCell>

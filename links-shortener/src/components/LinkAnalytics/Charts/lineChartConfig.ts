@@ -1,13 +1,22 @@
 import { TDetails } from "@/schemas/dbSchema";
 import {
+  addDays,
+  addMonths,
+  differenceInDays,
+  differenceInHours,
+  eachMonthOfInterval,
+  endOfMonth,
   format,
-  getDate,
-  getDay,
-  getHours,
-  getMonth,
   isAfter,
+  isBefore,
+  startOfDay,
+  startOfHour,
+  startOfMonth,
   subDays,
+  subHours,
+  subMonths,
 } from "date-fns";
+
 const marginConfig = {
   top: 10,
   left: 10,
@@ -19,121 +28,207 @@ type Tperiod = "24h" | "1week" | "1month" | "1year";
 
 const processData24h = (data: TDetails[]) => {
   const now = new Date();
-  const past24h = subDays(now, 1);
-  const filteredData = data.filter((entry) =>
-    isAfter(new Date(entry.created_at), past24h)
-  );
-  const hours = Array.from({ length: 24 }, () => ({
-    count: 0,
-    originalDate: null as Date | string | null,
-  }));
+  const currentHour = startOfHour(now);
+  const past24h = subHours(currentHour, 23);
 
-  filteredData.forEach((entry) => {
+  const hours = Array.from({ length: 24 }, (_, index) => {
+    const hour = subHours(currentHour, 23 - index);
+    return {
+      hour: format(hour, "HH:00"),
+      count: 0,
+      originalDate: null as Date | null,
+    };
+  });
+  data.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    const hour = getHours(entryDate);
-    hours[hour].count++;
-    if (!hours[hour].originalDate || entryDate > hours[hour].originalDate) {
-      hours[hour].originalDate = format(entryDate, "yyyy-MM-dd HH:mm:ss");
+    if (isAfter(entryDate, past24h) && entryDate <= currentHour) {
+      const hourIndex =
+        23 - differenceInHours(currentHour, startOfHour(entryDate));
+      hours[hourIndex].count++;
+      if (
+        !hours[hourIndex].originalDate ||
+        entryDate > hours[hourIndex].originalDate
+      ) {
+        hours[hourIndex].originalDate = entryDate;
+      }
     }
   });
-
-  return hours.map((hourData, i) => ({
-    hour: `${i}h`,
+  return hours.map((hourData) => ({
+    hour: hourData.hour,
     count: hourData.count,
-    originalDate: hourData.originalDate,
+    originalDate: hourData.originalDate
+      ? format(hourData.originalDate, "yyyy-MM-dd HH:mm:ss")
+      : null,
   }));
 };
 
 const processDataWeek = (data: TDetails[]) => {
   const now = new Date();
-  const pastWeek = subDays(now, 7);
-  const filteredData = data.filter((entry) =>
-    isAfter(new Date(entry.created_at), pastWeek)
-  );
-  const days = Array.from({ length: 7 }, () => ({
-    count: 0,
-    originalDate: null as Date | string | null,
-  }));
+  const today = startOfDay(now);
+  const pastWeek = subDays(today, 6);
 
-  filteredData.forEach((entry) => {
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const day = addDays(pastWeek, index);
+    return {
+      day: format(day, "EEE"),
+      date: format(day, "yyyy-MM-dd"),
+      count: 0,
+      originalDate: null as Date | null,
+    };
+  });
+  data.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    const day = getDay(entryDate);
-    days[day].count++;
-    if (!days[day].originalDate || entryDate > days[day].originalDate) {
-      days[day].originalDate = format(entryDate, "yyyy-MM-dd");
+    if (isAfter(entryDate, pastWeek) && entryDate <= now) {
+      const dayIndex = differenceInDays(startOfDay(entryDate), pastWeek);
+      if (dayIndex >= 0 && dayIndex < 7) {
+        days[dayIndex].count++;
+        if (
+          !days[dayIndex].originalDate ||
+          entryDate > days[dayIndex].originalDate
+        ) {
+          days[dayIndex].originalDate = entryDate;
+        }
+      }
     }
   });
-  const labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  return days.map((dayData, i) => ({
-    day: labels[i],
+  return days.map((dayData) => ({
+    day: dayData.day,
+    date: dayData.date,
     count: dayData.count,
-    originalDate: dayData.originalDate,
+    originalDate: dayData.originalDate
+      ? format(dayData.originalDate, "yyyy-MM-dd")
+      : null,
   }));
 };
 
 const processDataMonth = (data: TDetails[]) => {
   const now = new Date();
-  const pastMonth = subDays(now, 30);
-  const filteredData = data.filter((entry) =>
-    isAfter(new Date(entry.created_at), pastMonth)
-  );
-  const days = Array.from({ length: 30 }, () => ({
-    count: 0,
-    originalDate: null as Date | string | null,
-  }));
+  const today = startOfDay(now);
+  const pastMonth = subDays(today, 29);
 
-  filteredData.forEach((entry) => {
+  const days = Array.from({ length: 30 }, (_, index) => {
+    const day = addDays(pastMonth, index);
+    return {
+      day: format(day, "d"),
+      date: format(day, "yyyy-MM-dd"),
+      count: 0,
+      originalDate: null as Date | null,
+    };
+  });
+  data.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    const day = getDate(entryDate);
-    if (day <= 30) {
-      days[day - 1].count++;
-      if (
-        !days[day - 1].originalDate ||
-        entryDate > days[day - 1].originalDate!
-      ) {
-        days[day - 1].originalDate = format(entryDate, "yyyy-MM-dd");
+    if (isAfter(entryDate, pastMonth) && entryDate <= now) {
+      const dayIndex = differenceInDays(startOfDay(entryDate), pastMonth);
+      if (dayIndex >= 0 && dayIndex < 30) {
+        days[dayIndex].count++;
+        if (
+          !days[dayIndex].originalDate ||
+          entryDate > days[dayIndex].originalDate
+        ) {
+          days[dayIndex].originalDate = entryDate;
+        }
       }
     }
   });
-  return days.map((dayData, i) => ({
-    day: `${i + 1}`,
+  return days.map((dayData) => ({
+    day: dayData.day,
+    date: dayData.date,
     count: dayData.count,
-    originalDate: dayData.originalDate,
+    originalDate: dayData.originalDate
+      ? format(dayData.originalDate, "yyyy-MM-dd")
+      : null,
   }));
 };
 
 const processDataYear = (data: TDetails[]) => {
-  const months = Array.from({ length: 12 }, () => ({
-    count: 0,
-    originalDate: null as Date | string | null,
-  }));
-
+  const now = new Date();
+  const currentMonth = startOfMonth(now);
+  const pastYear = subMonths(currentMonth, 11);
+  const months = Array.from({ length: 12 }, (_, index) => {
+    const month = addMonths(pastYear, index);
+    return {
+      month: format(month, "MMM"),
+      date: format(month, "yyyy-MM"),
+      count: 0,
+      originalDate: null as Date | null,
+    };
+  });
   data.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    const month = getMonth(entryDate);
-    months[month].count++;
-    if (!months[month].originalDate || entryDate > months[month].originalDate) {
-      months[month].originalDate = format(entryDate, "yyyy-MM");
+    if (
+      isAfter(entryDate, pastYear) &&
+      isBefore(entryDate, addMonths(currentMonth, 1))
+    ) {
+      const monthIndex =
+        parseInt(format(entryDate, "M")) - parseInt(format(pastYear, "M"));
+      const adjustedIndex = monthIndex < 0 ? monthIndex + 12 : monthIndex;
+      if (adjustedIndex >= 0 && adjustedIndex < 12) {
+        months[adjustedIndex].count++;
+        if (
+          !months[adjustedIndex].originalDate ||
+          entryDate > months[adjustedIndex].originalDate
+        ) {
+          months[adjustedIndex].originalDate = entryDate;
+        }
+      }
     }
   });
-  const labels = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  return months.map((monthData, i) => ({
-    month: labels[i],
+  return months.map((monthData) => ({
+    month: monthData.month,
+    date: monthData.date,
     count: monthData.count,
-    originalDate: monthData.originalDate,
+    originalDate: monthData.originalDate
+      ? format(monthData.originalDate, "yyyy-MM")
+      : null,
+  }));
+};
+
+const processDataAllTime = (data: TDetails[]) => {
+  if (data.length === 0) {
+    return [];
+  }
+  const sortedData = [...data].sort(
+    (a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  );
+  const oldestDate = new Date(sortedData[0].created_at);
+  const newestDate = new Date(sortedData[sortedData.length - 1].created_at);
+  const allMonths = eachMonthOfInterval({
+    start: startOfMonth(oldestDate),
+    end: endOfMonth(newestDate),
+  });
+
+  const monthsData = allMonths.map((month) => ({
+    month: format(month, "MMM yyyy"),
+    date: format(month, "yyyy-MM"),
+    count: 0,
+    originalDate: null as Date | null,
+  }));
+
+  sortedData.forEach((entry) => {
+    const entryDate = new Date(entry.created_at);
+    const monthIndex = allMonths.findIndex(
+      (month) =>
+        entryDate >= startOfMonth(month) && entryDate <= endOfMonth(month)
+    );
+    if (monthIndex !== -1) {
+      monthsData[monthIndex].count++;
+      if (
+        !monthsData[monthIndex].originalDate ||
+        entryDate > monthsData[monthIndex].originalDate!
+      ) {
+        monthsData[monthIndex].originalDate = entryDate;
+      }
+    }
+  });
+
+  return monthsData.map((monthData) => ({
+    month: monthData.month,
+    date: monthData.date,
+    count: monthData.count,
+    originalDate: monthData.originalDate
+      ? format(monthData.originalDate, "yyyy-MM-dd HH:mm:ss")
+      : null,
   }));
 };
 
@@ -143,6 +238,7 @@ export {
   processDataMonth,
   processDataYear,
   processData24h,
+  processDataAllTime,
 };
 
 export type { Tperiod };

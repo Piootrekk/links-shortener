@@ -81,34 +81,40 @@ const ClickOverTimeChart = () => {
         <CardDescription className="flex items-center justify-between">
           <label>
             Showing total visitors in period of time. Click custom period to
-            view more details. Default period is 24h.
+            view more details.
+            {period === "24h" && " Showing data for the last 24 hours. "}
+            {period === "1week" && " Showing data for the last week. "}
+            {period === "1month" && " Showing data for the last month. "}
+            {period === "1year" && " Showing data for the last year. "}
           </label>
-          <div className="space-x-4">
+          <div className="space-x-4 space-y-4">
             <Button
               variant={"outline"}
               onClick={() => setPeriod("24h")}
-              className={period === "24h" ? "bg-icon-blue text-primary" : ""}
+              className={`${period === "24h" && "bg-icon-blue text-primary"}`}
             >
               24h
             </Button>
             <Button
               variant={"outline"}
               onClick={() => setPeriod("1week")}
-              className={period === "1week" ? "bg-icon-blue text-primary" : ""}
+              className={`${period === "1week" && "bg-icon-blue text-primary"}`}
             >
               1 week
             </Button>
             <Button
               variant={"outline"}
               onClick={() => setPeriod("1month")}
-              className={period === "1month" ? "bg-icon-blue text-primary" : ""}
+              className={`${
+                period === "1month" && "bg-icon-blue text-primary"
+              }`}
             >
               1 month
             </Button>
             <Button
               variant={"outline"}
               onClick={() => setPeriod("1year")}
-              className={period === "1year" ? "bg-icon-blue text-primary" : ""}
+              className={`${period === "1year" && "bg-icon-blue text-primary"}`}
             >
               1 year
             </Button>

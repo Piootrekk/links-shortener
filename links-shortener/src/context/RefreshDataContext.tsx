@@ -27,7 +27,7 @@ const RefreshDataProvider: React.FC<RefreshDataProviderProps> = ({
 }) => {
   const links = useFetchCallback(getPersonalLinks);
   const statistics = useFetchCallback(getPersonalStatistics);
-  
+
   const refreshBoth = async () => {
     links.execute();
     statistics.execute();

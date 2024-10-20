@@ -1,9 +1,13 @@
 import { getDetails } from "@/Api/endpoints";
-import useFetchCallback from "@/hooks/useFetchCallback";
+import useFetchCallback, {
+  AsyncFunction,
+  FetchState,
+} from "@/hooks/useFetchCallback";
+import { TGetDetails } from "@/schemas/dbSchema";
 import { createContext, useContext } from "react";
 
 type TAnalyticsData = {
-  analytics: ReturnType<typeof useFetchCallback>;
+  analytics: FetchState<TGetDetails | undefined, AsyncFunction>;
 };
 
 type AnalyticsDataProps = {

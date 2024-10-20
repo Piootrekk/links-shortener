@@ -8,42 +8,41 @@ import {
 } from "lucide-react";
 import React from "react";
 import StatCard, { StatCardProps } from "./StatCard";
+import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 
-type StatsBarProps = {
-  totalClicks: number;
-  uniqueClicks: number;
-  uniqueCountries: number;
-  uniqueISP: number;
-  uniqueDevices: number;
-  uniqueBrowsers: number;
-};
-
-const StatsBar: React.FC<StatsBarProps> = ({
-  totalClicks,
-  uniqueClicks,
-  uniqueCountries,
-  uniqueDevices,
-  uniqueISP,
-  uniqueBrowsers,
-}) => {
+const StatsBar: React.FC<{}> = ({}) => {
+  const { analytics } = useAnalyticsData();
+  if (!analytics.data) return null;
   const stats: StatCardProps[] = [
     {
       icon: <MousePointerClickIcon />,
       title: "Total Clicks",
-      value: totalClicks,
+      value: analytics.data.totalClicks,
     },
-    { icon: <UserIcon />, title: "Unique Users", value: uniqueClicks },
+    {
+      icon: <UserIcon />,
+      title: "Unique Users",
+      value: analytics.data.uniqueClicks,
+    },
     {
       icon: <MonitorSmartphone />,
       title: "Unique Devices",
-      value: uniqueDevices,
+      value: analytics.data.uniqueDevices,
     },
-    { icon: <Earth />, title: "Unique Countries", value: uniqueCountries },
-    { icon: <Router />, title: "Unique ISP", value: uniqueISP },
+    {
+      icon: <Earth />,
+      title: "Unique Countries",
+      value: analytics.data.uniqueCountries,
+    },
+    {
+      icon: <Router />,
+      title: "Unique ISP",
+      value: analytics.data.uniqueISP,
+    },
     {
       icon: <Globe />,
       title: "Unique Browsers",
-      value: uniqueBrowsers,
+      value: analytics.data.uniqueBrowsers,
     },
   ];
 

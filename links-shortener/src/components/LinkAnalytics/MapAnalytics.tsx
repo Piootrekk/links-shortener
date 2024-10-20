@@ -4,20 +4,21 @@ import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { TDetails } from "@/schemas/dbSchema";
 import { cn } from "@/lib/utils";
+import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 
 type AnalyticsMapProps = {
-  data: TDetails[];
   selectedId: string | null;
   onCloseMarker: () => void;
 };
 
 const AnalyticsMap: React.FC<AnalyticsMapProps> = ({
-  data,
   selectedId,
   onCloseMarker,
 }) => {
+  const { analytics } = useAnalyticsData();
+  if (!analytics.data) return null;
+  const data = analytics.data.hidden_details;
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
