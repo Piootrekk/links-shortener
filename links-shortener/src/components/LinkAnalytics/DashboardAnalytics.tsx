@@ -1,7 +1,7 @@
 import StatsBar from "./StatsBar";
 import AnalyticsTable from "./AnalyticsTable";
 import MapAnalytics from "./MapAnalytics";
-import ChartAnalytics from "./Chart1Analytics";
+import ChartAnalytics from "./Charts/PieChart";
 import { useState } from "react";
 import {
   Accordion,
@@ -11,7 +11,7 @@ import {
 } from "../ui/accordion";
 import Chart2Analytics from "./Chart2Analytics";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
-import ClickOnTimeChart from "./charts/ClickOnTimeChart";
+import ClickOverTimeChart from "./Charts/ClickOverTimeChart";
 
 type DashboardAnalyticsProps = {};
 
@@ -55,7 +55,7 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({}) => {
         </Accordion>
       </div>
       <div className="shadow rounded-lg p-6">
-        <ClickOnTimeChart />
+        <ClickOverTimeChart />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="shadow rounded-lg p-6">
