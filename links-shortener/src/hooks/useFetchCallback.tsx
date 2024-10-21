@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { ZodSchema, ZodError } from "zod";
 
-export type AsyncFunction = (...args: any[]) => Promise<any>;
+type AsyncFunction = (...args: any[]) => Promise<any>;
 
 type InferAsyncFunctionArgs<T extends AsyncFunction> = T extends (
   ...args: infer A
@@ -15,7 +15,7 @@ type InferAsyncFunctionResult<T extends AsyncFunction> = T extends (
   ? R
   : never;
 
-export type FetchState<TData, TFunction extends AsyncFunction> = {
+type FetchState<TData, TFunction extends AsyncFunction> = {
   data: TData | null;
   setDataManually: (data: TData) => void;
   error: Error | null;
@@ -64,3 +64,4 @@ const useFetchCallback = <TFunction extends AsyncFunction>(
 };
 
 export default useFetchCallback;
+export type { FetchState };

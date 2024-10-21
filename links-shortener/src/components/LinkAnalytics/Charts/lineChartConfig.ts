@@ -24,7 +24,7 @@ const marginConfig = {
   bottom: 10,
 };
 
-type Tperiod = "24h" | "1week" | "1month" | "1year";
+type Tperiod = "24h" | "1week" | "1month" | "1year" | "AllTime";
 
 const processData24h = (data: TDetails[]) => {
   const now = new Date();

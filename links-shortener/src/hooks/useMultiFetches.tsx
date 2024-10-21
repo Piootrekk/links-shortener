@@ -71,3 +71,4 @@ const useMultiFetches = <
 };
 
 export default useMultiFetches;
+export type { UseFetchMultiple };

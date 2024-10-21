@@ -41,7 +41,7 @@ type TStats = {
 };
 
 type TDetailsInsert = {
-  city?: string;
+  city?: string | null;
   device?: string;
   country?: string;
   latitude?: number;

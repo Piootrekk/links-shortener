@@ -31,7 +31,7 @@ import {
 } from "./lineChartConfig";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 import { marginConfig } from "./lineChartConfig";
-
+import { configColorsChart } from "./colorConfig";
 const CustomTooltip: React.FC<any> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -49,19 +49,19 @@ const CustomTooltip: React.FC<any> = ({ active, payload }) => {
 
 const ClickOverTimeChart = () => {
   const { analytics } = useAnalyticsData();
-
   const [period, setPeriod] = useState<Tperiod>("24h");
-
+  if (!analytics || !analytics.data) return null;
+  const details = analytics.data.hidden_details;
   const chartData = useMemo(() => {
     switch (period) {
       case "24h":
-        return processData24h(analytics.data.hidden_details);
+        return processData24h(details);
       case "1week":
-        return processDataWeek(analytics.data.hidden_details);
+        return processDataWeek(details);
       case "1month":
-        return processDataMonth(analytics.data.hidden_details);
+        return processDataMonth(details);
       case "1year":
-        return processDataYear(analytics.data.hidden_details);
+        return processDataYear(details);
       default:
         return [];
     }
@@ -70,7 +70,7 @@ const ClickOverTimeChart = () => {
   const chartConfig = {
     clicks: {
       label: "Clicks",
-      color: "hsl(var(--chart-1))",
+      color: configColorsChart.colorChart1,
     },
   } satisfies ChartConfig;
 

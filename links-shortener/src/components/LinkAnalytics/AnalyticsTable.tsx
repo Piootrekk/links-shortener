@@ -8,26 +8,25 @@ import {
   TableRow,
 } from "../ui/table";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
+import { TTalbeHeaders } from "@/schemas/chartsTypes";
 
 type AnalyticsTableProps = {
   onRowClick: (id: string) => void;
-  onColumnClick: (column: string) => void;
-  selectedColumn: string | null;
+  onColumnClick: (column: TTalbeHeaders) => void;
 };
 
 const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
   onRowClick,
   onColumnClick,
-  selectedColumn,
 }) => {
-  const tableHeaders = [
-    "Date",
-    "Location",
-    "Device",
-    "Browser",
-    "IP",
-    "OS",
-    "ISP",
+  const talbeHeaders: TTalbeHeaders[] = [
+    { header: "Date", key: "created_at", allowToChart: false },
+    { header: "Location", key: "city", allowToChart: true },
+    { header: "Device", key: "device_type", allowToChart: true },
+    { header: "Browser", key: "browser", allowToChart: true },
+    { header: "IP", key: "ip", allowToChart: true },
+    { header: "OS", key: "os", allowToChart: true },
+    { header: "ISP", key: "isp", allowToChart: true },
   ];
 
   const { analytics } = useAnalyticsData();
@@ -38,15 +37,17 @@ const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            {tableHeaders.map((header) => (
+            {talbeHeaders.map((tableHeader) => (
               <TableHead
-                onClick={() => onColumnClick(header)}
-                key={header}
+                onClick={() =>
+                  tableHeader.allowToChart && onColumnClick(tableHeader)
+                }
+                key={tableHeader.key}
                 className={`${
-                  selectedColumn === header && "bg-secondary"
-                } cursor-pointer`}
+                  tableHeader.allowToChart ? "cursor-pointer" : "cursor-auto"
+                }`}
               >
-                {header}
+                {tableHeader.header}
               </TableHead>
             ))}
           </TableRow>

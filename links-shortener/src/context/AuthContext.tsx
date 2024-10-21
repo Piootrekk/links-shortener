@@ -3,12 +3,18 @@ import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
 import { TUserCredentials } from "@/schemas/authSchema";
 import { getuserInfo, login, logout, register } from "@/Api/auth";
-import useMultiFetches from "@/hooks/useMultiFetches";
+import useMultiFetches, { UseFetchMultiple } from "@/hooks/useMultiFetches";
 import useInstantFetch from "@/hooks/useInstantFetch";
 import { UnableToEstablishConnection } from "@/router/Pages/Error";
 
+type MethodsTypes = {
+  login: typeof login;
+  logout: typeof logout;
+  register: typeof register;
+};
+
 type AuthContextType = {
-  user: ReturnType<typeof useInstantFetch>;
+  user: UseFetchMultiple<TUserCredentials | null, MethodsTypes>;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleRegister: (
     email: string,
