@@ -1,6 +1,6 @@
-import { AxiosError } from "axios";
+import { errorSetter } from "@/lib/errorValidation";
 import { useState, useCallback, useMemo } from "react";
-import { ZodSchema, ZodError } from "zod";
+import { ZodSchema } from "zod";
 
 type FetchState<T> = {
   data: T | null | undefined;
@@ -44,13 +44,7 @@ const useMultiFetches = <
           setData(result);
         }
       } catch (err) {
-        if (err instanceof ZodError) {
-          setError(new Error("Validation failed: " + err.message));
-        } else if (err instanceof AxiosError) {
-          setError(new Error("Network error: " + err.message));
-        } else {
-          setError(err as Error);
-        }
+        errorSetter(setError)(err);
       } finally {
         setIsLoading(false);
       }

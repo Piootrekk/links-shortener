@@ -4,7 +4,7 @@ import { TGetDetails } from "@/schemas/dbSchema";
 import { createContext, useContext } from "react";
 
 type TAnalyticsData = {
-  analytics: FetchState<TGetDetails | undefined, typeof getDetails>;
+  analytics: FetchState<TGetDetails, typeof getDetails>;
 };
 
 type AnalyticsDataProps = {

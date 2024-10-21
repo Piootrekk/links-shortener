@@ -1,5 +1,6 @@
+import { errorSetter } from "@/lib/errorValidation";
 import { useEffect, useState } from "react";
-import { ZodSchema, ZodError } from "zod";
+import { ZodSchema } from "zod";
 
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
@@ -46,13 +47,7 @@ const useInstantFetch = <TFunction extends AsyncFunction>(
           setData(result as TData);
         }
       } catch (err) {
-        if (err instanceof ZodError) {
-          setError(new Error("Validation failed: " + err.message));
-        } else if (err instanceof Error) {
-          setError(err);
-        } else {
-          setError(new Error("An unknown error occurred"));
-        }
+        errorSetter(setError)(err);
       } finally {
         setIsLoading(false);
       }

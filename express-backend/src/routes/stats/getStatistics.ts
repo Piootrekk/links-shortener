@@ -23,8 +23,12 @@ router.get(
         .status(400)
         .json({ message: "Unauthorized or invalid credentials" });
     }
-    const statistics = await userLinksWithInfo(user.id);
-    return res.json(statistics);
+    try {
+      const statistics = await userLinksWithInfo(user.id);
+      return res.json(statistics);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 );
 

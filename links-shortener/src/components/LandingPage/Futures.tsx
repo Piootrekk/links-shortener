@@ -13,7 +13,7 @@ import {
   User,
   UserX,
   FileLock2,
-  Bell,
+  Map,
 } from "lucide-react";
 
 const Futures = () => {
@@ -48,21 +48,19 @@ const Futures = () => {
     },
     {
       title: "Protected",
-      description:
-        "Create a short link with password protection. (Feature Soon!).",
+      description: "Create a short link with password protection.",
       icon: FileLock2,
+    },
+    {
+      title: "Map Clicks",
+      description: "Get a real-time map of clicks on your short URL.",
+      icon: Map,
     },
     {
       title: "Timed URL",
       description:
         "Set an expiration date for your short URL to limit its availability. (Feature Soon!)",
       icon: Timer,
-    },
-    {
-      title: "Notifications",
-      description:
-        "Get mail notified when your short URL is clicked. (Feature Soon!)",
-      icon: Bell,
     },
   ];
   return (

@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react";
-import useFetchCallback from "@/hooks/useFetchCallback";
+import useFetchCallback, { FetchState } from "@/hooks/useFetchCallback";
 import { getPersonalLinks, getPersonalStatistics } from "@/Api/endpoints";
+import { TStats, TUrl } from "@/schemas/dbSchema";
 
 type TRefreshData = {
-  links: ReturnType<typeof useFetchCallback>;
-  statistics: ReturnType<typeof useFetchCallback>;
+  links: FetchState<TUrl[], typeof getPersonalLinks>;
+  statistics: FetchState<TStats, typeof getPersonalStatistics>;
   refreshBoth: () => Promise<void>;
 };
 

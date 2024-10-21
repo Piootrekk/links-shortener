@@ -4,11 +4,12 @@ import {
   addMonths,
   differenceInDays,
   differenceInHours,
-  eachMonthOfInterval,
-  endOfMonth,
+  eachDayOfInterval,
+  endOfDay,
   format,
   isAfter,
   isBefore,
+  isWithinInterval,
   startOfDay,
   startOfHour,
   startOfMonth,
@@ -187,47 +188,54 @@ const processDataAllTime = (data: TDetails[]) => {
   if (data.length === 0) {
     return [];
   }
+
   const sortedData = [...data].sort(
     (a, b) =>
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
-  const oldestDate = new Date(sortedData[0].created_at);
-  const newestDate = new Date(sortedData[sortedData.length - 1].created_at);
-  const allMonths = eachMonthOfInterval({
-    start: startOfMonth(oldestDate),
-    end: endOfMonth(newestDate),
-  });
+  const oldestDate = startOfDay(new Date(sortedData[0].created_at));
+  const newestDate = endOfDay(
+    new Date(sortedData[sortedData.length - 1].created_at)
+  );
 
-  const monthsData = allMonths.map((month) => ({
-    month: format(month, "MMM yyyy"),
-    date: format(month, "yyyy-MM"),
+  const allDays = eachDayOfInterval({ start: oldestDate, end: newestDate });
+
+  const daysData = allDays.map((day) => ({
+    date: format(day, "yyyy-MM-dd"),
     count: 0,
     originalDate: null as Date | null,
   }));
 
   sortedData.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    const monthIndex = allMonths.findIndex(
-      (month) =>
-        entryDate >= startOfMonth(month) && entryDate <= endOfMonth(month)
+    const dayIndex = allDays.findIndex((day) =>
+      isWithinInterval(entryDate, {
+        start: startOfDay(day),
+        end: endOfDay(day),
+      })
     );
-    if (monthIndex !== -1) {
-      monthsData[monthIndex].count++;
+
+    if (dayIndex !== -1) {
+      daysData[dayIndex].count++;
       if (
-        !monthsData[monthIndex].originalDate ||
-        entryDate > monthsData[monthIndex].originalDate!
+        !daysData[dayIndex].originalDate ||
+        entryDate > daysData[dayIndex].originalDate!
       ) {
-        monthsData[monthIndex].originalDate = entryDate;
+        daysData[dayIndex].originalDate = entryDate;
       }
     }
   });
 
-  return monthsData.map((monthData) => ({
-    month: monthData.month,
-    date: monthData.date,
-    count: monthData.count,
-    originalDate: monthData.originalDate
-      ? format(monthData.originalDate, "yyyy-MM-dd HH:mm:ss")
+  const filteredDaysData = daysData.filter(
+    (day, index, array) =>
+      day.count > 0 || index === 0 || index === array.length - 1
+  );
+
+  return filteredDaysData.map((dayData) => ({
+    date: dayData.date,
+    count: dayData.count,
+    originalDate: dayData.originalDate
+      ? format(dayData.originalDate, "yyyy-MM-dd HH:mm:ss")
       : null,
   }));
 };

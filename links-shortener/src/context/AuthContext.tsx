@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
-import { TUserCredentials } from "@/schemas/authSchema";
+import { TLogout, TUserCredentials } from "@/schemas/authSchema";
 import { getuserInfo, login, logout, register } from "@/Api/auth";
 import useMultiFetches, { UseFetchMultiple } from "@/hooks/useMultiFetches";
 import useInstantFetch from "@/hooks/useInstantFetch";
@@ -23,9 +23,10 @@ type AuthContextType = {
   ) => Promise<void>;
   handleLogout: () => Promise<void>;
 };
+
 type TAuthMethods = {
   login: (email: string, password: string) => Promise<TUserCredentials>;
-  logout: () => Promise<null>;
+  logout: () => Promise<TLogout>;
   register: (
     email: string,
     password: string,

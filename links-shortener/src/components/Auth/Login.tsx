@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpin from "../ui/loading-spin";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const Login = () => {
   const { handleLogin, user } = useAuth();
@@ -19,6 +20,8 @@ const Login = () => {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  if (user.error) toast.error(user.error.message);
 
   const onSubmit = (formData: TLoginSchema) => {
     handleLogin(formData.email, formData.password);
@@ -32,7 +35,6 @@ const Login = () => {
           <CardDescription>
             <label>to your account if you have one.</label>
           </CardDescription>
-          {user.error && <ErrorMessage message={user.error.message} />}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>

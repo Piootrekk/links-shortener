@@ -5,10 +5,10 @@ import {
   anonymousLinkSchema,
   TAnonymousLinkSchema,
 } from "@/schemas/anonymousLink";
-import ErrorMessage from "../Error/ErrorMessage";
 import ConfirmLink from "./ConfirmLink";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const LinkAnonymous = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +25,10 @@ const LinkAnonymous = () => {
     setIsOpen(true);
     console.log(formData);
   };
+
+  if (errors.url) {
+    toast.error(errors.url.message);
+  }
 
   return (
     <>
@@ -50,9 +54,6 @@ const LinkAnonymous = () => {
           link={getValues("url")}
         />
       </form>
-      {errors.url && (
-        <ErrorMessage message={errors.url.message} className="text-md" />
-      )}
     </>
   );
 };

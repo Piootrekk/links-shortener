@@ -24,6 +24,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { configColorsChart } from "./colorConfig";
+
 type UniqueItemsChartProps = {
   selectedColumn: TTalbeHeaders;
 };
@@ -38,7 +39,6 @@ const UniqueItemsChart: React.FC<UniqueItemsChartProps> = ({
   const selectedColumnData = details.map(
     (detail: TDetails) => detail[selectedColumn.key]
   );
-
   const chartData = Object.entries(
     selectedColumnData.reduce((acc: Record<string, number>, value) => {
       if (value) {
@@ -69,24 +69,31 @@ const UniqueItemsChart: React.FC<UniqueItemsChartProps> = ({
       </CardHeader>
       <CardContent>
         <div className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <ChartContainer config={chartConfig}>
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
-                />
-                <Bar
-                  dataKey="count"
-                  fill={configColorsChart.colorChart3}
-                  radius={8}
-                />
-              </BarChart>
-            </ChartContainer>
-          </ResponsiveContainer>
+          {selectedColumnData && selectedColumnData.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <ChartContainer config={chartConfig}>
+                <BarChart accessibilityLayer data={chartData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent />}
+                  />
+                  <Bar
+                    dataKey="count"
+                    fill={configColorsChart.colorChart3}
+                    radius={8}
+                    barSize={80}
+                  />
+                </BarChart>
+              </ChartContainer>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              {"No data to display :("}
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

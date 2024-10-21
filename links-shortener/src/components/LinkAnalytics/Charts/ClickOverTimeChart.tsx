@@ -28,6 +28,7 @@ import {
   processDataMonth,
   processDataYear,
   Tperiod,
+  processDataAllTime,
 } from "./lineChartConfig";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 import { marginConfig } from "./lineChartConfig";
@@ -47,6 +48,33 @@ const CustomTooltip: React.FC<any> = ({ active, payload }) => {
   return null;
 };
 
+import React from "react";
+
+type ButtonToPeriodProps = {
+  period: Tperiod;
+  currentStatePeriod: Tperiod;
+  setPeriod: (period: Tperiod) => void;
+  label: string;
+};
+
+const ButtonToPeriod: React.FC<ButtonToPeriodProps> = ({
+  period,
+  currentStatePeriod,
+  label,
+  setPeriod,
+}) => {
+  return (
+    <Button
+      onClick={() => setPeriod(period)}
+      className={`${
+        period === currentStatePeriod && "bg-icon-blue text-primary"
+      }`}
+    >
+      {label}
+    </Button>
+  );
+};
+
 const ClickOverTimeChart = () => {
   const { analytics } = useAnalyticsData();
   const [period, setPeriod] = useState<Tperiod>("24h");
@@ -62,6 +90,8 @@ const ClickOverTimeChart = () => {
         return processDataMonth(details);
       case "1year":
         return processDataYear(details);
+      case "AllTime":
+        return processDataAllTime(details);
       default:
         return [];
     }
@@ -86,38 +116,39 @@ const ClickOverTimeChart = () => {
             {period === "1week" && " Showing data for the last week. "}
             {period === "1month" && " Showing data for the last month. "}
             {period === "1year" && " Showing data for the last year. "}
+            {period === "AllTime" && " Showing data for all time. "}
           </label>
           <div className="space-x-4 space-y-4">
-            <Button
-              variant={"outline"}
-              onClick={() => setPeriod("24h")}
-              className={`${period === "24h" && "bg-icon-blue text-primary"}`}
-            >
-              24h
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={() => setPeriod("1week")}
-              className={`${period === "1week" && "bg-icon-blue text-primary"}`}
-            >
-              1 week
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={() => setPeriod("1month")}
-              className={`${
-                period === "1month" && "bg-icon-blue text-primary"
-              }`}
-            >
-              1 month
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={() => setPeriod("1year")}
-              className={`${period === "1year" && "bg-icon-blue text-primary"}`}
-            >
-              1 year
-            </Button>
+            <ButtonToPeriod
+              period="24h"
+              currentStatePeriod={period}
+              setPeriod={setPeriod}
+              label="24h"
+            />
+            <ButtonToPeriod
+              period="1week"
+              currentStatePeriod={period}
+              setPeriod={setPeriod}
+              label="1 Week"
+            />
+            <ButtonToPeriod
+              period="1month"
+              currentStatePeriod={period}
+              setPeriod={setPeriod}
+              label="1 Month"
+            />
+            <ButtonToPeriod
+              period="1year"
+              currentStatePeriod={period}
+              setPeriod={setPeriod}
+              label="1 Year"
+            />
+            <ButtonToPeriod
+              period="AllTime"
+              currentStatePeriod={period}
+              setPeriod={setPeriod}
+              label="All Time"
+            />
           </div>
         </CardDescription>
       </CardHeader>

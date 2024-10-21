@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpin from "../ui/loading-spin";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const Register = () => {
   const { user, handleRegister } = useAuth();
@@ -22,6 +23,10 @@ const Register = () => {
     handleRegister(formData.email, formData.password, formData.confirmPassword);
   };
 
+  if (user.error) {
+    toast.error(user.error.message);
+  }
+  
   return (
     <>
       <Card>
