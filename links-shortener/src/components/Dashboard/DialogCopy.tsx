@@ -1,6 +1,7 @@
 import { Copy, CopyCheck } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type DialogCopyProps = {
   shortUrl: string;
@@ -14,6 +15,7 @@ const DialogCopy: React.FC<DialogCopyProps> = ({ shortUrl }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(`${URL}/direct/${shortUrl}`);
     setCopied(true);
+    toast.success("Copied to clipboard");
   };
 
   return (

@@ -25,6 +25,7 @@ import { insertPersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 import { Plus, RefreshCcw } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
+import { toast } from "sonner";
 
 type DialogAddFormProps = {};
 
@@ -69,7 +70,10 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
         ? formData.password
         : undefined
     );
-    if (!error) return;
+    if (!error) {
+      toast.success("Link created successfully");
+      return;
+    }
   };
 
   useEffect(() => {

@@ -20,6 +20,7 @@ import useFetchCallback from "@/hooks/useFetchCallback";
 
 import { deletePersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
+import { toast } from "sonner";
 
 type DialogRemoveProps = {
   title: string;
@@ -46,7 +47,10 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
 
   const onSubmit = async (_: TRemoveLinkSchema) => {
     await execute(id, qrPath);
-    if (!error) return;
+    if (!error) {
+      toast.success("Link removed successfully.");
+      return;
+    }
   };
 
   useEffect(() => {

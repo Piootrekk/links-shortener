@@ -20,6 +20,7 @@ type FetchState<TData, TFunction extends AsyncFunction> = {
   data: TData | null;
   setDataManually: (data: TData) => void;
   error: Error | null;
+  setErrorManually: (error: Error | null) => void;
   isLoading: boolean;
   execute: (...args: InferAsyncFunctionArgs<TFunction>) => Promise<void>;
 };
@@ -55,7 +56,14 @@ const useFetchCallback = <TFunction extends AsyncFunction>(
     [asyncFunction, validationSchema]
   );
 
-  return { data, error, isLoading, execute, setDataManually: setData };
+  return {
+    data,
+    error,
+    isLoading,
+    execute,
+    setDataManually: setData,
+    setErrorManually: setError,
+  };
 };
 
 export default useFetchCallback;

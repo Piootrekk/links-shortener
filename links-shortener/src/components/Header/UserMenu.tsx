@@ -14,7 +14,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
 const UserMenu: React.FC<{}> = () => {
-  const { user, handleLogout } = useAuth();
+  const { user, handleLogout, summonToast } = useAuth();
+  const onLogout = async () => {
+    await handleLogout();
+    summonToast();
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-10 rounded-full overflow-hiddenfocus:outline-none">
@@ -31,7 +35,7 @@ const UserMenu: React.FC<{}> = () => {
             <span className="ml-2">My Links</span>
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+        <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
           <LogOut className="h-4 w-4" />
           <span className="ml-2">Logout</span>
         </DropdownMenuItem>

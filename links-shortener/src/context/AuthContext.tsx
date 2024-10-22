@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
 import { TLogout, TUserCredentials } from "@/schemas/authSchema";
@@ -6,6 +6,7 @@ import { getuserInfo, login, logout, register } from "@/Api/auth";
 import useMultiFetches, { UseFetchMultiple } from "@/hooks/useMultiFetches";
 import useInstantFetch from "@/hooks/useInstantFetch";
 import { UnableToEstablishConnection } from "@/router/Pages/Error";
+import { toast } from "sonner";
 
 type MethodsTypes = {
   login: typeof login;
@@ -22,6 +23,7 @@ type AuthContextType = {
     confirmPassword: string
   ) => Promise<void>;
   handleLogout: () => Promise<void>;
+  summonToast: () => void;
 };
 
 type TAuthMethods = {
@@ -58,6 +60,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const user = useMultiFetches<TUserCredentials | null, TAuthMethods>(methods);
   const baseUserInfo = useInstantFetch(getuserInfo, []);
+  const [toastState, setToastState] = useState(false);
 
   useEffect(() => {
     if (baseUserInfo.data !== undefined) {
@@ -65,11 +68,27 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [baseUserInfo.data]);
 
+  useEffect(() => {
+    if (user.error !== null && toastState) {
+      toast.error(user.error.message);
+      setToastState(false);
+    }
+    if (user.data && !user.error && toastState) {
+      baseUserInfo.setDataManually(user.data);
+      toast.success("Logged in successfully");
+    }
+    if (user.data === null && !user.error && toastState) {
+      baseUserInfo.setDataManually(null);
+      toast.success("Logged out successfully");
+    }
+  }, [user.error, user.data]);
+
+  const summonToast = () => {
+    setToastState(true);
+  };
+
   const handleLogin = async (email: string, password: string) => {
     await user.exec.login(email, password);
-    if (user.data !== undefined) {
-      baseUserInfo.setDataManually(user.data);
-    }
   };
 
   const handleRegister = async (
@@ -78,16 +97,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     confirmPassword: string
   ) => {
     await user.exec.register(email, password, confirmPassword);
-    if (user.data !== undefined) {
-      baseUserInfo.setDataManually(null);
-    }
   };
 
   const handleLogout = async () => {
     await user.exec.logout();
-    if (user.data !== undefined) {
-      baseUserInfo.setDataManually(null);
-    }
   };
 
   if (baseUserInfo.isLoading) {
@@ -106,6 +119,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       <AuthContext.Provider
         value={{
           user: user,
+          summonToast,
           handleLogin,
           handleRegister,
           handleLogout,

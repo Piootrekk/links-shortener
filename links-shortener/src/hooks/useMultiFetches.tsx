@@ -6,6 +6,7 @@ type FetchState<T> = {
   data: T | null | undefined;
   setDataManually: (data: T) => void;
   error: Error | null;
+  setErrorManually: (error: Error | null) => void;
   isLoading: boolean;
 };
 
@@ -61,7 +62,14 @@ const useMultiFetches = <
     return execMethods as UseFetchMultiple<T, M>["exec"];
   }, [methods, execute]);
 
-  return { data, error, isLoading, exec, setDataManually: setData };
+  return {
+    data,
+    error,
+    isLoading,
+    exec,
+    setDataManually: setData,
+    setErrorManually: setError,
+  };
 };
 
 export default useMultiFetches;

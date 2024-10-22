@@ -20,6 +20,7 @@ type FetchState<T> = {
   data: T | null | undefined;
   setDataManually: (data: T) => void;
   error: Error | null;
+  setErrorManually: (error: Error | null) => void;
   isLoading: boolean;
 };
 
@@ -55,7 +56,13 @@ const useInstantFetch = <TFunction extends AsyncFunction>(
     fetchData();
   }, []);
 
-  return { data, error, isLoading, setDataManually: setData };
+  return {
+    data,
+    error,
+    isLoading,
+    setDataManually: setData,
+    setErrorManually: setError,
+  };
 };
 
 export default useInstantFetch;

@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
 import { Button } from "../ui/button";
 import qrDownload from "@/lib/qrDownload";
+import { toast } from "sonner";
 
 type DialogDownloadProps = {
   qrCode: string;
@@ -8,6 +9,7 @@ type DialogDownloadProps = {
 const DialogDownload: React.FC<DialogDownloadProps> = ({ qrCode }) => {
   const handleDownload = async () => {
     await qrDownload(qrCode);
+    toast.success("Download successful");
   };
 
   return (

@@ -7,10 +7,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingSpin from "../ui/loading-spin";
 import { useAuth } from "@/context/AuthContext";
-import { toast } from "sonner";
 
 const Register = () => {
-  const { user, handleRegister } = useAuth();
+  const { user, handleRegister, summonToast } = useAuth();
   const {
     register,
     handleSubmit,
@@ -19,14 +18,16 @@ const Register = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (formData: TSignUpSchema) => {
-    handleRegister(formData.email, formData.password, formData.confirmPassword);
+  const onSubmit = async (formData: TSignUpSchema) => {
+    await handleRegister(
+      formData.email,
+      formData.password,
+      formData.confirmPassword
+    );
+    summonToast();
+    return;
   };
 
-  if (user.error) {
-    toast.error(user.error.message);
-  }
-  
   return (
     <>
       <Card>
@@ -35,7 +36,6 @@ const Register = () => {
           <CardDescription className="text-sm">
             <label>to create an account.</label>
           </CardDescription>
-          {user.error && <ErrorMessage message={user.error.message} />}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
