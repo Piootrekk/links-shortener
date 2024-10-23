@@ -90,6 +90,21 @@ const getDetails = async (id: string) => {
   return response.data;
 };
 
+const insertLinkAnonymous = async (orginalUrl: string, shortUrl: string) => {
+  const response = await axiosInstance.post<TCrud>("/link-anon", {
+    orginal_url: orginalUrl,
+    short_url: shortUrl,
+  });
+  return response.data;
+};
+
+const getDetailsAnonymous = async (id: string) => {
+  const response = await axiosInstance.get<TGetDetails>(
+    `/get-details-anon/${id}`
+  );
+  return response.data;
+};
+
 export {
   getPersonalLinks,
   insertPersonalLink,
@@ -101,4 +116,6 @@ export {
   redirectingToUrl,
   validateRedirect,
   getDetails,
+  insertLinkAnonymous,
+  getDetailsAnonymous,
 };

@@ -10,6 +10,7 @@ import LinkAnalytics from "./Pages/LinkAnalytics";
 import ColorsTest from "@/components/Mock/ColorsTest";
 import RouteEndpoints from "@/components/Mock/RouteEndpoints";
 import { NotFound, Forbidden } from "./Pages/Error";
+import LinkPublicAnalytics from "./Pages/LinkPublicAnalytics";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,15 @@ const router = createBrowserRouter([
       },
       {
         path: "link/:id",
-        element: <LinkAnalytics />,
+        element: (
+          <RequireAuth>
+            <LinkAnalytics />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/public/:id",
+        element: <LinkPublicAnalytics />,
       },
       {
         path: "/auth",

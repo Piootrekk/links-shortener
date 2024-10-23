@@ -1,6 +1,7 @@
 import { TDetails } from "@/schemas/dbSchema";
 import {
   addDays,
+  addHours,
   addMonths,
   differenceInDays,
   differenceInHours,
@@ -30,6 +31,7 @@ type Tperiod = "24h" | "1week" | "1month" | "1year" | "AllTime";
 const processData24h = (data: TDetails[]) => {
   const now = new Date();
   const currentHour = startOfHour(now);
+  const nextHour = addHours(currentHour, 1);
   const past24h = subHours(currentHour, 23);
 
   const hours = Array.from({ length: 24 }, (_, index) => {
@@ -40,20 +42,24 @@ const processData24h = (data: TDetails[]) => {
       originalDate: null as Date | null,
     };
   });
+
   data.forEach((entry) => {
     const entryDate = new Date(entry.created_at);
-    if (isAfter(entryDate, past24h) && entryDate <= currentHour) {
+    if (isAfter(entryDate, past24h) && entryDate < nextHour) {
       const hourIndex =
         23 - differenceInHours(currentHour, startOfHour(entryDate));
-      hours[hourIndex].count++;
-      if (
-        !hours[hourIndex].originalDate ||
-        entryDate > hours[hourIndex].originalDate
-      ) {
-        hours[hourIndex].originalDate = entryDate;
+      if (hourIndex >= 0 && hourIndex < 24) {
+        hours[hourIndex].count++;
+        if (
+          !hours[hourIndex].originalDate ||
+          entryDate > hours[hourIndex].originalDate
+        ) {
+          hours[hourIndex].originalDate = entryDate;
+        }
       }
     }
   });
+
   return hours.map((hourData) => ({
     hour: hourData.hour,
     count: hourData.count,
@@ -226,6 +232,7 @@ const processDataAllTime = (data: TDetails[]) => {
     }
   });
 
+  // Remove days with zero count, except for the first and last day
   const filteredDaysData = daysData.filter(
     (day, index, array) =>
       day.count > 0 || index === 0 || index === array.length - 1

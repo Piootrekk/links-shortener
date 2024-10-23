@@ -47,19 +47,20 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
 
   const onSubmit = async (_: TRemoveLinkSchema) => {
     await execute(id, qrPath);
-    if (!error) {
-      toast.success("Link removed successfully.");
-      return;
-    }
+    return;
   };
 
   useEffect(() => {
-    if (data && data.success) {
+    if (data && data.success && !error && !isLoading) {
       setValue("title", "");
       setIsOpen(false);
+      toast.success("Link removed successfully.");
       refreshBoth();
     }
-  }, [data]);
+    if (error) {
+      toast.error(error.message);
+    }
+  }, [data, error]);
 
   const handleOpenChange = (open: boolean) => {
     if (!isLoading) {
@@ -86,7 +87,6 @@ const DialogRemove: React.FC<DialogRemoveProps> = ({ title, qrPath, id }) => {
             link to confirm.
           </DialogDescription>
         </DialogHeader>
-        {error && <ErrorMessage message={error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"

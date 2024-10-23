@@ -52,26 +52,26 @@ router.post(
   }
 );
 
-router.post("link-anon"),
-  async (req: Request, res: Response) => {
-    const { orginal_url, short_url } = req.body;
-    const parsed = insertAnonymouslySchema.safeParse({
-      orginal_url,
-      short_url,
-    });
-    if (!parsed.success) {
-      const errors = getZodErrors(parsed.error.errors);
-      return res.status(400).json(errors);
-    }
-    try {
-      const insertedLink = await insertUrlAnonymously(
-        parsed.data.orginal_url,
-        parsed.data.short_url
-      );
-      return res.json(insertedLink);
-    } catch (error) {
-      return res.status(500).json(error);
-    }
-  };
+router.post("/link-anon", async (req: Request, res: Response) => {
+  const { orginal_url, short_url } = req.body;
+  const parsed = insertAnonymouslySchema.safeParse({
+    orginal_url,
+    short_url,
+  });
+  if (!parsed.success) {
+    const errors = getZodErrors(parsed.error.errors);
+    return res.status(400).json(errors);
+  }
+  try {
+    const insertedLink = await insertUrlAnonymously(
+      parsed.data.orginal_url,
+      parsed.data.short_url
+    );
+    console.log(`LinksAnon`, insertedLink);
+    return res.json(insertedLink);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
 
 export default router;

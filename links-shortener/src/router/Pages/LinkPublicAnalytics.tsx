@@ -1,13 +1,13 @@
-import { getDetails } from "@/Api/endpoints";
+import { getDetailsAnonymous } from "@/Api/endpoints";
 import MainAnalytics from "@/components/LinkAnalytics/MainAnalytics";
 import { AnalyticsDataProvider } from "@/context/AnalyticsDataContext";
 
-const LinkAnalytics = () => {
+const LinkPublicAnalytics = () => {
   return (
-    <AnalyticsDataProvider fetchMethod={getDetails}>
+    <AnalyticsDataProvider fetchMethod={getDetailsAnonymous}>
       <MainAnalytics />
     </AnalyticsDataProvider>
   );
 };
 
-export default LinkAnalytics;
+export default LinkPublicAnalytics;

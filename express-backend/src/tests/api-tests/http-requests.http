@@ -45,3 +45,9 @@ GET {{baseUrl}}/links-with-stats
 
 ### only for tests /redirect
 GET {{baseUrl}}/redirect
+
+### post link anon
+POST {{baseUrl}}/link-anon
+
+### post link
+POST {{baseUrl}}/link-anon

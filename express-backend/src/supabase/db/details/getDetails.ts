@@ -1,9 +1,10 @@
 import { prisma } from "../../supabase";
 
-const getLinkWithDetailsUnauthorized = async (short_url: string) => {
+const getLinkWithDetailsUnauthorized = async (id: string) => {
   const link = await prisma.urls.findUnique({
     where: {
-      short_url,
+      id,
+      user_id: null,
     },
     include: {
       hidden_details: true,
@@ -48,7 +49,7 @@ const getDetails = async (id: string, user_id: string) => {
   return linksWithDetails;
 };
 
-const getLinkWithDetailsLimits = async (
+const getDetailsLimits = async (
   short_url: string,
   user_id: string,
   min: number,
@@ -73,5 +74,5 @@ export {
   getLinkWithDetailsUnauthorized,
   getLinkWithDetailsUnauthorizedLimits,
   getDetails,
-  getLinkWithDetailsLimits,
+  getDetailsLimits,
 };

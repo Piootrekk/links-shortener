@@ -19,6 +19,7 @@ import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { updatePersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
+import { toast } from "sonner";
 
 type DialogUpdateFormProps = {
   data?: TUpdateLinkSchema;
@@ -53,11 +54,15 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
   };
 
   useEffect(() => {
-    if (update && update.success) {
+    if (update && update.success && !error && !isLoading) {
       setIsOpen(false);
+      toast.success("Link updated successfully.");
       refreshBoth();
     }
-  }, [update]);
+    if (error) {
+      toast.error(error.message);
+    }
+  }, [update, error]);
 
   const handleOpenChange = (open: boolean) => {
     if (!isLoading) {
@@ -80,7 +85,6 @@ const DialogUpdate: React.FC<DialogUpdateFormProps> = ({ data, id }) => {
           <DialogTitle>Edit link</DialogTitle>
           <DialogDescription>Edit your link</DialogDescription>
         </DialogHeader>
-        {error && <ErrorMessage message={error.message} />}
         <form
           className="flex flex-col gap-y-4"
           onSubmit={handleSubmit(onSubmit)}

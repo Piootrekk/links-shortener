@@ -37,6 +37,7 @@ const insertUrlAnonymously = async (orginal_url: string, short_url: string) => {
       short_url: short_url,
     },
   });
+  console.log(inserts);
   if (!inserts) throw new Error("Insert failed");
   return {
     data: inserts,

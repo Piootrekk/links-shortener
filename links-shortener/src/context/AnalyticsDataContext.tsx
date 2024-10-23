@@ -1,4 +1,4 @@
-import { getDetails } from "@/Api/endpoints";
+import { getDetails, getDetailsAnonymous } from "@/Api/endpoints";
 import useFetchCallback, { FetchState } from "@/hooks/useFetchCallback";
 import { TGetDetails } from "@/schemas/dbSchema";
 import { createContext, useContext } from "react";
@@ -9,6 +9,7 @@ type TAnalyticsData = {
 
 type AnalyticsDataProps = {
   children: React.ReactNode;
+  fetchMethod: typeof getDetails | typeof getDetailsAnonymous;
 };
 
 const AnalyticsDataContext = createContext<TAnalyticsData | undefined>(
@@ -25,8 +26,11 @@ const useAnalyticsData = () => {
   return context;
 };
 
-const AnalyticsDataProvider: React.FC<AnalyticsDataProps> = ({ children }) => {
-  const analytics = useFetchCallback(getDetails);
+const AnalyticsDataProvider: React.FC<AnalyticsDataProps> = ({
+  children,
+  fetchMethod,
+}) => {
+  const analytics = useFetchCallback(fetchMethod);
   return (
     <AnalyticsDataContext.Provider
       value={{

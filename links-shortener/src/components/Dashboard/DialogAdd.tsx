@@ -23,8 +23,10 @@ import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertPersonalLink } from "@/Api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
-import { Plus, RefreshCcw } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
+
+import DialogAddRefreshShortUrl from "./DialogAddRefreshShortUrl";
 import { toast } from "sonner";
 
 type DialogAddFormProps = {};
@@ -36,10 +38,6 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
   const { refreshBoth } = useRefreshData();
-
-  const onHandleShortUrlGenerate = () => {
-    setValue("shortUrl", shortUrlGenerate(2, 6));
-  };
 
   const {
     register,
@@ -70,19 +68,21 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
         ? formData.password
         : undefined
     );
-    if (!error) {
-      toast.success("Link created successfully");
-      return;
-    }
+
+    return;
   };
 
   useEffect(() => {
-    if (data && data.success) {
+    if (data && data.success && !error && !isLoading) {
       formsReset();
       setIsOpen(false);
+      toast.success("Link created successfully.");
       refreshBoth();
     }
-  }, [data]);
+    if (error) {
+      toast.error(error.message);
+    }
+  }, [data, error]);
 
   const handleOpenChange = (open: boolean) => {
     if (!isLoading) {
@@ -103,7 +103,6 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           <DialogTitle>Add link</DialogTitle>
           <DialogDescription>Create a new link</DialogDescription>
         </DialogHeader>
-        {error && <ErrorMessage message={error.message} />}
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
@@ -131,13 +130,9 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
               {...register("shortUrl")}
               className="flex-1"
             />
-            <Button
-              variant="ghost"
-              type="button"
-              onClick={() => onHandleShortUrlGenerate()}
-            >
-              <RefreshCcw />
-            </Button>
+            <DialogAddRefreshShortUrl
+              setShortUrl={(newShortUrl) => setValue("shortUrl", newShortUrl)}
+            />
           </div>
           {errors.shortUrl && (
             <ErrorMessage message={errors.shortUrl.message} />
