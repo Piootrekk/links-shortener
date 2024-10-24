@@ -1,6 +1,6 @@
 import Faq from "@/components/LandingPage/Faq";
 import Futures from "@/components/LandingPage/Futures";
-import LinkAnonymous from "@/components/LandingPage/LinkAnonymous";
+import LinkAnonymous from "@/components/LandingPage/AnonymousAnalytics/LinkAnonymous";
 
 const LandingView = () => {
   return (

@@ -10,13 +10,13 @@ import { useAuth } from "@/context/AuthContext";
 
 import TransformLinkVisualize from "./TransformLinkVisualize";
 import { QrCode, BarChart2, UserCircle, Lock, Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import shortUrlGenerate from "@/lib/shortUrlGenerate";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { insertLinkAnonymous } from "@/Api/endpoints";
-import LoadingSpin from "../ui/loading-spin";
+import LoadingSpin from "../../ui/loading-spin";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -48,6 +48,9 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
     if (data && data.success && !error && !isLoading) {
       setIsOpen(false);
       toast.success("Link created successfully.");
+      toast.info(
+        "Notice, your analytics are public, if you want private - create account."
+      );
       navigate(`/public/${data.data?.id}`);
     }
     if (error) {

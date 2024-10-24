@@ -1,5 +1,5 @@
-import DialogAddRefreshShortUrl from "../Dashboard/DialogAddRefreshShortUrl";
-import { Card } from "../ui/card";
+import DialogAddRefreshShortUrl from "../../Dashboard/DialogAddRefreshShortUrl";
+import { Card } from "../../ui/card";
 import { ArrowDownIcon } from "lucide-react";
 
 type TransformLinkProp = {

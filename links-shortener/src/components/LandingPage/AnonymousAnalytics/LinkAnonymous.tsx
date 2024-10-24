@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   anonymousLinkSchema,
   TAnonymousLinkSchema,
 } from "@/schemas/anonymousLink";
 import ConfirmLink from "./ConfirmLink";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 

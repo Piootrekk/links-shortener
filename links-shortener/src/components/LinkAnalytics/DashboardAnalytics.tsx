@@ -1,5 +1,5 @@
 import StatsBar from "./StatsBar";
-import AnalyticsTable from "./AnalyticsTable";
+import AnalyticsTable from "./Table/AnalyticsTable";
 import { useState } from "react";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
 import ClickOverTimeChart from "./Charts/ClickOverTimeChart";

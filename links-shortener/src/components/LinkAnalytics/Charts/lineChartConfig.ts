@@ -192,7 +192,14 @@ const processDataYear = (data: TDetails[]) => {
 
 const processDataAllTime = (data: TDetails[]) => {
   if (data.length === 0) {
-    return [];
+    const today = new Date();
+    return [
+      {
+        date: format(today, "yyyy-MM-dd"),
+        count: 0,
+        originalDate: null,
+      },
+    ];
   }
 
   const sortedData = [...data].sort(
@@ -205,7 +212,6 @@ const processDataAllTime = (data: TDetails[]) => {
   );
 
   const allDays = eachDayOfInterval({ start: oldestDate, end: newestDate });
-
   const daysData = allDays.map((day) => ({
     date: format(day, "yyyy-MM-dd"),
     count: 0,
@@ -232,7 +238,6 @@ const processDataAllTime = (data: TDetails[]) => {
     }
   });
 
-  // Remove days with zero count, except for the first and last day
   const filteredDaysData = daysData.filter(
     (day, index, array) =>
       day.count > 0 || index === 0 || index === array.length - 1
