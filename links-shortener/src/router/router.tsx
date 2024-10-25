@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/public/:id",
+        path: "/p/:id",
         element: <LinkPublicAnalytics />,
       },
       {

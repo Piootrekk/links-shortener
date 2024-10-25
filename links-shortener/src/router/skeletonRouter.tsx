@@ -18,7 +18,7 @@ const routerSkeleton = createBrowserRouter([
         element: <SkeletonUniversal />,
       },
       {
-        path: "/public/:id",
+        path: "/p/:id",
         element: <SkeletonUniversal />,
       },
       {

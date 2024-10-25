@@ -3,7 +3,7 @@ import { TUrl } from "@/schemas/dbSchema";
 import DialogRemove from "./DialogRemove";
 import DialogQR from "./DialogQR";
 import DialogUpdate from "./DialogUpdate";
-import borderplateQR from "@/assets/borderplate.png";
+import borderplateQR from "@/assets/borderplate.webp";
 import DialogCopy from "./DialogCopy";
 import DialogDownload from "./DialogDownload";
 import { Lock } from "lucide-react";

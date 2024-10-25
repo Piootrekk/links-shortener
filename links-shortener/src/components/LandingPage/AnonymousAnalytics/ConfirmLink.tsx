@@ -7,7 +7,6 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
-
 import TransformLinkVisualize from "./TransformLinkVisualize";
 import { QrCode, BarChart2, UserCircle, Lock, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
@@ -19,6 +18,8 @@ import { insertLinkAnonymous } from "@/Api/endpoints";
 import LoadingSpin from "../../ui/loading-spin";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { key, anonLinksSchema } from "@/schemas/localStorageSchema";
 
 type ConfirmLinkProps = {
   isOpen: boolean;
@@ -40,23 +41,42 @@ const ConfirmLink: React.FC<ConfirmLinkProps> = ({
   const { data, isLoading, error, execute } =
     useFetchCallback(insertLinkAnonymous);
   const navigate = useNavigate();
+
+  const {
+    setValue: setStoredLinks,
+    error: storageError,
+  } = useLocalStorage(key, anonLinksSchema, null);
+
   const onSubmit = async () => {
     await execute(link, shortUrl);
   };
 
   useEffect(() => {
     if (data && data.success && !error && !isLoading) {
+      const newLink = {
+        short_url: shortUrl,
+        original_url: link,
+        id: data.data?.id,
+      };
+
+      setStoredLinks(newLink);
+
       setIsOpen(false);
       toast.success("Link created successfully.");
       toast.info(
         "Notice, your analytics are public, if you want private - create account."
       );
-      navigate(`/public/${data.data?.id}`);
+      navigate(`/p/${data.data?.id}`);
     }
+
     if (error) {
       toast.error(error.message);
     }
-  }, [data, error]);
+
+    if (storageError) {
+      toast.error("There was an error saving to LocalStorage.");
+    }
+  }, [data, error, isLoading, storageError]);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleButtonClick}>

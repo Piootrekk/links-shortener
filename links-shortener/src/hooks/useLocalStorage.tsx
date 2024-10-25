@@ -1,53 +1,45 @@
 import { useState } from "react";
-import { ZodSchema } from "zod";
+import { z, ZodError } from "zod";
+
+type UseLocalStorageReturn<T> = {
+  value: T | null;
+  setValue: (value: T) => void;
+  error: string | null;
+};
 
 const useLocalStorage = <T,>(
   key: string,
-  initialValue: T,
-  schema?: ZodSchema<T>
-) => {
-  const [error, setError] = useState<Error | null>(null);
-
-  const getSavedValue = (): T | undefined => {
-    const savedValue = localStorage.getItem(key);
-    if (savedValue !== null) {
+  schema: z.ZodSchema<T>,
+  initialValue: T
+): UseLocalStorageReturn<T> => {
+  const [value, setValueState] = useState<T | null>(() => {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue) {
       try {
-        const parsedValue = JSON.parse(savedValue);
-        if (schema) {
-          const result = schema.safeParse(parsedValue);
-          if (!result.success) {
-            setError(new Error("Validation failed: " + result.error.message));
-            return;
-          }
-          return result.data;
-        }
-        return parsedValue as T;
-      } catch (error) {
-        setError(new Error("Error with getting values in localStorage"));
+        return schema.parse(JSON.parse(storedValue));
+      } catch {
+        return initialValue;
       }
     }
     return initialValue;
-  };
-  const [value, setValueState] = useState<T | undefined>(getSavedValue);
+  });
 
-  const setLocalStorageValue = (newValue: T) => {
-    if (schema) {
-      const validationResult = schema.safeParse(newValue);
-      if (!validationResult.success) {
-        setError(new Error(validationResult.error.message));
-        return;
+  const [error, setError] = useState<string | null>(null);
+
+  const setValue = (newValue: T) => {
+    try {
+      const parsedValue = schema.parse(newValue);
+      setValueState(parsedValue);
+      localStorage.setItem(key, JSON.stringify(parsedValue));
+      setError(null);
+    } catch (e) {
+      if (e instanceof ZodError) {
+        setError(e.errors.map((err) => err.message).join(", "));
       }
     }
-    try {
-      localStorage.setItem(key, JSON.stringify(newValue));
-      setValueState(newValue);
-      setError(null);
-    } catch (error) {
-      setError(new Error("Error with saving data"));
-    }
   };
 
-  return { value, setValue: setLocalStorageValue, error };
+  return { value, setValue, error };
 };
 
 export default useLocalStorage;

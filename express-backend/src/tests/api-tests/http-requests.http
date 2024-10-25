@@ -4,8 +4,8 @@ POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-    "email": "{{email}}",
-    "password": "{{password}}"
+    "email": "",
+    "password": ""
 }
 
 ### Register
@@ -22,8 +22,8 @@ Content-Type: application/json
 POST {{baseUrl}}/logout
 
 {
-    "email": "{{email}}",
-    "password": "{{password}}"
+    "email": "",
+    "password": ""
 }
 
 ### Get user

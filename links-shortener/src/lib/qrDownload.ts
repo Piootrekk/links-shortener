@@ -1,4 +1,5 @@
 import { downloadQrCode } from "@/Api/endpoints";
+import { toast } from "sonner";
 
 const qrDownload = async (qrCode: string) => {
   const qrStream = await downloadQrCode(qrCode);
@@ -12,10 +13,8 @@ const qrDownload = async (qrCode: string) => {
     a.download = qrCode;
     a.click();
     URL.revokeObjectURL(qrUrl);
-
-    // Kiedyś przerobić to na toast/
   } else {
-    console.error("Cannot generate QR code.");
+    toast.error("Cannot generate QR code.");
   }
 };
 

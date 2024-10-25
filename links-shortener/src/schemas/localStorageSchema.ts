@@ -1,14 +1,16 @@
 import { z } from "zod";
 
-const anonLinkSchema = z.object({
+const linkStorageSchema = z.object({
   short_url: z.string(),
-  orginal_url: z.string(),
+  original_url: z.string(),
+  id: z.string().optional(),
 });
+
 const key = "anonLinks";
 
-const anonLinksSchema = z.array(anonLinkSchema);
+const anonLinksSchema = z.union([linkStorageSchema, z.null()]);
 
-type TAnonLinksFromLocalStorage = z.infer<typeof anonLinksSchema>;
+type TAnonLinkFromLocalStorage = z.infer<typeof anonLinksSchema>;
 
 export { anonLinksSchema, key };
-export type { TAnonLinksFromLocalStorage };
+export type { TAnonLinkFromLocalStorage };

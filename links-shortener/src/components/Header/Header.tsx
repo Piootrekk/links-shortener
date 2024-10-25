@@ -5,6 +5,7 @@ import UserMenu from "./UserMenu";
 import { useAuth } from "@/context/AuthContext";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import UserMenuMobile from "./UserMenuMobile";
+import StorageMenu from "./StorageMenu";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -22,9 +23,12 @@ const Header = () => {
             <h1 className="text-3xl  font-bold">URL Shortener</h1>
           </Link>
           {user.data === null ? (
-            <Button variant={"outline"} onClick={loginHandler}>
-              Authorize
-            </Button>
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              <StorageMenu />
+              <Button variant={"outline"} onClick={loginHandler}>
+                Authorize
+              </Button>
+            </div>
           ) : isNotMobile ? (
             <UserMenu />
           ) : (

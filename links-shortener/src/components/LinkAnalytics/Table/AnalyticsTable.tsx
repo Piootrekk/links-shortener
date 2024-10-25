@@ -31,7 +31,7 @@ const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
     <div className="overflow-x-auto">
       <div
         className={`${
-          totalPages > 0 && "h-[580px] min-h-[580px] overflow-y-auto"
+          totalPages > 1 && "h-[580px] min-h-[580px] overflow-y-auto"
         }`}
       >
         <Table>
