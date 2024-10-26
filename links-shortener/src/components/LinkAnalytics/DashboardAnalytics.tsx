@@ -1,11 +1,15 @@
 import StatsBar from "./StatsBar";
-import AnalyticsTable from "./Table/AnalyticsTable";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useAnalyticsData } from "@/context/AnalyticsDataContext";
-import ClickOverTimeChart from "./Charts/ClickOverTimeChart";
-import MapDisplayer from "./MapDisplayer";
 import { TTalbeHeaders } from "@/schemas/chartsTypes";
-import UniqueItemsChart from "./Charts/UniqueItemsChart";
+import { lazy } from "react";
+import SkeletonUniversal from "../Loading/SkeletonUniversal";
+
+const AnalyticsTable = lazy(() => import("./Table/AnalyticsTable"));
+const ClickOverTimeChart = lazy(() => import("./Charts/ClickOverTimeChart"));
+const MapDisplayer = lazy(() => import("./MapDisplayer"));
+const UniqueItemsChart = lazy(() => import("./Charts/UniqueItemsChart"));
+
 type DashboardAnalyticsProps = {};
 
 const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({}) => {
@@ -20,21 +24,23 @@ const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({}) => {
   if (!analytics.data) return null;
   return (
     <div className="space-y-8">
-      <StatsBar />
-      <div className="shadow rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Table Details</h2>
-        {analytics.data.hidden_details.length > 0 ? (
-          <AnalyticsTable
-            onRowClick={setSelectedId}
-            onColumnClick={setSelectedColumn}
-          />
-        ) : (
-          <div className="text-muted-foreground">No data available</div>
-        )}
-        <MapDisplayer selectedId={selectedId} onCloseMarker={onCloseMarker} />
-      </div>
-      <ClickOverTimeChart />
-      <UniqueItemsChart selectedColumn={selectedColumn} />
+      <Suspense fallback={<SkeletonUniversal />}>
+        <StatsBar />
+        <div className="shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Table Details</h2>
+          {analytics.data.hidden_details.length > 0 ? (
+            <AnalyticsTable
+              onRowClick={setSelectedId}
+              onColumnClick={setSelectedColumn}
+            />
+          ) : (
+            <div className="text-muted-foreground">No data available</div>
+          )}
+          <MapDisplayer selectedId={selectedId} onCloseMarker={onCloseMarker} />
+        </div>
+        <ClickOverTimeChart />
+        <UniqueItemsChart selectedColumn={selectedColumn} />
+      </Suspense>
     </div>
   );
 };

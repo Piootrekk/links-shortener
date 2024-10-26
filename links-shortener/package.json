@@ -1,8 +1,10 @@
 {
   "name": "links-shortener",
+
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": ".",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

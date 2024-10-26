@@ -37,10 +37,6 @@ const routerSkeleton = createBrowserRouter([
         path: "*",
         element: <SkeletonUniversal />,
       },
-      {
-        path: "/404",
-        element: <SkeletonUniversal />,
-      },
     ],
   },
 ]);

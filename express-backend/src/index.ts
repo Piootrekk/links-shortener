@@ -17,12 +17,16 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 
-app.get("/", (_: Request, res: Response) => {
+router.get("/", (_: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
-app.get("/health", (_: Request, res: Response) => {
+router.get("/health", (_: Request, res: Response) => {
   res.json({ health: true });
+});
+
+router.all("/*", (_, res) => {
+  res.status(404).json({ message: "Not Found" });
 });
 
 app.listen(PORT, () => {

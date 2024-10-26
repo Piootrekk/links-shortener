@@ -1,16 +1,26 @@
+import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import DefaultLayout from "./Layout/DefaultLayout";
-import HomeView from "./Pages/HomeView";
-import DashboardView from "./Pages/DashboardView";
-import AuthView from "./Pages/AuthView";
-import RedirectView from "./Pages/RedirectView";
+
 import RequireNotAuth from "./Guard/RequireNotAuth";
 import RequireAuth from "./Guard/RequireAuth";
-import LinkAnalytics from "./Pages/LinkAnalytics";
-import ColorsTest from "@/components/Mock/ColorsTest";
-import RouteEndpoints from "@/components/Mock/RouteEndpoints";
-import { NotFound, Forbidden } from "./Pages/Error";
-import LinkPublicAnalytics from "./Pages/LinkPublicAnalytics";
+
+import SkeletonAuth from "@/components/Loading/SkeletonAuth";
+import SkeletonDashboard from "@/components/Loading/SkeletonDashboard";
+import SkeletonHome from "@/components/Loading/SkeletonHome";
+import SkeletonUniversal from "@/components/Loading/SkeletonUniversal";
+
+import { NotFound } from "./Pages/Error";
+import { Forbidden } from "./Pages/Error";
+
+const HomeView = lazy(() => import("./Pages/HomeView"));
+const DashboardView = lazy(() => import("./Pages/DashboardView"));
+const AuthView = lazy(() => import("./Pages/AuthView"));
+const RedirectView = lazy(() => import("./Pages/RedirectView"));
+const LinkAnalytics = lazy(() => import("./Pages/LinkAnalytics"));
+const ColorsTest = lazy(() => import("@/components/Mock/ColorsTest"));
+const RouteEndpoints = lazy(() => import("@/components/Mock/RouteEndpoints"));
+const LinkPublicAnalytics = lazy(() => import("./Pages/LinkPublicAnalytics"));
 
 const router = createBrowserRouter([
   {
@@ -18,25 +28,37 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomeView />,
+        element: (
+          <Suspense fallback={<SkeletonHome />}>
+            <HomeView />
+          </Suspense>
+        ),
       },
       {
         path: "link/:id",
         element: (
           <RequireAuth>
-            <LinkAnalytics />
+            <Suspense fallback={<SkeletonUniversal />}>
+              <LinkAnalytics />
+            </Suspense>
           </RequireAuth>
         ),
       },
       {
         path: "/p/:id",
-        element: <LinkPublicAnalytics />,
+        element: (
+          <Suspense fallback={<SkeletonUniversal />}>
+            <LinkPublicAnalytics />
+          </Suspense>
+        ),
       },
       {
         path: "/auth",
         element: (
           <RequireNotAuth>
-            <AuthView />
+            <Suspense fallback={<SkeletonAuth />}>
+              <AuthView />
+            </Suspense>
           </RequireNotAuth>
         ),
       },
@@ -44,21 +66,35 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: (
           <RequireAuth>
-            <DashboardView />
+            <Suspense fallback={<SkeletonDashboard />}>
+              <DashboardView />
+            </Suspense>
           </RequireAuth>
         ),
       },
       {
         path: "/direct/:custom_link",
-        element: <RedirectView />,
+        element: (
+          <Suspense fallback={<SkeletonUniversal />}>
+            <RedirectView />
+          </Suspense>
+        ),
       },
       {
         path: "/test",
-        element: <ColorsTest />,
+        element: (
+          <Suspense fallback={<SkeletonUniversal />}>
+            <ColorsTest />
+          </Suspense>
+        ),
       },
       {
         path: "/routes-test",
-        element: <RouteEndpoints />,
+        element: (
+          <Suspense fallback={<SkeletonUniversal />}>
+            <RouteEndpoints />
+          </Suspense>
+        ),
       },
       {
         path: "/*",
@@ -68,7 +104,10 @@ const router = createBrowserRouter([
         path: "/404",
         element: <NotFound />,
       },
-      { path: "/403", element: <Forbidden /> },
+      {
+        path: "/403",
+        element: <Forbidden />,
+      },
     ],
   },
 ]);

@@ -12,8 +12,4 @@ router.use("/", linksRoutes);
 router.use("/", detailsRoutes);
 router.use("/", statisticsRoutes);
 
-router.all("/*", (_, res) => {
-  res.status(404).json({ message: "Not Found" });
-});
-
 export default router;
