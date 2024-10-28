@@ -19,9 +19,6 @@ const transformErrorToDefault = (err: unknown): Error => {
   if (err instanceof Error) {
     return err;
   }
-  if (import.meta.env.VITE_MODE === "development") {
-    console.error(err);
-  }
   return new Error("An unknown error occurred");
 };
 

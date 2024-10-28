@@ -77,7 +77,6 @@ router.post("/validate-redirect", async (req: Request, res: Response) => {
     };
 
     const data = await setDetails(short_url, dataToDetails);
-    console.log(data);
   } catch (error) {
     return res.status(500).json(error || "Internal server error");
   }

@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import { z } from "zod";
 config();
 
-const front = process.env.URL_FRONT;
+const front = process.env.EXPRESS_URL_FRONT;
 if (!front) {
   throw new Error("FRONTEND_URL is not set");
 }

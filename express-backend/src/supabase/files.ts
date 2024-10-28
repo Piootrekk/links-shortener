@@ -4,10 +4,10 @@ import supabase from "./supabase";
 import streamifier from "streamifier";
 config();
 
-const URL_FRONT = process.env.URL_FRONT;
+const EXPRESS_URL_FRONT = process.env.EXPRESS_URL_FRONT;
 
-if (!URL_FRONT) {
-  throw new Error("BUCKET_ENDPOINT is not defined");
+if (!EXPRESS_URL_FRONT) {
+  throw new Error("EXPRESS_BUCKET_ENDPOINT is not defined");
 }
 
 const uploadFile = async (file: File) => {
@@ -24,7 +24,7 @@ const deleteFile = async (path: string) => {
 };
 
 const invokeQR = async (name: string) => {
-  const qrBlob = await generateQR(`${URL_FRONT}/direct/${name}`, name);
+  const qrBlob = await generateQR(`${EXPRESS_URL_FRONT}/direct/${name}`, name);
   const qrPath = await uploadFile(qrBlob);
   return qrPath;
 };

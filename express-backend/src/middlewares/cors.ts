@@ -3,7 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 config();
 
-const frontend = process.env.URL_FRONT;
+const frontend = process.env.EXPRESS_URL_FRONT;
 
 if (!frontend) {
   throw new Error("FRONTEND_URL is not defined");

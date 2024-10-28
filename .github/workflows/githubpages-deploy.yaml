@@ -1,0 +1,38 @@
+name: Front to github pages
+on: [workflow_dispatch]
+jobs:
+  deploy-gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - name: Change directory to front
+        run: cd ./links-shortener
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./links-shortener
+
+      - name: Build
+        run: npm run build
+        working-directory: ./links-shortener
+        env:
+          VITE_FRONTEND_URL: ${{secrets.VITE_FRONTEND_URL}}
+          VITE_BACKEND_URL: ${{secrets.VITE_BACKEND_URL}}
+          VITE_DB_ENDPOINT: ${{secrets.VITE_DB_ENDPOINT}}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: ./links-shortener/dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./links-shortener/dist

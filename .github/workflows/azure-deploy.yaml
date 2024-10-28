@@ -1,0 +1,69 @@
+name: Deploy backend to azure as service app
+on: [workflow_dispatch]
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy image to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          images: piotrekdockerxd/short-url-backend:latest
+      - name: Configure environment variables on Azure
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          app-settings-json: |
+            [
+                {
+                    "name": "PORT",
+                    "value": "${{ secrets.PORT }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_CRYPT_SECRET",
+                    "value": "${{ secrets.EXPRESS_CRYPT_SECRET }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_SUPABASE_KEY",
+                    "value": "${{ secrets.EXPRESS_SUPABASE_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_SUPABASE_URL",
+                    "value": "${{ secrets.EXPRESS_SUPABASE_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_BUCKET_ENDPOINT",
+                    "value": "${{ secrets.EXPRESS_BUCKET_ENDPOINT }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_DATABASE_URL",
+                    "value": "${{ secrets.EXPRESS_DATABASE_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_DIRECT_URL",
+                    "value": "${{ secrets.EXPRESS_DIRECT_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_URL_BACKEND",
+                    "value": "${{ secrets.EXPRESS_URL_BACKEND }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_URL_FRONT",
+                    "value": "${{ secrets.EXPRESS_URL_FRONT }}",
+                    "slotSetting": false
+                }
+            ]
