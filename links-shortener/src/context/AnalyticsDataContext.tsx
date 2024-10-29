@@ -1,4 +1,4 @@
-import { getDetails, getDetailsAnonymous } from "@/Api/endpoints";
+import { getDetails, getDetailsAnonymous } from "@/api/endpoints";
 import useFetchCallback, { FetchState } from "@/hooks/useFetchCallback";
 import { TGetDetails } from "@/schemas/dbSchema";
 import { createContext, useContext } from "react";

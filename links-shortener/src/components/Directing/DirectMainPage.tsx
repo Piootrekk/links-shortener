@@ -11,7 +11,7 @@ import {
   CardContent,
 } from "../ui/card";
 import LoadingSpin from "../ui/loading-spin";
-import { validateRedirect } from "@/Api/endpoints";
+import { validateRedirect } from "@/api/endpoints";
 
 type DirectMainPageProps = {
   custom_link: string;

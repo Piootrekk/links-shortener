@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import routerSkeleton from "@/router/skeletonRouter";
 import { TLogout, TUserCredentials } from "@/schemas/authSchema";
-import { getuserInfo, login, logout, register } from "@/Api/auth";
+import { getuserInfo, login, logout, register } from "@/api/auth";
 import useMultiFetches, { UseFetchMultiple } from "@/hooks/useMultiFetches";
 import useInstantFetch from "@/hooks/useInstantFetch";
 import { UnableToEstablishConnection } from "@/router/Pages/Error";

@@ -1,4 +1,4 @@
-import { downloadQrCode } from "@/Api/endpoints";
+import { downloadQrCode } from "@/api/endpoints";
 import { toast } from "sonner";
 
 const qrDownload = async (qrCode: string) => {

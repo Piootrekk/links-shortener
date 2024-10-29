@@ -1,0 +1,43 @@
+name: Deploy front to vercel
+on: [workflow_dispatch]
+
+jobs:
+  vercel_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Change directory to front
+        run: cd ./links-shortener
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./links-shortener
+
+      - name: Build Vite app
+        env:
+          VITE_FRONTEND_URL: ${{ secrets.VITE_FRONTEND_URL }}
+          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+          VITE_DB_ENDPOINT: ${{ secrets.VITE_DB_ENDPOINT }}
+        run: npm run build
+        working-directory: ./links-shortener
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          npm install -g vercel
+          vercel --token $VERCEL_TOKEN --prod --confirm --scope $VERCEL_ORG_ID \
+            --env VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }} \
+            --env VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
+            --env VITE_DB_ENDPOINT=${{ secrets.VITE_DB_ENDPOINT }}
+        working-directory: ./links-shortener

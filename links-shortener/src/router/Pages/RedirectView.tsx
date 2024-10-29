@@ -1,4 +1,4 @@
-import { redirectingToUrl } from "@/Api/endpoints";
+import { redirectingToUrl } from "@/api/endpoints";
 import DirectMainPage from "@/components/Directing/DirectMainPage";
 import DirectWithPassword from "@/components/Directing/DirectWithPassword";
 import SkeletonUniversal from "@/components/Loading/SkeletonUniversal";

@@ -1,7 +1,7 @@
 name: Registry image to Docker Hub
 on: [workflow_dispatch]
 jobs:
-  publish_images:
+  dockerize:
     runs-on: ubuntu-latest
     steps:
       - name: checkout

@@ -1,4 +1,4 @@
-import { getDetailsAnonymous } from "@/Api/endpoints";
+import { getDetailsAnonymous } from "@/api/endpoints";
 import MainAnalytics from "@/components/LinkAnalytics/MainAnalytics";
 import { AnalyticsDataProvider } from "@/context/AnalyticsDataContext";
 

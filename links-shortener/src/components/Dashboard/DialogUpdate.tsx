@@ -17,7 +17,7 @@ import updateSchema, { TUpdateLinkSchema } from "@/schemas/updateLinkSchema";
 import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { updatePersonalLink } from "@/Api/endpoints";
+import { updatePersonalLink } from "@/api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 import { toast } from "sonner";
 

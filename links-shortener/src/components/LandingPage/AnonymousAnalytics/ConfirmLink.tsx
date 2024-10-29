@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Card } from "../../ui/card";
 import shortUrlGenerate from "@/lib/shortUrlGenerate";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { insertLinkAnonymous } from "@/Api/endpoints";
+import { insertLinkAnonymous } from "@/api/endpoints";
 import LoadingSpin from "../../ui/loading-spin";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";

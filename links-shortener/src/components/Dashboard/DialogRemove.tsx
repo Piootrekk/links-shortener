@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
 
-import { deletePersonalLink } from "@/Api/endpoints";
+import { deletePersonalLink } from "@/api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 import { toast } from "sonner";
 

@@ -1,4 +1,4 @@
-import { validateRedirect } from "@/Api/endpoints";
+import { validateRedirect } from "@/api/endpoints";
 import useFetchCallback from "@/hooks/useFetchCallback";
 import { useEffect } from "react";
 import ErrorMessage from "../Error/ErrorMessage";

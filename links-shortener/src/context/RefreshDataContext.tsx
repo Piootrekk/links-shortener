@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import useFetchCallback, { FetchState } from "@/hooks/useFetchCallback";
-import { getPersonalLinks, getPersonalStatistics } from "@/Api/endpoints";
+import { getPersonalLinks, getPersonalStatistics } from "@/api/endpoints";
 import { TStats, TUrl } from "@/schemas/dbSchema";
 
 type TRefreshData = {

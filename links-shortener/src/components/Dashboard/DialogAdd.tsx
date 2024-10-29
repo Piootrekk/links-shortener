@@ -21,7 +21,7 @@ import insertLinkSchema, {
 import { useForm } from "react-hook-form";
 import LoadingSpin from "../ui/loading-spin";
 import useFetchCallback from "@/hooks/useFetchCallback";
-import { insertPersonalLink } from "@/Api/endpoints";
+import { insertPersonalLink } from "@/api/endpoints";
 import { useRefreshData } from "@/context/RefreshDataContext";
 import { Plus } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
