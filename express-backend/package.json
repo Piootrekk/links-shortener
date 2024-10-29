@@ -5,11 +5,13 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npx tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.ts"
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "short links, hide link, obfuscate link, generate qr code, ip grabber, analytics clicks, "
+  ],
+  "author": "Piotr Wilkowiecki",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.20.0",
@@ -35,6 +37,7 @@
     "@types/qrcode": "^1.5.5",
     "@types/streamifier": "^0.1.2",
     "@types/ua-parser-js": "^0.7.39",
+    "cross-env": "^7.0.3",
     "prisma": "^5.20.0",
     "typescript": "^5.5.4"
   }

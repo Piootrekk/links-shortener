@@ -1,2 +1,2 @@
-docker build -t short_express_url_backend:local .
-docker run -p 3005:3005 -d --env-file .env short_express_url_backend:local
+docker build -t short_express_url_backend:latest .
+docker run -p 3005:3005 -d --env-file .env short_express_url_backend:latest

@@ -27,7 +27,7 @@ const StorageMenu = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant={"outline"}>Storage</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

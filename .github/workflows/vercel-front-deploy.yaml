@@ -1,4 +1,9 @@
 name: Deploy front to vercel
+
+env:
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
 on: [workflow_dispatch]
 
 jobs:
@@ -22,22 +27,22 @@ jobs:
         working-directory: ./links-shortener
 
       - name: Build Vite app
-        env:
-          VITE_FRONTEND_URL: ${{ secrets.VITE_FRONTEND_URL }}
-          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
-          VITE_DB_ENDPOINT: ${{ secrets.VITE_DB_ENDPOINT }}
         run: npm run build
         working-directory: ./links-shortener
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-        run: |
-          npm install -g vercel
-          vercel --token $VERCEL_TOKEN --prod --confirm --scope $VERCEL_ORG_ID \
-            --env VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }} \
-            --env VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
-            --env VITE_DB_ENDPOINT=${{ secrets.VITE_DB_ENDPOINT }}
+      - name: Vercel install
+        run: npm install -g vercel
+      - name: Vercel Provide Envs
+        run: vercel \
+          --build-env VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }} \
+          --build-env VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
+          --build-env VITE_DB_ENDPOINT=${{ secrets.VITE_DB_ENDPOINT }}
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: ./links-shortener
+      - name: Deploy Project Artifacts
+        run:
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} \
+          --env VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }} \
+          --env VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
+          --env VITE_DB_ENDPOINT=${{ secrets.VITE_DB_ENDPOINT }}
