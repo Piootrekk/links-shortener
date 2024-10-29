@@ -5,11 +5,16 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start": "cross-env NODE_ENV=production node build/src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts"
   },
   "keywords": [
-    "short links, hide link, obfuscate link, generate qr code, ip grabber, analytics clicks, "
+    "short links",
+    "hide link",
+    "obfuscate link",
+    "generate qr code",
+    "ip grabber",
+    "analytics clicks"
   ],
   "author": "Piotr Wilkowiecki",
   "license": "ISC",
