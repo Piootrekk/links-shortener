@@ -28,6 +28,7 @@ const logout = async () => {
 };
 
 const getuserInfo = async () => {
+  console.log(import.meta.env.VITE_APP_MODE);
   const response = await axiosInstance.get<TUserCredentials | null>("/user");
   return response.data;
 };

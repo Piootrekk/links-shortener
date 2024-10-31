@@ -11,6 +11,7 @@ import {
 const router = Router();
 config();
 
+const isProduction = process.env.NODE_ENV === "production";
 const publicIp = process.env.MY_PUBLIC_IP;
 
 router.get("/redirect/:short_url", async (req: Request, res: Response) => {
@@ -41,21 +42,6 @@ router.post("/validate-redirect", async (req: Request, res: Response) => {
     if (!hashedPassword) {
       return res.status(404).json({ message: "Short url not found" });
     }
-    if (hashedPassword?.password === null) {
-      res.json({
-        success: true,
-        original_url: hashedPassword.original_url,
-      });
-    } else {
-      const validate = await compareHash(password, hashedPassword.password);
-      if (!validate) {
-        return res.status(400).json({ message: "Invalid password" });
-      }
-      res.json({
-        success: true,
-        original_url: hashedPassword.original_url,
-      });
-    }
 
     const { ua, ipGeoDetails } = await parseShadyAnalytics(req);
     const dataToDetails: TDetailsInsert = {
@@ -75,8 +61,22 @@ router.post("/validate-redirect", async (req: Request, res: Response) => {
           : undefined,
       isp: ipGeoDetails.isp,
     };
-
-    const data = await setDetails(short_url, dataToDetails);
+    await setDetails(short_url, dataToDetails);
+    if (hashedPassword?.password === null) {
+      return res.json({
+        success: true,
+        original_url: hashedPassword.original_url,
+      });
+    } else {
+      const validate = await compareHash(password, hashedPassword.password);
+      if (!validate) {
+        return res.status(400).json({ message: "Invalid password" });
+      }
+      return res.json({
+        success: true,
+        original_url: hashedPassword.original_url,
+      });
+    }
   } catch (error) {
     return res.status(500).json(error || "Internal server error");
   }
@@ -84,19 +84,22 @@ router.post("/validate-redirect", async (req: Request, res: Response) => {
 
 const parseShadyAnalytics = async (req: Request) => {
   const ip =
-    req.socket.remoteAddress ||
-    req.ip ||
-    req.headers["x-forwarded-for"] ||
-    req.headers["cf-connecting-ip"] ||
-    req.headers["x-real-ip"];
-  let ipForParse = ip! as string;
-  if (ip === "::1" && publicIp !== undefined) {
-    ipForParse = publicIp;
-  } else ipForParse = ip! as string;
+    req.headers["x-client-ip"] || // Apache
+    req.headers["x-forwarded-for"]?.toString().split(",")[0] ||
+    req.headers["x-real-ip"] || // Nginx
+    req.headers["cf-connecting-ip"] || // Cloudflare
+    req.socket.remoteAddress?.replace("::ffff:", "") || // Bezpośrednie połączenie IPv4
+    req.ip; // Express
+
+  if (!ip) {
+    throw new Error("Unable to grab ip");
+  }
+
+  const ipAddress = isProduction ? ip : publicIp!;
 
   const userAgent = req.headers["user-agent"];
   const ua = uap(userAgent);
-  const ipGeoDetails = await getGetDetails(ipForParse);
+  const ipGeoDetails = await getGetDetails(ipAddress);
   return { ua, ipGeoDetails };
 };
 

@@ -128,7 +128,7 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
               type="text"
               placeholder="Short URL"
               {...register("shortUrl")}
-              className="flex-1"
+              className="flex-1 min-w-12"
             />
             <DialogAddRefreshShortUrl
               setShortUrl={(newShortUrl) => setValue("shortUrl", newShortUrl)}

@@ -1,15 +1,14 @@
 {
   "name": "links-shortener",
-
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "homepage": ".",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "cross-env VITE_APP_MODE=development vite",
+    "build": "cross-env VITE_APP_MODE=production tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "cross-env VITE_APP_MODE=production vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -51,6 +50,7 @@
     "@typescript-eslint/parser": "^8.7.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
