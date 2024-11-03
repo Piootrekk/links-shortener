@@ -25,15 +25,7 @@ router.post("/login", async (req, res) => {
     if (!user.user || !user.session || !user) {
       return res.status(400).json({ message: "User not found" });
     }
-    const cookieCredentials: TCookieCredentials = {
-      access_token: user.session.access_token,
-      role: user.user.user_metadata.role,
-    };
-    res.cookie(
-      "access_token",
-      JSON.stringify(cookieCredentials),
-      cookieOptions
-    );
+    res.cookie("access_token", user.session.access_token, cookieOptions);
     const userCredentials: TUserCredentials = {
       id: user.user.id,
       email: user.user.email!,
@@ -62,15 +54,7 @@ router.post("/register", async (req, res) => {
     if (!user.user || !user.session || !user) {
       return res.status(400).json({ message: "User not found" });
     }
-    const cookieCredentials: TCookieCredentials = {
-      access_token: user.session.access_token,
-      role: user.user.user_metadata.role,
-    };
-    res.cookie(
-      "access_token",
-      JSON.stringify(cookieCredentials),
-      cookieOptions
-    );
+    res.cookie("access_token", user.session.access_token, cookieOptions);
     const userCredentials: TUserCredentials = {
       id: user.user.id,
       email: user.user.email!,
@@ -93,11 +77,10 @@ router.post("/logout", async (req, res) => {
 });
 
 router.get("/user", async (req: Request, res: Response) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies.access_token as string;
   try {
     if (!token) return res.json(null);
-    const tokenObject = JSON.parse(token) as TCookieCredentials;
-    const user = await tockenVerify(tokenObject.access_token);
+    const user = await tockenVerify(token);
     if (!user) return res.json(null);
     const userCredentials: TUserCredentials = {
       id: user.id,
@@ -105,7 +88,7 @@ router.get("/user", async (req: Request, res: Response) => {
       created_at: user.created_at!,
       last_sign_in_at: user.last_sign_in_at!,
     };
-    res.json(user);
+    res.json(userCredentials);
   } catch (error) {
     res.json(null);
   }

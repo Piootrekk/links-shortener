@@ -6,12 +6,10 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies.access_token as string;
   if (!token) return res.status(401).json({ message: "Unauthorized" });
-  const tokenObject = JSON.parse(token) as TCookieCredentials;
-
   try {
-    const user = await tockenVerify(tokenObject.access_token);
+    const user = await tockenVerify(token);
 
     if (!user) return res.status(401).json({ message: "Unauthorized" });
 
@@ -27,15 +25,15 @@ const authAsMasterMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies.access_token as string;
   if (!token) return res.status(403).json({ message: "Unauthorized" });
-  const tokenObject = JSON.parse(token) as TCookieCredentials;
-  if (tokenObject.role !== "master")
-    return res.status(403).json({ message: "Forbidden" });
+
   try {
-    const user = await tockenVerify(tokenObject.access_token);
-    if (!user) return res.status(403).json({ message: "Unauthorized" });
-    req.user = user;
+    const verifyToken = await tockenVerify(token);
+    const userRole = verifyToken.user_metadata.role as string;
+    if (userRole !== "master")
+      return res.status(403).json({ message: "Forbidden" });
+    req.user = verifyToken;
     next();
   } catch (error) {
     res.status(400).json({ message: error });

@@ -55,6 +55,7 @@ type ButtonToPeriodProps = {
   currentStatePeriod: Tperiod;
   setPeriod: (period: Tperiod) => void;
   label: string;
+  buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 };
 
 const ButtonToPeriod: React.FC<ButtonToPeriodProps> = ({
@@ -62,6 +63,7 @@ const ButtonToPeriod: React.FC<ButtonToPeriodProps> = ({
   currentStatePeriod,
   label,
   setPeriod,
+  buttonProps,
 }) => {
   return (
     <Button
@@ -69,6 +71,8 @@ const ButtonToPeriod: React.FC<ButtonToPeriodProps> = ({
       className={`${
         period === currentStatePeriod && "bg-icon-blue text-primary"
       }`}
+      variant={"outline"}
+      {...buttonProps}
     >
       {label}
     </Button>

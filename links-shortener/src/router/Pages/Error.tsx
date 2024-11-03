@@ -34,7 +34,7 @@ const Error: React.FC<NotFoundProps> = ({ alertText, extraButtonAction }) => {
             extraButtonAction
           ) : (
             <Button variant="ghost" className="w-full" asChild>
-              <Link to="/">Go back to home</Link>
+              <Link to="/">Back to home</Link>
             </Button>
           )}
         </CardContent>

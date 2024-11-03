@@ -2,6 +2,7 @@ import { useRefreshData } from "@/context/RefreshDataContext";
 import { useEffect } from "react";
 import DashboardLinks from "./DashboardLinks";
 import SkeletonLinksAndFilter from "../Loading/SkeletonLinksAndFilter";
+import Error from "@/router/Pages/Error";
 
 const LinksProvider = () => {
   const { links } = useRefreshData();
@@ -10,15 +11,12 @@ const LinksProvider = () => {
     links.execute();
   }, []);
 
-  if (
-    links.isLoading ||
-    links.error ||
-    links.data === null ||
-    links.data === undefined
-  ) {
+  if (links.isLoading) {
     return <SkeletonLinksAndFilter />;
   }
-
+  if (links.error || links.data === null || links.data === undefined) {
+    return <Error alertText="Failed to load links" />;
+  }
   return <DashboardLinks links={links.data} />;
 };
 

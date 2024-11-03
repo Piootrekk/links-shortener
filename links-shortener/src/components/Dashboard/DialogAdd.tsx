@@ -119,16 +119,16 @@ const DialogAdd: React.FC<DialogAddFormProps> = () => {
           />
           {errors.url && <ErrorMessage message={errors.url.message} />}
 
-          <div className="flex items-center gap-2 mt-4 mb-4">
-            <Card className="p-2">
-              {import.meta.env.VITE_FRONTEND_URL + "/direct" || "URL"}
+          <div className="flex items-center gap-2 mt-4 mb-4 ">
+            <Card className="p-2 text-sm">
+              {import.meta.env.VITE_FRONTEND_URL + "/direct" || "URL"}{" "}
             </Card>
             <span>{"/"}</span>
             <Input
               type="text"
               placeholder="Short URL"
               {...register("shortUrl")}
-              className="flex-1 min-w-12"
+              className="flex-1 md:w-20 w-12"
             />
             <DialogAddRefreshShortUrl
               setShortUrl={(newShortUrl) => setValue("shortUrl", newShortUrl)}
