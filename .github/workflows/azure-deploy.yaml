@@ -67,7 +67,7 @@ jobs:
                     "slotSetting": false
                 },
                 {
-                    "name": "EXPRESS_SUPABASE_SERVICE_ROLE,
+                    "name": "EXPRESS_SUPABASE_SERVICE_ROLE",
                     "value": "${{ secrets.EXPRESS_SUPABASE_SERVICE_ROLE }}",
                     "slotSetting": false
                 }
