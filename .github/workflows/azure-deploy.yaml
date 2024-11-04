@@ -65,5 +65,10 @@ jobs:
                     "name": "EXPRESS_URL_FRONT",
                     "value": "${{ secrets.EXPRESS_URL_FRONT }}",
                     "slotSetting": false
+                },
+                {
+                    "name": "EXPRESS_SUPABASE_SERVICE_ROLE,
+                    "value": "${{ secrets.EXPRESS_SUPABASE_SERVICE_ROLE }}",
+                    "slotSetting": false
                 }
             ]

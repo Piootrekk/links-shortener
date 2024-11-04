@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { tockenVerify } from "../supabase/auth";
-import { TCookieCredentials } from "../schemas/authTypes";
 const authMiddleware = async (
   req: Request,
   res: Response,

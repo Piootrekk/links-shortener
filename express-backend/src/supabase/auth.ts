@@ -26,5 +26,4 @@ const tockenVerify = async (token: string) => {
   return data.user;
 };
 
-
 export { signUp, signIn, tockenVerify };

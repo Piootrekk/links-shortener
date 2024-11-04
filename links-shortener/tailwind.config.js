@@ -53,6 +53,9 @@ export const theme = {
       icon: {
         blue: "hsl(var(--icon-blue))",
       },
+      sonnar: {
+        error: "hsl(var(--sonnar-error))",
+      }
     },
     borderRadius: {
       lg: "var(--radius)",

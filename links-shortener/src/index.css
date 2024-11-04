@@ -30,6 +30,7 @@
     --chart-4: 210 98% 78%;
     --chart-5: 212 97% 87%;
     --icon-blue: 208, 85%, 93%;
+    --sonnar-error: 0, 82%, 60%;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -59,6 +60,7 @@
       --chart-4: 210 98% 78%;
       --chart-5: 212 97% 87%;
       --icon-blue: 218, 91%, 61%;
+      --sonnar-error: 0, 85%, 15%;
     }
   }
 

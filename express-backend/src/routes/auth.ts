@@ -2,7 +2,7 @@ import { Router, Request, Response, CookieOptions } from "express";
 import { signIn, signUp, tockenVerify } from "../supabase/auth";
 import { loginSchema, signUpSchema } from "../schemas/authSchema";
 import { getZodErrors } from "../utils/getZodErrors";
-import { TCookieCredentials, TUserCredentials } from "../schemas/authTypes";
+import { TUserCredentials } from "../schemas/authTypes";
 
 const isProduction = process.env.NODE_ENV === "production";
 const cookieOptions: CookieOptions = {
