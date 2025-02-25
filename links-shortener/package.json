@@ -8,7 +8,8 @@
     "dev": "cross-env VITE_APP_MODE=development vite",
     "build": "cross-env VITE_APP_MODE=production tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "cross-env VITE_APP_MODE=production vite preview"
+    "previewprod": "cross-env VITE_APP_MODE=production vite preview",
+    "previewdev": "cross-env VITE_APP_MODE=development vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -26,6 +27,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "esbuild": "^0.25.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
     "lucide-react": "^0.424.0",
@@ -57,6 +59,6 @@
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.2.2",
-    "vite": "^5.4.8"
+    "vite": "^6.2.0"
   }
 }

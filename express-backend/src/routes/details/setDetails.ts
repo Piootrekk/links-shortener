@@ -88,7 +88,7 @@ const parseShadyAnalytics = async (req: Request) => {
     req.headers["x-forwarded-for"]?.toString().split(",")[0] ||
     req.headers["x-real-ip"] || // Nginx
     req.headers["cf-connecting-ip"] || // Cloudflare
-    req.socket.remoteAddress?.replace("::ffff:", "") || // Bezpośrednie połączenie IPv4
+    req.socket.remoteAddress?.replace("::ffff:", "") || // Directly connect with IPv4
     req.ip; // Express
 
   if (!ip) {
