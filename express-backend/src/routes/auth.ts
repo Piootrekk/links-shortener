@@ -6,11 +6,10 @@ import { TUserCredentials } from "../schemas/authTypes";
 
 const isProduction = process.env.NODE_ENV === "production";
 const cookieOptions: CookieOptions = {
-  domain: ".vercel.app",
   httpOnly: true,
   secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
-  maxAge: 3 * 60 * 60 * 1000,
+  sameSite: "none",
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   path: "/",
 };
 

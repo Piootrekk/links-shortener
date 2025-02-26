@@ -20,7 +20,7 @@ export const corsOptionsMiddleware = cors({
   origin: isProduction
     ? frontend
     : ["http://localhost:5173", "http://localhost:3000"],
-  allowedHeaders: "Content-Type,Authorization",
+  allowedHeaders: "Content-Type, Authorization",
   methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
   credentials: true,
 });

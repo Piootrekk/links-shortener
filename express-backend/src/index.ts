@@ -10,7 +10,7 @@ const app: Express = express();
 const PORT = process.env.PORT;
 
 if (!PORT) throw new Error("Port is not defined");
-
+app.set("trust proxy", 1);
 app.use(corsOptionsMiddleware);
 app.use(headerMiddleware);
 app.use(cookieParser());
