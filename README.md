@@ -2,16 +2,9 @@
 
 This is a full stack application that allows to shorten long URLs to a more manageable size.
 
-## 🚀 Preview
-
 Preview the application live on [https://shrly.vercel.app/](https://shrly.vercel.app/)
 
-Landing page:
-![Landing page](./resources/landing-page.png)
-Dashboard page:
-![Dashboard page](./resources/dashboard-page.png)
-Statistics page:
-![Statistics page](./resources/statistics-page.png)
+Preview backend [https://links-shortener-backend.vercel.app/](https://links-shortener-backend.vercel.app/)
 
 ## 🛠 Technologies
 
@@ -49,3 +42,21 @@ Statistics page:
 - Created url actions (edit, delete, copy, download QR code, preview QR code)
 - Analytics (clicks, user meta data, user agent, referrer)
 - Map view (geolocation visitors)
+
+## 🚀 Preview
+
+### Landing page:
+
+![Landing page](./resources/landing-page.png)
+
+### Dashboard page:
+
+![Dashboard page](./resources/dashboard-page.png)
+
+### Statistics page:
+
+![Statistics page](./resources/statistics-page.png)
+
+### Schema fullstack project:
+
+![Schema fullstack project](./resources/project-schema.png)

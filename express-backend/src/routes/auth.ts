@@ -6,9 +6,12 @@ import { TUserCredentials } from "../schemas/authTypes";
 
 const isProduction = process.env.NODE_ENV === "production";
 const cookieOptions: CookieOptions = {
+  domain: ".vercel.app",
   httpOnly: true,
   secure: isProduction,
   sameSite: isProduction ? "none" : "lax",
+  maxAge: 3 * 60 * 60 * 1000,
+  path: "/",
 };
 
 const router = Router();
@@ -72,7 +75,7 @@ router.post("/logout", async (req, res) => {
   if (!cookies) {
     return res.status(400).json({ message: "Already logged out" });
   }
-  res.clearCookie("access_token");
+  res.clearCookie("access_token", cookieOptions);
   res.json(null);
 });
 
