@@ -5,8 +5,13 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npx tsc",
+    "vercel-build": "prisma generate && npx tsc",
     "start": "cross-env NODE_ENV=production node build/src/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon src/index.ts"
+    "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   },
   "keywords": [
     "short links",
@@ -44,5 +49,6 @@
     "cross-env": "^7.0.3",
     "prisma": "^5.20.0",
     "typescript": "^5.5.4"
-  }
+  },
+  "packageManager": "npm@11.0.0"
 }
